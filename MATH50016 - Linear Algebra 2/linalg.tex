@@ -1,0 +1,889 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{prop*}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem*{defn*}{Definition}
+\newtheorem*{not*}{Notation}
+
+\DeclarePairedDelimiter\length{\lvert\lvert}{\rvert\rvert}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\chr}{char}
+\DeclareMathOperator{\diag}{diag}
+
+\title{MATH50003 Linear Algebra and Numerical Analysis Term 1\\{\Large also known as}\\MATH50016 Linear Algebra 2 for JMC}
+\author{Notes by Robert Weingart}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section*{General notes}
+
+%This document is a concise summary of the official course notes.
+%It includes every theorem, lemma, proposition, corollary and defintion, without any proofs or exercises.
+%The numbering should match the official notes, but notation has been changed in many places to be more consistent.\\
+%
+%\noindent Notation which is used throughout an entire section is defined only once at the start rather than in every statement.
+%When a symbol has the same meaning in multiple consecutive statements, the definition is not repeated as it should be clear from the context.\\
+%
+%\noindent Unnumbered definitions correspond to bolded terms that are not given numbers.
+%Unnumbered propositions are results from exercises that I though were important enough to include.
+
+\begin{not*}
+	Throughout this entire document, unless otherwise stated:
+	\begin{itemize}
+		\item $F$ is an arbitrary field
+		\item $V$ is an arbitrary vector space over $F$
+		\item $T : V \to V$ is an arbitrary linear map
+		\item $A$ is an arbitrary $n \times n$ matrix with entries in $F$
+	\end{itemize}
+	Furthermore,
+	\begin{itemize}
+		\item For any linear map or matrix $S$, $c_S$ is the characteristic polynomial
+		\item For any linear map or matrix $S$, $m_S$ is the minimal polynomial (defined in section 9)
+		\item To avoid ambiguity, $:$ always means ``such that'' and $\mid$ always means ``divides''
+	\end{itemize}
+\end{not*}
+
+\section{Course Overview}
+
+\noindent Nothing to summarise here, I am including the section to maintain correct numbering.
+
+\section{Some revision from 1st Year Linear Algebra}
+
+\begin{defn*}
+	Let $V$ be finite-dimensional with a basis $B = \{v_1, \ldots, v_n\}$.
+	Let $a_{ij}$ be the $j$th component of $T(v_i)$ with respect to $B$.
+	The \textbf{matrix of $T$} with respect to $B$ is $[T]_B := (a_{ij})$.
+\end{defn*}
+
+\begin{prop}
+	For linear maps $S$ and $T$ and a basis $B$, $[ST]_B = [S]_B[T]_B$.
+\end{prop}
+
+\begin{prop*}
+	For any polynomial $q(x)$, $[q(T)]_B = q([T]_B)$.
+\end{prop*}
+
+\begin{defn*}
+	Let $V$ be finite-dimensional with two bases $E = \{e_1, \ldots, e_n\}$ and $F = \{f_1, \ldots, f_n\}$.
+	Let $p_{ij}$ be the $i$th component of $f_j$ with respect to $E$.
+	The \textbf{change of basis matrix} from $E$ to $F$ is $(p_{ij})$.
+\end{defn*}
+
+\begin{prop}
+	The change of basis matrix is invertible.
+	If $P$ is the chnage of basis matrix from $E$ to $F$, then $[T]_F = P^{-1}[T]_EP$.
+\end{prop}
+
+\begin{defn*}
+	The \textbf{characteristic polynomial} of $T$ is $c_T(x) := \det{xI_V - T}$.
+\end{defn*}
+
+\begin{prop}
+	The eigenvalues of $T$ are the roots of $c_T$.
+	The eigenvectors to an eigenvalue $\lambda$ are the non-zero vectors in $E_{\lambda} := \ker{\lambda I_V - T}$.
+	$[T]_B$ is diagonal $\iff B$ consists of eigenvalues of $T$.
+\end{prop}
+
+\begin{defn*}
+	The \textbf{$\lambda$-eigenspace} of $T$ is $E_{\lambda}$ as defined above.
+\end{defn*}
+
+\begin{prop}
+	If $F = \mathbb{C}$ and $V$ is finite-dimensional then $T$ has an eigenvalue in $\mathbb{C}$.
+\end{prop}
+
+\begin{prop}
+	Eigenvectors to different eigenvalues are linearly independent.
+\end{prop}
+
+\begin{cor}
+	If the characteristic polynomial of $T$ has $\dim{V}$ distinct roots then $T$ is diagonalisable.
+\end{cor}
+
+\section{Algebraic and geometric multiplicities of eigenvalues}
+
+\begin{defn*}
+	If $\lambda$ is an eigenvalue of $T$, its \textbf{algebraic multiplicity} is $a(\lambda)$ such that $c_T(x) = (x - \lambda)^{a(\lambda)}q(x)$ where $q(\lambda) \neq 0$.
+	Its \textbf{geometric multiplicity} is $g(\lambda) = \dim{E_{\lambda}}$.
+\end{defn*}
+
+\begin{prop}
+	$g(\lambda) \leq a(\lambda)$.
+\end{prop}
+
+\begin{thm}
+	If $\dim{V} = n$ and $\lambda_1, \ldots, \lambda_r$ are the distinct eigenvalues of $T : V \to V$, the following statements are equivalent:
+	\begin{itemize}
+		\item $T$ is diagonalisable
+		\item $\sum_{i = 1}^rg(\lambda_i) = n$
+		\item $\forall i,\ g(\lambda_i) = a(\lambda_i)$
+	\end{itemize}
+\end{thm}
+
+\section{Direct sums}
+
+\begin{defn*}
+	$V$ is the \textbf{direct sum} of subspaces $V_1, \ldots, V_k$ iff
+	$$\forall v \in V,\ \exists! v_1 \in V_1, \ldots, v_k \in V_k : v = \sum_{i = 1}^kv_i$$
+	that is to say, the selection of $v_i$ is unique.
+	In this case we write $V = V_1 \oplus \ldots \oplus V_k$.
+\end{defn*}
+
+\begin{not*}
+	From now on I will use $\bigoplus$ to write a direct sum over a range, like $\sum$ for sums.
+	This does not occur in the official notes, but I will use it here for brevity.
+	For instance, in the situation above I will now write
+	$$V = \bigoplus_{i = 1}^kV_i$$
+\end{not*}
+
+\begin{prop}
+	$V = V_1 \oplus V_2 \iff V_1 \cap V_2 = \{0\}$ and $\dim{V_1} + \dim{V_2} = \dim{V}$
+\end{prop}
+
+\begin{prop}
+	$V = \bigoplus_{i = 1}^kV_i \iff \dim{V} = \sum_{i = 1}^k\dim{V_i}$ and for any bases $B_i$ of the $V_i$, $\bigcup_{i = 1}^kB_i$ is a basis of $V$.
+\end{prop}
+
+\begin{defn}
+	A subspace $W$ of $V$ is \textbf{$T$-invariant} $\iff T(W) \subseteq W$.
+	In this case, the \textbf{restriction} of $T$ to $W$ is $T_W : W \to W$, where $T_W(w) = T(w)$.
+\end{defn}
+
+\begin{prop}
+	Suppose there are $T$-invariant subspaces $V_i$ with bases $B_i$ such that $V = \bigoplus V_i$. Let $A_i = [T_{V_i}]_{B_i}$ and $B = \bigcup B_i$.
+	Then
+	$$[T]_B = \begin{pmatrix}A_1 & & \\ & \ddots & \\ & & A_k \end{pmatrix}$$
+\end{prop}
+
+\begin{not*}
+	From now on, block diagonal matrices will be written using $\oplus$ or $\bigoplus$ whenever possible.
+	For instance,
+	$$A \oplus B := \begin{pmatrix} A & 0 \\ 0 & B \end{pmatrix}$$
+\end{not*}
+
+\section{Quotient spaces}
+
+\begin{defn*}
+	For a subspace $W$ of $V$, the \textbf{quotient space} $V / W$ consists of the cosets
+	$$W + v := \{w + v \mid w \in W\}$$
+	where $v \in V$.
+	We define addition as
+	$$(W + v) + (W + v') := W + (v + v')$$
+	and scalar multiplication as
+	$$\lambda(W + v) := W + \lambda v$$
+	with $v, v' \in V$ and $\lambda \in F$ arbitrary.
+\end{defn*}
+
+\begin{prop}
+	$V / W$ is a vector space over $F$.
+\end{prop}
+
+\begin{prop}
+	If $V$ is finite-dimensional, $\dim{V / W} = \dim{V} - \dim{W}$.
+\end{prop}
+
+\begin{prop*}
+	If $B_W = \{w_1, \ldots, w_r\}$ is a basis of $V$ and $B = B_W \cup \{v_1, \ldots, v_s\}$ is a basis of $V$ then $\bar{B} := \{W + v_1, \ldots, W + v_s\}$ is a basis of $V / W$.
+\end{prop*}
+
+\begin{defn*}
+	If $W$ is $T$-invariant, the \textbf{quotient map} $\bar{T} : V / W \to V / W$ is
+	$$\bar{T}(W + v) := W + T(v)$$
+\end{defn*}
+
+\begin{prop}
+	With $B$, $B_W$ and $\bar{B}$ defined as above,
+	$$[T]_B = \begin{pmatrix} [T_W]_{B_W} & Z \\ 0 & [\bar{T}]_{\bar{B}} \end{pmatrix}$$
+	for some $r \times s$ matrix $Z$.
+\end{prop}
+
+\begin{cor}
+	$c_T(x) = c_{T_W}(x)c_{\bar{T}}(x)$.
+\end{cor}
+
+\section{Triangularisation}
+
+\begin{prop}
+	The values along the main diagonal of an upper triangular matrix are its eigenvalues.
+	The product of two upper triangular matrices is also upper triangular, and its diagonal entries are the products of the corresponding diagonal entries of the factors.
+\end{prop}
+
+\begin{thm}
+	(Triangularisation Theorem)
+	If $c_T(x)$ factorises as a product of linear factors then there is a basis $B$ of $V$ such that $[T]_B$ is upper triangular.
+\end{thm}
+
+\noindent To triangularise $T$, choose an eigenvector $w_1$ of $T$ and let $W_1 = \spn{w_1}$.
+Let $W + w_2$ be an eigenvector for the quotient map with respect to $W$ and let $W_2 = \spn{\{w_1, w_2\}}$.
+Let $W + w_3$ be an eigenvector for the quotient map with respect to $W_2$ and let $W_3 = \spn{\{w_1, w_2, w_3\}}$.
+Continue in this fashion until you have $B = \{w_1, \ldots, w_n\}$.
+Then $[T]_B$ is upper triangular.
+
+\section{Cayley-Hamilton Theorem}
+
+\begin{thm}
+	(Cayley-Hamilton Theorem)
+	$c_T(T) = 0$.
+\end{thm}
+
+\begin{cor}
+	$c_A(A) = 0$.
+\end{cor}
+
+\begin{defn*}
+	The \textbf{companion matrix} of $p(x) = \sum_{i = 0}^na_ix^i$ where $a_n = 1$ is
+	$$C(p) = \begin{pmatrix}
+		0 & 0 & 0 & \ldots & 0 & -a_0 \\
+		1 & 0 & 0 & \ldots & 0 & -a_1 \\
+		0 & 1 & 0 & \ldots & 0 & -a_2 \\
+		\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+		0 & 0 & 0 & \ldots & 1 & -a_{n - 1}
+	\end{pmatrix}$$
+\end{defn*}
+
+\section{Polynomials}
+
+\begin{defn*}
+	A \textbf{polynomial} over $F$ is an expression of the form
+	$$p(x) := \sum_{i = 1}^na_ix^i$$
+	with all $a_i \in F$.
+	The set of polynomials over $F$ is $F[x]$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{zero polynomial} is $p(x) = 0$.
+\end{defn*}
+
+\begin{defn*}
+	The degree of a non-zero polynomial is the highest $\deg{p}$ such that $x^{\deg{p}}$ occurs in $p(x)$ with a non-zero coefficient.
+	$\deg{0}$ is undefined.
+\end{defn*}
+
+\begin{defn*}
+	$p(x)$ \textbf{divides} $q(x) \iff \exists r(x) \in F[x] : q(x) = p(x)r(x)$.
+	In this case we write $p(x) \mid q(x)$.
+\end{defn*}
+
+\begin{not*}
+	From now on I will usually write $p$ rather than $p(x)$.
+\end{not*}
+
+\begin{prop}
+	(Euclidean Algorithm)
+	For $f, g \in F[x]$ non-constant,
+	$$\exists q, r \in F[x] : f = qg + r$$
+	with $r = 0$ or $\deg{r} < \deg{g}$.
+\end{prop}
+
+\begin{defn}
+	$d \in F[x]$ is a \textbf{greatest common divisor} of $f, g \in F[x]$ both non-zero iff
+	\begin{itemize}
+		\item $d \mid f$
+		\item $d \mid g$
+		\item For all $e \in F[x]$, $e \mid f$ and $e \mid g \implies e \mid d$.
+	\end{itemize}
+	In this case we write $\gcd{(f, g)} = d$.
+\end{defn}
+
+\begin{prop}
+	For $f, g \in F[x]$ non-zero, $\gcd{(f, g)}$ exists and is unique up to scalar multiplication.
+\end{prop}
+
+\begin{defn*}
+	$f, g \in F[x]$ are \textbf{co-prime} $\iff \gcd{(f, g)} = 1$.
+\end{defn*}
+
+\begin{prop}
+	For $f, g \in F[x]$ non-zero, $\exists r, s \in F[x] : \gcd{(f, g)} = rf + sg$.
+\end{prop}
+
+\begin{defn*}
+	An \textbf{irreducible} polynomial is one which is non-constant and cannot be factorised as a product of polynomials of smaller degree.
+\end{defn*}
+
+\begin{prop}
+	For $p(x) \in \mathbb{Q}[x]$ monic with integer coefficients, all roots of $p$ in $\mathbb{Q}$ are integers.
+	If $p(x)$ is reducible, then $p = ab$ where $a$ and $b$ are also monic with integer coefficients (this statement is called Gauss's Lemma).
+\end{prop}
+
+\begin{prop}
+	If $p$ is irreducible and $p \mid ab$, either $p \mid a$ or $p \mid b$.
+\end{prop}
+
+\begin{cor}
+	If $p$ is irreducible and $p \mid \prod g_i$, then $\exists i : p \mid g_i$.
+\end{cor}
+
+\begin{thm}
+	(Unique Factorization Theorem)
+	Any non-constant polynomial can be written as a product of irreducible factors.
+	This factorisation is unique up to scalar multiplication of the factors.
+\end{thm}
+
+\section{The minimal polynomial of a linear map}
+
+\begin{defn*}
+	$m_T(x) \in F[x]$ is a \textbf{minimal polynomial} for $T$ if $m_T(T) = 0$, $m_T$ is monic and there is no polynomial of smaller degree for which the other two conditions hold.
+\end{defn*}
+
+\begin{prop}
+	$m_T$ is unique.
+	For all $p \in F[x]$, $p(T) = 0 \iff m_T \mid p$.
+\end{prop}
+
+\begin{prop}
+	$m_T \mid c_T$.
+	For all $\lambda \in F$, $c_T(\lambda) = 0 \implies m_T(\lambda) = 0$.
+\end{prop}
+
+\begin{thm}
+	All irreducible factors of $c_T$ divide $m_T$.
+\end{thm}
+
+\begin{prop}
+	For $T_W$ and $\bar{T}$ as in sections 4 and 5, $m_{T_W} \mid m_T$ and $m_{\bar{T}} \mid m_T$.
+\end{prop}
+
+\section{Primary Decomposition}
+
+\begin{thm}
+	(Primary Decomposition Theorem)
+	Suppose $m_T(x) = \prod_{i = 1}^kf_i(x)^{n_i}$ with the $f_i$ distinct and irreducible.
+	Let $V_i := \ker{f_i(T)^{n_i}}$.
+	Then $V = \bigoplus_{i = 1}^kV_i$, each $V_i$ is $T$-invariant, and $m_{T_{V_i}} = f_i(x)^{n_i}$.
+\end{thm}
+
+\begin{cor}
+	$T$ is diagonalisable $\iff m_T$ is a product of distinct linear factors.
+\end{cor}
+
+\begin{prop}
+	Suppose $g_1, g_2 \in F[x]$ are coprime and $g_1(T)g_2(T) = 0$.
+	Let $V_i = \ker{g_i(T)}$.
+	Then $V = V_1 \oplus V_2$ and the $V_i$ are $T$-invariant.
+	If additionally $m_T = g_1g_2$, then $m_{T_{V_i}} = g_i$.
+\end{prop}
+
+\section{Jordan Canonical Form}
+
+\subsection{Definition and properties}
+
+\begin{defn*}
+	A \textbf{Jordan block} is an $n \times n$ matrix of the form
+	$$J_n(\lambda) := \begin{pmatrix}
+		\lambda & 1 & 0 & \ldots & 0 \\
+		0 & \lambda & 1 & \ldots & 0 \\
+		0 & 0 & \lambda & \ldots & 0 \\
+		\vdots & \vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & 0 & \ldots & \lambda
+	\end{pmatrix}$$
+\end{defn*}
+
+\begin{prop}
+	Let $J = J_n(\lambda)$.
+	\begin{itemize}
+		\item $c_J(x) = m_J(x) = (x - \lambda)^n$
+		\item $\lambda$ is the only eigenvalue of $J$
+		\item $a(\lambda) = n$
+		\item $g(\lambda) = 1$
+		\item $J - \lambda I = J_n(0)$
+		\item $(J - \lambda I)e_1 = 0$ and $(J - \lambda I)e_k = e_{k - 1}$
+		\item $(J - \lambda I)^n = 0$
+		\item $\rank{(J - \lambda I)^i} = n - i$
+		\item $(J - \lambda I)^ie_k = e_{k - i}$
+	\end{itemize}
+\end{prop}
+
+\begin{prop}
+	Let $A = \bigoplus A_i$.
+	\begin{itemize}
+		\item $c_A = \prod c_{A_i}$
+		\item $m_A = \lcm{\{m_{A_i}\}}$
+		\item For any eigenvalue $\lambda$ of $A$, $\dim{E_{\lambda}(A)} = \sum \dim{E_{\lambda}(A_i)}$
+		\item For any $q(x) \in F[x]$, $q(A) = \bigoplus q(A_i)$
+	\end{itemize}
+\end{prop}
+
+\begin{thm}
+	If $c_A$ is a product of linear factors, then $A$ is similar to a matrix of the form
+	$$J = \bigoplus_{i = 1}^kJ_{n_i}(\lambda_i)$$
+	where the $\lambda_i$ are the eigenvalues of $A$, not necessarily distinct.
+	$J$ is unique up to reordering the Jordan blocks.
+\end{thm}
+
+\begin{defn*}
+	The \textbf{Jordan Canonical Form} of $A$ is $J$ as defined above.
+\end{defn*}
+
+\begin{prop}
+	Suppose $J$ has $a$ blocks associated with an eigenvalue $\lambda$, with sizes $n_1, \ldots, n_a$.
+	Then:
+	\begin{itemize}
+		\item $\sum_{i = 1}^an_i = a(\lambda)$
+		\item $a = g(\lambda)$
+		\item $\max{\{n_i\}} = \max{\{r : (x - \lambda)^r \mid m_A(x)\}}$ (the size of the largest block is the exponent of $(x - \lambda)$ as a factor of $m_A$)
+	\end{itemize}
+\end{prop}
+
+\subsection{Steps in the proof of Theorem 11.3 that are numbered as though they were important even though they are just special cases of Theorem 11.3}
+
+\begin{thm}
+	The JCF is unique up to reordering the blocks.
+\end{thm}
+
+\begin{thm}
+	If $c_T$ is a product of linear factors, then there exists a basis $B$ of $V$ such that $[T]_B$ is in JCF.
+\end{thm}
+
+\begin{defn*}
+	$T$ is \textbf{nilpotent} $\iff \exists k : T^k = 0$.
+\end{defn*}
+
+\begin{thm}
+	If $T$ is nilpotent, then there exists a basis $B$ of $V$ such that $[S]_B = \bigoplus J_{n_i}(0)$
+\end{thm}
+
+\begin{cor}
+	In the situation above, $[T + \lambda I_V]_B = \bigoplus J_{n_i}(\lambda)$.
+\end{cor}
+
+%\subsection{How to compute the JCF}
+%
+%\noindent First split up $V$ into $V_i$ as in the Primary Decomposition Theorem, so that each $V_i$ corresponds to a distinct eigenvalue $\lambda_i$.
+%Let $S_i := T_{V_i} - \lambda_iI$, which will be nilpotent.
+
+\section{Cyclic Decomposition and Rational Canonical Form}
+
+\subsection{Cyclic Decomposition}
+
+\begin{defn*}
+	Let $V$ be finite-dimensional.
+	The \textbf{$T$-cyclic subspace} of $V$ generated by $v \in V$ is
+	\begin{align*}
+		Z(v, T) &:= \{f(T)(v) : f(x) \in F[x]\}\\ 
+				&= \spn\{v, T(v), T^2(v), \ldots\}
+	\end{align*}
+	Note that $Z(v, T)$ is $T$-invariant.
+	We abbreviate the restriction $T_{Z(v, T)}$ to $T_v$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{$T$-annihilator} of $v$ and $Z(v, T)$ is $m_v$, the monic polynomial of smallest degree such that $m_v(T)(v) = 0$.
+	It can be constructed as follows:
+	Let $k$ be as small as possible such that $\{v, T(v), T^2(v), \ldots, T^k(v)\}$ is not linearly independent.
+	Then $T^k(v) = -a_0v - a_1T(v) - \ldots - a_{k - 1}T^{k - 1}(v)$, and $m_v$ is the polynomial with coefficients $a_i$.
+\end{defn*}
+
+\begin{prop}
+	With $k$ defined as above, $B = \{v, T(v), T^2(v), \ldots, T^{k - 1}(v)\}$ is a basis of $Z(v, T)$. $[T_v]_B = C(m_v)$. $m_{T_v} = m_v$.
+\end{prop}
+
+\begin{thm}
+	(Cyclic Decomposition Theorem)
+	Let $V$ be finite-dimensional.
+	If $m_T(x) = f(x)^k$ with $f$ irreducible, then there exist unique numbers $r$ and $k_1, \ldots, k_r$ such that
+	\begin{align*}
+		k &= k_1 \geq k_2 \geq \ldots \geq k_r\\
+		V &= \bigoplus_{i = 1}^rZ(v_i, T)\\
+		m_{v_i} &= f(x)^{k_i}\quad i = 1, \ldots, r
+	\end{align*}
+	for some $v_1, \ldots, v_r \in V$
+\end{thm}
+
+\begin{cor}
+	If $T$ is as above, there exists a basis $B$ of $V$ such that
+	$$[T]_B = \bigoplus_{i = 1}^rC(f(x)^{k_i})$$
+	with $k = k_1 \geq k_2 \geq \ldots \geq k_r$ uniquely determined by $T$.
+\end{cor}
+
+\begin{cor}
+	If $m_A(x) = x^k$, then
+	$$A \sim \bigoplus_{i = 1}^rC(x^{k_i})$$
+	with $k = k_1 \geq k_2 \geq \ldots \geq k_r$ uniquely determined by $A$.
+\end{cor}
+
+\subsection{RCF}
+
+\begin{thm}
+	(Rational Canonical Form)
+	Let $V$ be finite-dimensional.
+	If
+	$$m_T(x) = \prod_{i = 1}^tf_i(x)^{k_i}$$
+	with the $f_i$ distinct and irreducible, then there are unique numbers
+	\begin{align*}
+		   r_1, &\ldots, r_t\\
+		k_{11}, &\ldots, k_{1r_1}\\
+		k_{22}, &\ldots, k_{2r_2}\\
+				&\vdots\\
+		k_{t1}, &\ldots, k_{tr_t}
+	\end{align*}
+	such that
+	\begin{align*}
+		k_i &= k_{i1} \geq k_{i2} \geq \ldots \geq k_{ir_i}\quad i = 1, \ldots, t\\
+		[T]_B &= \bigoplus_{i = 1}^t\left(\bigoplus_{j = 1}^{r_i}C\left(f_i(x)^{k_{ij}}\right)\right)
+	\end{align*}
+	for some basis $B$ of $V$.
+\end{thm}
+
+\begin{cor}
+	If the minimal polynomial of $A$ is of the form of $m_T$ above, then $A$ is similar to a unique matrix of the form of $[T]_B$ above.
+\end{cor}
+
+\begin{defn*}
+	The \textbf{rational canonical form} of $A$ is the matrix described in the corollary above.
+\end{defn*}
+
+\begin{prop}
+	This proposition is not in the official notes, but it should be.
+	Let $f_i$ be one of the factors of $m_A$.
+	Consider the blocks of the RCF of $A$ associated with $f_i$, which are
+	$$C(f_i(x)^{k_{i1}}) \oplus \ldots \oplus C(f_i(x)^{k_{ir_i}})$$
+	with the exponents defined as in Theorem 12.5.
+	Then:
+	\begin{itemize}
+		\item $\sum_{j=1}^{r_i}k_{ij} = \max{\{k : f^k \mid c_A\}}$
+		\item $r_i = \frac{n - \rank{(f(A))}}{\deg{f}}$
+		\item $k_{i1} = k_i = \max{\{k : f^k \mid m_A\}}$
+	\end{itemize}
+	The first and third statements are trivial; I included them to emphasise the parallels to Proposition 11.4.
+	The second statement was proved in a live lecture. (TODO: add link)
+\end{prop}
+
+%\subsection{How to compute the RCF}
+%
+%\noindent I wish I knew.
+
+\section{The dual space}
+
+\begin{defn*}
+	A \textbf{linear functional} on $V$ is a linear map $\phi : V \to F$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{dual space} of $V$ is $V^{\ast}$, the set of linear functionals on $V$.
+	Addition and scalar multiplication are defined as usual using the equivalent operations on $V$.
+	This is a vector space over $F$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{Kronecker delta} is
+	$$\delta_{ij} := \begin{cases} 1 & i = j \\ 0 & i \neq j \end{cases}$$
+\end{defn*}
+
+\begin{prop}
+	Let $n = \dim{V}$ and $B = \{v_1, \ldots, v_n\}$ be a basis of $V$.
+	Define
+	$$\phi_i(v_j) = \delta_{ij}\quad i = 1, \ldots, n, j = 1, \ldots, n$$
+	meaning that for any $v = \sum\alpha_jv_j$
+	$$\phi_i(v) = \alpha_i$$
+	Then $\{\phi_1, \ldots, \phi_n\}$ is a basis of $V^{\ast}$, and therefore $\dim{V^{\ast}} = \dim{V}$.
+\end{prop}
+
+\begin{defn*}
+	Let $V$ be finite-dimensional.
+	The \textbf{annihilator} of $X \subseteq V$ is
+	$$X^0 := \{\phi \in V^{\ast} : \phi(x) = 0\quad \forall x \in X\}$$
+	This is a subspace of $V^{\ast}$.
+\end{defn*}
+
+\begin{prop}
+	$\dim{W^0} = \dim{V} - \dim{W}$.
+\end{prop}
+
+\section{Inner Product Spaces}
+
+\subsection{Definition and matrix representation}
+
+\begin{not*}
+	From now on let $F$ be either $\mathbb{R}$ or $\mathbb{C}$, such that there is a conjugate map $\bar{\cdot} : F \to F$.
+\end{not*}
+
+\begin{defn*}
+	An \textbf{inner product} on $V$ is a map $(\cdot, \cdot) : V \times V \to F$ where
+	\begin{itemize}
+		\item $(\lambda u + \mu v, w) = \lambda(u, w) + \mu(v, w)$
+		\item $\overline{(v, w)} = (w, v)$
+		\item $v \neq 0 \implies (v, v) > 0$
+	\end{itemize}
+	$V$ together with $(\cdot, \cdot)$ is an \textbf{inner product space}.
+\end{defn*}
+
+\begin{defn*}
+	$A$ is \textbf{Hermitian} $\iff A^T = \bar{A}$.
+\end{defn*}
+
+\begin{defn*}
+	For $\dim{V} = n$, the \textbf{matrix of an inner product} for some basis $B = \{v_1, \ldots, v_n\}$ has entries $a_{ij} = (v_i, v_j)$.
+	This matrix $A$ is Hermitian, and for any $v, w \in V$, $(v, w) = [v]_B^TA\bar{[w]}_B$, so $A$ defines $(\cdot, \cdot)$ uniquely.
+\end{defn*}
+
+\begin{defn*}
+	A Hermitian matrix $A$ is \textbf{positive-definite} iff
+	$$\forall x \in F^n \setminus \{0\},\  x^TA\bar{x} > 0$$
+\end{defn*}
+
+\subsection{Geometric functions}
+
+\begin{defn*}
+	The \textbf{length} of $u \in V$ is $\length{u} := \sqrt{(u, u)}$.
+	The \textbf{distance} between $u, v\in V$ is $d(u, v) := \length{u - v}$.
+	$u$ is a \textbf{unit vector} $\iff \length{u} = 1$.
+\end{defn*}
+
+\begin{prop}
+	For any $u, v, w$ in an inner product space:
+	\begin{itemize}
+		\item $\lvert (u, v) \rvert \leq \length{u} \length{v}$
+		\item $\length{u + v} \leq \length{u} + \length{v}$
+		\item $\length{u - v} \leq \length{u - w} + \length{w - v}$
+	\end{itemize}
+\end{prop}
+
+\subsection{Dual space}
+
+\begin{defn*}
+	$f_v \in V^{\ast}$ is $f_v(w) = (w, v)$.
+\end{defn*}
+
+\begin{defn*}
+	$\bar{V}$ is a vector space over $F$ with the same vectors and addition as $V$, but scalar addition defined as $\lambda \ast v := \bar{\lambda}v$, where the operation on the right hand side is scalar multiplication from $V$.
+\end{defn*}
+
+\begin{prop}
+	 $\pi(v) := f_v$ is a vector space isomorphism $\pi : \bar{V} \to V^{\ast}$.
+\end{prop}
+
+\begin{cor}
+	$\forall f \in V^{\ast},\ \exists! v \in V : f = f_v$.
+\end{cor}
+
+\subsection{Orthogonality}
+
+\begin{defn*}
+	$u$ and $v$ are \textbf{orthogonal} $\iff (u, v) = 0$.
+	A set of vectors is \textbf{orthogonal} iff any pair of distinct vectors is orthogonal.
+	An orthogonal set of unit vectors is \textbf{orthonormal}.
+\end{defn*}
+
+\begin{defn*}
+	For $X \subseteq V$
+	$$X^{\bot} := \{u \in V : (u, w) = 0\quad \forall w \in W\}$$
+	This is a subspace of $V$.
+\end{defn*}
+
+\begin{prop}
+	If $V$ is finite-dimensional and $W$ is a subspace of $V$, then $V = W \oplus W^{\bot}$.
+\end{prop}
+
+\begin{thm}
+	Any finite-dimensional inner product space has an orthonormal basis, and any orthonormal set can be extended to an orthonormal basis.
+\end{thm}
+
+\begin{prop*}
+	(Gram-Schmidt Process)
+	Given a basis $\{v_1, \ldots, v_n\}$, define
+	\begin{align*}
+		u_1 &:= \frac{v_1}{\length{v_1}}\\
+		w_i &:= v_i - \sum_{j = 1}^{i - 1}(v_i, u_j)u_j\\
+		u_i &:= \frac{w_i}{\length{w_i}}
+	\end{align*}
+	Then $\{u_1, \ldots, u_n\}$ is an orthonormal basis.
+\end{prop*}
+
+\begin{prop}
+	For $v \in V$ and an orthonormal basis $\{u_1, \ldots, u_n\}$ for $V$, $v = \sum_{i = 1}^n(v, u_i)u_i$ and $\length{v}^2 = \sum_{i = 1}^n\lvert (v, u_i) \rvert^2$.
+\end{prop}
+
+\begin{defn*}
+	The \textbf{projection} of $v \neq 0$ along $w \neq 0$ is $\frac{(v, w)}{(w, w)}v$
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{orthogonal projection map} along a subspace $W$ is $\pi_W(w + w') = w$ where $w \in W$ and $w' \in W^{\bot}$ (recall that for any $v$ there are unique $w \in W, w' \in W^{\bot}$ such that $v = w + w'$, so this is well-defined).
+\end{defn*}
+
+\begin{prop}
+	$\length{v - \pi_W(v)} = \min{\{\length{v - w} \mid w \in W\}}$ i.e.\@ $\pi_W(v)$ is the closest vector to $v$ in $W$. If $\{u_1, \ldots, u_r\}$ is an orthonormal basis of $W$, then $\pi_W(v) = \sum_{i = 1}^r(v, v_i)v_i$.
+\end{prop}
+
+\begin{prop}
+	Let $E = \{e_1, \ldots, e_n\}$ and $F = \{f_1, \ldots, f_n\}$ be two orthonormal bases of $V$.
+	Let $P = (p_{ij})$ be the change of basis matrix, i.e.\@ the matrix such that $f_i = \sum_{j = 1}^np_{ji}e_j$.
+	Then $P^T\bar{P} = I$.
+\end{prop}
+
+\begin{defn*}
+	$P$ is \textbf{orthogonal} $\iff P$ is real and $P^TP = I$.
+	${P}$ is \textbf{unitary} $\iff P$ is complex and $P^T\bar{P} = I$.
+	Each of these types is a group, called a \textbf{classical group}.
+\end{defn*}
+
+\section{Linear maps on inner product spaces}
+
+\subsection{Definition and adjoints}
+
+\begin{prop}
+	Let $V$ be finite-dimensional
+	For any linear map $T : V \to V$ there is a unique linear map $T^{\ast} : V \to V$ such that
+	$$\forall u, v \in V,\ (T(u), v) = (u, T^{\ast}(v))$$
+\end{prop}
+
+\begin{defn*}
+	$T^{\ast}$ is the \textbf{adjoint} of $T$. $T$ is \textbf{self-adjoint} $\iff T = T^{\ast}$.
+\end{defn*}
+
+\begin{prop}
+	If $B$ is an orthonormal basis then $[T^{\ast}]_B = \bar{[T]}_B^T$ 
+\end{prop}
+
+\begin{thm}
+	(Spectral Theorem)
+	If $T$ is self-adjoint then $V$ has an orthonormal basis of $T$-eigenvectors.
+\end{thm}
+
+\begin{cor}
+	If $A$ is real and symmetric, there exists an orthogonal $P$ such that $P^{-1}AP$ is diagonal.
+	If $A$ is complex and Hermitian, there exists a unitary $P$ such that $P^{-1}AP$ is diagonal.
+\end{cor}
+
+\begin{lem}
+	If $T$ is self-adjoint, all its eigenvalues are real, eigenvectors to distinct eigenvalues are orthogonal, and if $W$ is $T$-invariant then so is $W^{\bot}$.
+\end{lem}
+
+\subsection{How to find an orthonormal basis}
+
+If $T$ is self-adjoint, we can find the basis described in Theorem 15.3 as follows:
+For each eigenvalue of $T$, use the Gram-Schmidt Process to find an orthonormal basis of the eigenspace.
+Then take the union of all these bases.
+
+\section{Bilinear and Quadratic Forms}
+
+\subsection{Bilinear forms}
+
+\begin{not*}
+	$F$ is now back to being arbitrary.
+\end{not*}
+
+\begin{defn*}
+	A \textbf{bilinear form} on $V$ is $(\cdot, \cdot) : V \times V \to F$ where
+	\begin{align*}
+		(\alpha v_1 + \beta v_2, w) &= \alpha(v_1, w) + \beta(v_2, w)\\
+		(v, \alpha w_1 + \beta w_2) &= \alpha(v, w_1) + \beta(v, w_2)
+	\end{align*}
+\end{defn*}
+
+\begin{defn*}
+	For $\dim{V} = n$, the \textbf{matrix of a bilinear form} for some basis $B = \{v_1, \ldots, v_n\}$ has entries $a_{ij} = (v_i, v_j)$.
+	Then for any $v, w \in V$, $(v, w) = [v]_B^TA[w]_B$, so $A$ defines $(\cdot, \cdot)$ uniquely.
+\end{defn*}
+
+\subsection{Symmetry and skew-symmetry}
+
+\begin{defn*}
+	$(\cdot, \cdot)$ is \textbf{symmetric} $\iff \forall v, w \in V,\ (v, w) = (w, v)$.
+	$(\cdot, \cdot)$ is \textbf{skew-symmetric} $\iff \forall v, w \in V,\ (v, w) = -(w, v)$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{characteristic} of $F$ is the smallest $\chr{F}$ such that $\chr{F} = 0$ in $F$, or 0 if there is no such number.
+	$\chr{\mathbb{R}} = \chr{\mathbb{C}} = 0$.
+	$\chr{\mathbb{F}_p} = p$.
+\end{defn*}
+
+\begin{lem}
+	$\chr{F} \neq 2 \implies \forall v \in V,\ (v, v) = 0$
+\end{lem}
+
+\begin{thm}
+	$(\cdot, \cdot)$ is symmetric or skew-symmetric $\iff \forall v, w \in V,\ ((v, w) = 0 \iff (w, v) = 0)$.
+\end{thm}
+
+\begin{defn*}
+	For $X \subseteq V$
+	$$X^{\bot} := \{u \in V : (u, w) = 0\quad \forall w \in W\}$$
+	This is a subspace of $V$.
+\end{defn*}
+
+\begin{defn*}
+	$(\cdot, \cdot)$ is \textbf{non-degenerate} $\iff V^{\bot} = \{0\}$.
+\end{defn*}
+
+\begin{prop}
+	Let $V$ be finite-dimensional and $(\cdot, \cdot)$ be non-degenerate and symmetric or skew-symmetric.
+	Define $f_v(u) := (v, u)$.
+	Then $\phi(v) := f_v$ is an isomorphism $\phi : V \to V^{\ast}$.
+	Furthermore, if $W$ is a subspace of $V$, then $\dim{W^{\bot}} = \dim{V} - \dim{W}$.
+\end{prop}
+
+\begin{defn*}
+	$A$ and $B$ both $n \times n$ over $F$ are \textbf{congruent} $\iff$ there exists $P$ invertible over $F$ such that $B = P^TA^P$.
+	Two bilinear forms are \textbf{equivalent} $\iff$ their matrices are congruent.
+\end{defn*}
+
+\begin{thm}
+	Let $V$ be finite-dimensional, $\chr{F} \neq 2$, and $(\cdot, \cdot)$ non-degenerate and skew-symmetric.
+	Then $\dim{V}$ is even, and there is a basis $B = {e_1, f_1, \ldots, e_m, f_m}$ for $2m = n$ such that the matrix of $(\cdot, \cdot)$ with respect to $B$ is
+	$$\bigoplus_{i = 1}^m\begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$$
+	Equivalently,
+	$$(e_i, f_i) = -(f_i, e_i) = 1$$
+	and if $i \neq j$
+	$$(e_i, e_j) = (f_i, f_j) = (e_i, f_j) = (f_j, e_i) = 0$$
+\end{thm}
+
+\begin{cor}
+	If $A$ is invertible and skew-symmetric and $\chr{F} \neq 2$, then $A$ is congruent to a matrix of the form above.
+\end{cor}
+
+\begin{thm}
+	Let $V$ be finite-dimensional, $\chr{F} \neq 2$, and $(\cdot,\cdot)$ non-degenerate and symmetric.
+	Then there is an orthogonal basis $B = \{u_1, \ldots, u_n\}$ such that $(u_i, u_j) = 0$ when $i \neq j$ and $(u_i, u_i) \neq 0$.
+	The matrix of $(\cdot, \cdot)$ with respect to this $B$ is $\diag{(u_1, u_1), \ldots, (u_n, u_n)}$.
+\end{thm}
+
+\begin{cor}
+	If $A$ is invertible and symmetric and $\chr{F} \neq 2$, then $A$ is congruent to a diagonal matrix.
+\end{cor}
+
+\subsection{Quadratic forms}
+
+\begin{defn*}
+	A \textbf{quadratic form} on $V$ is $Q : V \to F$ with $Q(v) := (v, v)$, where $(\cdot, \cdot)$ is symmetric.
+	$Q$ is \textbf{non-degenerate} $\iff (\cdot, \cdot)$ is non-degenerate.
+\end{defn*}
+
+\begin{defn*}
+	$Q, Q'$ are \textbf{equivalent} $\iff$ there is an invertible matrix $P$ such that $Q(Py) = Q'(y)$ $\iff$ their matrices are congruent.
+	Then letting $x = Py$, we have $Q(x) = (Py)^TA(Py) = y^TP^TAPy = Q'(y)$ where $A$ is the matrix of $Q$.
+\end{defn*}
+
+\begin{thm}
+	Let $V = F^n$ and $Q$ be non-degenerate.
+	If $F = \mathbb{C}$ then $Q$ is equivalent to $Q_0(x) := \sum_{i = 1}^nx_i^2$, whose matrix is $I_n$.
+	If $F = \mathbb{R}$ then $Q$ is equivalent to a unique $Q_{p,q} := \sum_{i = 1}^px_i^2 - \sum_{i = p + 1}^{p + q}x_i^2$ where $p + q = n$, whose matrix is $I_p \oplus -I_q$.
+	If $F = \mathbb{Q}$ then there are infinitely many inequivalent non-degenerate quadratic forms.
+\end{thm}
+
+\subsection{Applications}
+
+\begin{defn*}
+	Let $(\cdot, \cdot)$ be non-degenerate and symmetric or skew-symmetric.
+	$T$ is an \textbf{isometry} of $(\cdot, \cdot) \iff \forall u, v \in V,\ (T(u), T(v)) = (u, v)$.
+	The set of isometries $I(V, (\cdot, \cdot))$ is a subgroup of $GL(V)$.
+\end{defn*}
+
+\end{document}

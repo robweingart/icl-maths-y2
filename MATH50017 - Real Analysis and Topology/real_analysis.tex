@@ -1,0 +1,985 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{prop*}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem*{defn*}{Definition}
+\newtheorem*{not*}{Notation}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\length{\lVert}{\rVert}
+
+\renewcommand{\d}{{\textnormal{d}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{MATH50001 Analysis 2 Term 1\\{\Large also known as}\\MATH50017 Real Analysis and Topology for JMC}
+\author{Notes by Robert Weingart}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section*{General notes}
+
+This document is a concise summary of the official course notes.
+It includes every theorem, lemma, proposition, corollary and definition, without any proofs or exercises.
+The numbering should match the official notes, but notation has been changed in many places to be more consistent.\\
+
+\noindent Notation which is used throughout an entire section is defined only once at the start rather than in every statement.
+When a symbol has the same meaning in multiple consecutive statements, the definition is not repeated as it should be clear from the context.\\
+
+\noindent Unnumbered definitions correspond to bolded terms that are not given numbers.
+Unnumbered propositions are results from exercises that I though were important enough to include.
+
+\section{Differentiation in higher dimensions}
+
+\subsection{Euclidean spaces}
+
+\subsubsection{Preliminaries from analysis 1}
+
+\begin{defn*}
+	Some definitions from year 1:
+	\begin{align*}
+		\mathbb{N} &:= \{1, 2, 3, \ldots\}\\
+		\mathbb{Z} &:= \{\ldots, \}
+	\end{align*}
+\end{defn*}
+
+\subsubsection{Euclidean space of dimension $n$}
+
+\begin{defn*}
+	The \textbf{$n$-dimensional Euclidean space} $\mathbb{R}^n$ is the set of all ordered $n$-tuples of members (\textbf{coordinates}) of $\mathbb{R}$.
+	In this module, the $i$th coordinate of $x \in \mathbb{R}^n$ is denoted $x^i$.
+	$\mathbb{R}^n$ is a vector space over $\mathbb{R}$, with addition and scalar multiplication applied to each element.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{inner product} on $\mathbb{R}^n$ is
+	\begin{align*}
+		\langle\cdot,\cdot\rangle : \mathbb{R}^n \times \mathbb{R}^n \to \mathbb{R}\\
+		\langle x, y\rangle := \sum_{i = 1}^nx^iy^i
+	\end{align*}
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{length} or \textbf{norm} on $\R^n$ is
+  \begin{align*}
+    \length{\cdot} : \R^n \to [0, \infty)\\
+    \length{x} := \sqrt{\langle x, x \rangle}
+  \end{align*}
+\end{defn*}
+
+\begin{prop*}
+  For all $x, y \in \R^n$, $\lambda \in \R$
+  \begin{itemize}
+    \item $\length{x} \geq 0$
+    \item $\length{x} = 0 \iff x = 0$
+    \item $\length{\lambda x} = \abs{\lambda}\length{x}$
+    \item Triangle inequality: $\length{x + y} \leq \length{x} + \length{y}$
+  \end{itemize}
+\end{prop*}
+
+\subsubsection{Convergence of sequences in Euclidean spaces}
+
+\begin{defn}
+  A sequence $(x_i) \subset \R^n$ \textbf{converges to} $x \in \R $ iff
+  $$\forall \epsilon > 0,\ \exists N \in \N : \forall i \geq N,\ \length{x_i - x} < \epsilon$$
+\end{defn}
+
+\begin{prop}
+  $x_i \to x \iff \forall j \in \{1, \ldots, n\},\ x_i^j \to x^j$ (note the use of superscript to mean component extraction, not exponentiation)
+\end{prop}
+
+\subsection{Continuity}
+
+\subsubsection{Open sets in Euclidean spaces}
+
+\begin{defn*}
+  The \textbf{open ball} of radius $r \in \R$ about $x \in \R^n$ is
+  $$B_r(x) := \{ y \in \R : \length{y - x} < r \}$$
+\end{defn*}
+
+\begin{defn}
+  $U \subseteq \R^n$ is \textbf{open in} $\R^n \iff \forall x \in U,\ \exists r > 0 : B_r(x) \subseteq U$.
+\end{defn}
+
+\subsubsection{Continuity at a point, and continuity on an open set}
+
+\begin{defn}
+  For $A$ open, $f : A \to \R$ is \textbf{continuous at} $p \in A$ iff
+  $$\forall \epsilon > 0,\ \exists \delta > 0 : \forall x \in A,\ \length{x - p} < \delta \implies \length{f(x) - f(p)} < \epsilon$$
+  $f$ is \textbf{continuous on} $A \iff f$ is continuous at all $p \in A$.
+\end{defn}
+
+\begin{thm}
+  For $A \subset \R^n$ and $B \subset \R^m$ both open, if $f : A \to B$ is continuous at $p$ and $g : B \to \R^l$ is continuous at $f(p)$ then $g \circ f$ is continuous at $p$.
+\end{thm}
+
+\begin{defn}
+  For $A$ open and $f : A \to \R^m$, the \textbf{limit of $f$ as $x$ tends to $p \in A$} is $q \in \R^m$ where
+  $$\forall \epsilon > 0,\ \exists \delta > 0 : \forall x \in A,\ 0 < \length{x - p} < \delta \implies \length{f(x) - q} < \epsilon$$
+  which we write $\lim_{x \to p}f(x) = q$.
+\end{defn}
+
+\begin{prop*}
+  $f$ is continuous at $p \iff \lim_{x \to p}f(x) = f(p)$.
+\end{prop*}
+
+\begin{thm}
+  The limit can be distributed over addition and multiplication, and also over division if the limit of the denominator is not 0.
+\end{thm}
+
+\begin{cor}
+  If $f : A \to \R$ and $g : A \to R$ are continuous at $p$ then so are $f + g$ and $fg$, and so is $\frac{f}{g}$ assuming $g(p) \neq 0$.
+\end{cor}
+
+\subsection{Derivative of a map of Euclidean spaces}
+
+\subsubsection{Derivative as a linear map}
+
+\begin{lem}
+  $f : (a, b) \to \R$ is differentiable at $p \in (a, b) \iff$ there exists a map $A_{\lambda}(x) = \lambda(x - p) + f(p)$ with $\lambda \in \R$ such that
+  $$\lim_{x \to p}\frac{\abs{f(x) - A_{\lambda}(x)}}{\abs{x - p}} = 0$$
+\end{lem}
+
+\begin{defn}
+  For $\Omega$ open, $f : \Omega \to \R^m$ is \textbf{differentiable at} $p \in \Omega$ iff there is a linear map $\Lambda : \R^n \to \R^m$ such that
+  $$\lim_{x \to p}\frac{\length{f(x) - (\Lambda(x - p) + f(p))}}{\length{x - p}} = 0$$
+  Then the \textbf{derivative of $f$ at $p$} or (\textbf{total derivative} or \textbf{differential}) is $Df(p) := \Lambda$.
+\end{defn}
+
+\begin{lem}
+  $f$ is differentiable at $p \implies f$ is continuous at $p$.
+\end{lem}
+
+\begin{thm}
+  If the derivative exists, it is unique.
+\end{thm}
+
+\subsubsection{Chain rule}
+
+\begin{thm}
+  For $A \in \R^n$ and $B \in \R^m$ both open, $g : A \to B$ differentiable at $p$ and $f : B \to \R^l$ differentiable at $g(p)$, $f \circ g$ is differentiable at $p$ with
+  $$D(f \circ g)(p) = Df(g(p)) \circ Dg(p)$$
+\end{thm}
+
+\subsection{Directional derivatives}
+
+\subsubsection{Rates of change and partial derivatives}
+
+\begin{defn}
+  For $f$ differentiable at $p$ and $\length{v} = 1$, the \textbf{directional derivative} of $f$ at $p$ in the direction $v$ is
+  $$\frac{\partial f}{\partial v}(p) := Df(p)(v) = \lim_{t \to 0}\frac{f(p + vt) - f(p)}{t}$$
+  The \textbf{partial derivatives} of $f$ at $p$ are $D_if(p) := \frac{\partial f}{\partial e_i}(p)$ for $i = 1, \ldots, n$.
+\end{defn}
+
+\begin{thm}
+  For $f$ differentiable at $p$,
+  $$Df(p) = \begin{pmatrix}
+    D_1f^1(p) & \ldots & D_nf^1(p) \\
+    \vdots    & \ddots & \vdots    \\
+    D_1f^m(p) & \ldots & D_nf^m(p)
+  \end{pmatrix}$$
+\end{thm}
+
+\begin{cor}
+  If $g : A \to B$ is differentiable at $p$ and $f : B \to \R^l$ is differentiable at $g(p)$ then
+  $$D(f \circ g)(p) = \begin{pmatrix}
+    D_1f^1(g(p)) & \ldots & D_mf^1(g(p)) \\
+    \vdots    & \ddots & \vdots    \\
+    D_1f^l(g(p)) & \ldots & D_mf^l(g(p))
+  \end{pmatrix}\begin{pmatrix}
+    D_1g^1(p) & \ldots & D_ng^1(p) \\
+    \vdots    & \ddots & \vdots    \\
+    D_1g^m(p) & \ldots & D_ng^m(p)
+  \end{pmatrix}$$
+\end{cor}
+
+\begin{lem}
+  If $f$ is differentiable in $\Omega$ open and has a local minimum or maximum at $p \in \Omega$ then $Df(p) = 0$.
+\end{lem}
+
+\subsubsection{Relation between partial derivatives and differentiability}
+
+\begin{thm}
+  If the partial derivatives of $f : \Omega \to \R^m$ all exist in $\Omega$ and are all continuous at $p$ then $f$ is differentiable at $p$.
+\end{thm}
+
+\subsection{Higher derivatives}
+
+\subsubsection{Higher derivatives as linear maps}
+
+\begin{defn}
+  $f$ is \textbf{continuously differentiable} iff $Df : \Omega \to \R^{mn}$ is continuous, where the $m \times n$ matrix representing $Df(p)$ is converted into an $mn$-dimensional vector.
+\end{defn}
+
+\begin{defn}
+  The \textbf{second derivative} of $f$ is $DDf : \Omega \to (\R^n \to \R^{m \times n})$ (equivalently, $DDf : \Omega \to \R^n \to \R^n \to \R^m$).
+  It is the derivative of $Df : \Omega \to \R^{mn}$.
+  For $p \in \Omega$, $DDf(p)$ is a linear map from $n$-dimensional vectors to $m \times n$ matrices.
+  This extends to higher derivatives.
+\end{defn}
+
+\subsubsection{Symmetry of mixed partial derivatives}
+
+\begin{thm}
+  (Schwartz)
+  If $f$ is differentiable in $\Omega$ and $D_iD_jf$ and $D_jD_if$ exist and are continuous in $\Omega$ then $D_iD_jf(p) = D_jD_if(p)$ for all $p \in \Omega$.
+\end{thm}
+
+\subsubsection{Taylor's theorem}
+
+\begin{not*}
+  In this section $\alpha$ is a \textbf{multi-index}, an $n$-tuple of non-negative integers.
+  We define:
+  \begin{align*}
+    \abs{\alpha} &:= \alpha_1 + \alpha_2 + \ldots + \alpha_n\\
+    D^{\alpha}f &:= D_1^{\alpha_1}D_2^{\alpha_2}\ldots D_n^{\alpha_n}f\\
+    v^{\alpha} &:= (v^1)^{\alpha_1}(v^2)^{\alpha_2}\ldots(v^n)^{\alpha_n}\\
+    \alpha! &:= \alpha_1!\alpha_2!\ldots\alpha_n!
+  \end{align*}
+  Notice that the nested superscripts in the third equation have different meanings; each factor is the $i$th component raised to the power of $\alpha_i$.
+\end{not*}
+
+\begin{thm}
+  (Taylor)
+  For $p \in \R^n$, $h \in B_r(0)$, and $f : B_r(p) \to \R$ which is $k$-times continuously differentiable on $B_r(p)$,
+  $$f(p + h) = \sum_{\abs{\alpha} \leq k - 1}\frac{h^{\alpha}}{\alpha!}D^{\alpha}f(p) + R_k(p, h)$$
+  where
+  $$R_k(p, h) = \sum_{\abs{\alpha} = k}\frac{h^{\alpha}}{\alpha!}D^{\alpha}f(x)$$
+  for some $x$ with $0 < \length{x - p} < \length{h}$.
+  Each sum is over all $n$-multi-indices $\alpha$ with the specified property.
+\end{thm}
+
+\subsection{Inverse and Implicit function theorems}
+
+\subsubsection{Inverse function theorem}
+
+\begin{thm}
+  (Inverse Function)
+  For $f$ continuously differentiable on $\Omega$ and $q \in \Omega$ such that $Df(q)$ is invertible, there exist $U \subset \Omega$ and $V \subset \R^n$ both open such that $q \in U$, $f(q) \in V$, $f : U \to V$ is bijective, $f^{-1} : V \to U$ is continuously differentiable, and for all $y \in V$,
+  $$Df^{-1}(y) = \left(Df(f^{-1}(y))\right)^{-1}$$
+\end{thm}
+
+\begin{defn*}
+  $f : \Omega \to \Omega'$ is a \textbf{$C^1$-diffeomorphism} iff $f$ is bijective, continuously differentiable, and $Df(x)$ is invertible for all $x \in \Omega$.
+\end{defn*}
+
+\subsubsection{Implicit Function Theorem}
+
+\begin{thm}
+  (Implicit Function simplified)
+  For $\Omega \subset \R^2$ open, $f : \Omega \to \R$ continuously differentiable, and $(x', y') \in \Omega$ with $f(x', y') = 0$ and $D_2f(x', y') \neq 0$, there exist $A, B \subset \R$ both open and $g : A \to B$ continuously differentiable where $x' \in A$, $y' \in B$, and
+  $$\forall y \in B,\ (\exists x \in A : f(x, y) = 0) \iff (\exists x \in A : y = g(x))$$
+\end{thm}
+
+\subsubsection{* Sketch of the proof of the Implicit Function Theorem}
+
+Not examinable.
+
+\subsubsection{The general from of the Implicit Function Theorem}
+
+\begin{thm}
+  For $\Omega \subset \R^n$ and $\Omega' \subset \R^m$ both open, $f : \Omega \times \Omega' \to \R^m$ continuously differentiable everywhere, and $p \in \Omega \times \Omega'$ such that $f(p) = 0$ and the $m \times m$ matrix with entries $(D_{n + j}f^i(p))$ is invertible, there exist $A \subset \Omega$ and $B \subset \Omega'$ both open and $g : A \to B$ continuously differentiable such that
+  $$\forall y \in B,\ (\exists x \in A : f(x, y) = 0) \iff (\exists x \in A : y = g(x))$$
+\end{thm}
+
+\subsubsection{* Equivalence of the two theorems}
+
+Not examinable.
+
+\section{Metric and topological spaces}
+
+\subsection{Metric spaces}
+
+\subsubsection{Motivation and definition}
+
+\begin{defn}
+	A \textbf{metric} on a set $X$ is a function $\d : X \times X \to \mathbb{R}$ where for all $x, y, z \in X$
+	\begin{itemize}
+		\item $\d(x, y) \geq 0$
+		\item $\d(x, y) = 0 \iff x = y$
+		\item $\d(x, y) = \d(y, x)$
+		\item $\d(x, y) \leq \d(x, z) + \d(z, y)$
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	A \textbf{metric space} is a pair $(X, \d)$ where $\d$ is a metric on $X$.
+	The elements of $X$ are \textbf{points} and $\d$ is the \textbf{distance} between two points.
+\end{defn}
+
+\subsubsection{Examples of metric spaces}
+
+\begin{defn*}
+	A common metric on $\mathbb{R}$ is $\d_1(x, y) = \lvert x - y \rvert$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{Euclidean metric} on $\mathbb{R}^n$ is $\d_2(x, y) = \lvert\lvert x - y \rvert\rvert$.
+\end{defn*}
+
+\begin{lem}
+	For $f : [a, b] \to \mathbb{R}$ continuous and non-negative, with $f(x)$ non-zero for at least one $x$, $\int_a^bf(t)\d t > 0$.
+\end{lem}
+
+\begin{defn*}
+	For any set $X$, the \textbf{discrete metric} is 
+	$$\d_{\text{disc}}(x, y) = \begin{cases}0 & \text{if } x = y\\1 & \text{if } x \neq y\end{cases}$$
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{British rail metric} on $\mathbb{R}$ is 
+	$$\d_{\text{rail}}(x, y) = \begin{cases}\length{x - y} & \text{if } x = ky, k \in \mathbb{R}\\\length{x} + \length{y} & \text{otherwise}\end{cases}$$
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{supremum} or \textbf{uniform metric} on $C([a, b])$ is
+	$$\d_{\infty}(f, g) = \max{\lvert f(t) - g(t) \rvert}$$
+\end{defn*}
+
+\begin{defn}
+	For a metric space $(X, \d)$ and a subset $Y \subset X$, the restriction of $\d$ to $Y$ is the \textbf{induced metric} $\d\mid_Y$.
+	$(Y, \d\mid_Y)$ is a \textbf{metric subspace} of $X$, and is also an MS.
+\end{defn}
+
+\begin{defn}
+	For metric spaces $(X, \d_X)$ and $(Y, \d_Y)$ and a metric $\d$ on $X \times Y$ defined in terms of $\d_X$ and $\d_Y$, $(X \times Y, \d)$ is a \textbf{product metric space}.
+	Important examples of such a $\d$ include:
+	\begin{itemize}
+		\item $\d((x_1, x_2), (y_1, y_2)) = \max{\{\d_1(x_1, y_1), \d_2(x_2, y_2)\}}$
+		\item $\d((x_1, x_2), (y_1, y_2)) = \d_1(x_1, y_1) + \d_2(x_2, y_2)$
+	\end{itemize}
+\end{defn}
+
+\subsubsection{Normed vector spaces}
+
+\begin{defn}
+	A \textbf{norm} on a vector space $V$ over $\mathbb{R}$ is a function $\length{\cdot} : V \to \mathbb{R}$ where for all $u, v \in V$ and $\lambda \in \mathbb{R}$
+	\begin{itemize}
+		\item $\length{v} \geq 0$
+		\item $\length{v} = 0 \iff v = 0$
+		\item $\length{\lambda v} = \lvert\lambda\rvert\length{v}$
+		\item $\length{u + v} \leq \length{u} + \length{v}$
+	\end{itemize}
+\end{defn}
+
+\begin{defn*}
+	A \textbf{normed vector space} is a pair $(V, \length{\cdot})$ where $\length{\cdot}$ is a norm on $V$.
+\end{defn*}
+
+\begin{lem}
+	For a normed vector space $(V, \length{\cdot})$, $\d_{\length{\ }}(u, v) = \length{u - v}$ is a metric on $V$.
+\end{lem}
+
+\subsubsection{Open sets in metric spaces}
+
+\begin{defn}
+	The \textbf{ball} of radius $\epsilon$ about $x$ (or \textbf{$\epsilon$-neighbourhood} of $x$) is
+	$$B_{\epsilon}(x) = \{y \in X \mid d(x, y) < \epsilon\}$$
+\end{defn}
+
+\begin{defn}
+	$U \subseteq X$ is \textbf{open} $\iff \forall u \in U,\  \exists \delta > 0 : B_{\delta}(u) \subseteq U$
+\end{defn}
+
+\begin{lem}
+	All balls are open.
+\end{lem}
+
+\begin{lem}
+	In any $(X, d)$, $X$ and $\emptyset$ are open.
+\end{lem}
+
+\begin{lem}
+	A union of open sets is open.
+\end{lem}
+
+\begin{lem}
+	An intersection of finitely many open sets is open.
+\end{lem}
+
+\begin{defn}
+	Two metrics $\d_1$ and $\d_2$ on $X$ are \textbf{topologically equivalent} iff
+	$$\forall U \subseteq X ,\  (U \text{ open in } (X, \d_1) \iff U \text{ open in } (X, \d_2))$$
+\end{defn}
+
+\subsubsection{Convergence in metric spaces}
+
+\begin{defn}
+	A sequence $(x_n)$ of elements of $X$ \textbf{converges} in $(X, \d)$ $\iff$ there exists a \textbf{limit} $x \in X$ such that
+	$$\forall\epsilon > 0,\  \exists N \in \mathbb{N} : \forall n \geq N,\  \d(x_n, x) < \epsilon$$
+	We use the usual notation of $x_n \to x$.
+\end{defn}
+
+\begin{defn*}
+	A sequence $(x_n)$ is \textbf{eventually constant} iff
+	$$\exists N \in \mathbb{N} : \forall n \geq N,\ x_n = x_N$$
+\end{defn*}
+
+\begin{prop*}
+	Under the discrete metric, a sequence converges iff it is eventually constant.
+\end{prop*}
+
+\begin{lem}
+	If the limit of a sequence exists, it is unique.
+\end{lem}
+
+\begin{cor}
+	If $\d_1$ and $\d_2$ are topologically equivalent, convergence under $\d_1$ is equivalent to convergence under $\d_2$.
+\end{cor}
+
+\subsubsection{Closed sets in metric spaces}
+
+\begin{defn}
+	$V \subseteq X$ is \textbf{closed} in $(X, \d)$ $\iff$ all convergent sequences whose elements are all in $V$ have their limit also in $V$.
+\end{defn}
+
+\begin{prop*}
+	Under the discrete metric, all sets are closed.
+\end{prop*}
+
+\begin{thm}
+	$V$ is closed $\iff X \setminus V$ is open.
+\end{thm}
+
+\begin{lem}
+	An intersection of closed sets is closed.
+	A union of finitely many closed sets is closed.
+\end{lem}
+
+\subsubsection{Interior, isolated, limit, and boundary points in metric spaces}
+
+\begin{defn}
+	For $V \subset X$, $x \in X$ (not necessarily $x \in V$):
+	\begin{itemize}
+		\item $x$ is an \textbf{interior} or \textbf{inner point} of $V \iff \exists \delta > 0 : B_{\delta}(x) \subset V$ 
+		\item $x$ is an \textbf{isolated point} of $V \iff \exists \delta > 0 : V \cap B_{\delta}(x) = \{x\}$
+		\item $x$ is a \textbf{limit} or \textbf{accumulation point} of $V \iff \forall \delta > 0,\ (B_{\delta}(x) \cap V) \setminus \{x\} \neq \emptyset$
+		\item $x$ is a \textbf{boundary point} of $V \iff \forall \delta > 0,\ B_{\delta}(x) \cap V \neq \emptyset$ and $B_{\delta}(x) \setminus V \neq \emptyset$
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	For $(X, \d)$ and $V \subset X$:
+	\begin{itemize}
+		\item The \textbf{interior} of $V$ is $V^{\circ}$, the set of its interior points.
+		\item The \textbf{closure} of $V$ is $\overline{V}$, the union of $V$ and the set of its limit points.
+		\item The \textbf{boundary} of $V$ is $\partial V$, the set of its boundary points.
+	\end{itemize}
+\end{defn}
+
+\begin{prop*}
+	$V$ is open $\iff V = V^{\circ}$. 
+\end{prop*}
+
+\begin{prop*}
+	$V$ is closed $\iff V = \overline{V}$.
+\end{prop*}
+
+\begin{prop*}
+	$V \subseteq W \implies V^{\circ} \subseteq W^{\circ}$
+\end{prop*}
+
+\begin{prop*}
+	$V \subseteq W \implies \overline{V} \subseteq \overline{W}$
+\end{prop*}
+
+\begin{prop*}
+	$\overline{V \cup W} = \overline{V} \cup \overline{W}$
+\end{prop*}
+
+\begin{lem}
+	$x$ is a limit point of $V \iff$ there is a sequence of points in $V \setminus \{x\}$ converging to $x$.
+\end{lem}
+
+\begin{defn}
+	$V \subseteq X$ is \textbf{dense} in $X \iff \overline{V} = X$.
+	$(X, \d)$ is \textbf{separable} $\iff$ there is a countable dense subset.
+\end{defn}
+
+\subsubsection{Continuous maps of metric spaces}
+
+\begin{not*}
+	From now on, let $(X, \d_X)$ and $(Y, \d_Y)$ be metric spaces and let $f : X \to Y$ be a map.
+\end{not*}
+
+\begin{defn}
+	$f$ is \textbf{continuous at} $x \in X$ iff
+	$$\forall \epsilon > 0,\ \exists \delta > 0 : \forall x' \in X,\ (\d_X(x, x') < \delta \implies \d_Y(f(x), f(x')) < \epsilon)$$
+	$f$ is \textbf{continuous} $\iff f$ is continuous at every $x \in X$.
+	$f$ is \textbf{uniformly continuous} $\iff f$ is continuous with $\delta$ independent of $x$ (but still dependent on $\epsilon$).
+\end{defn}
+
+\begin{thm}
+	$f$ is continuous $\iff \forall U \subseteq Y$ \textnormal{(}$U$ is open $\implies f^{-1}(U)$ is open\textnormal{)}.
+\end{thm}
+
+\begin{prop*}
+	$f$ is continuous $\iff \forall U \subseteq Y$ \textnormal{(}$U$ is closed $\implies f^{-1}(U)$ is closed\textnormal{)}
+\end{prop*}
+
+\begin{thm}
+	$f$ is continuous at $x \in X \iff$ for all sequences $(x)_n$, $x_n \to x \implies f(x_n) \to f(x)$.
+\end{thm}
+
+\begin{defn}
+	$f$ is a \textbf{homeomorphism} $\iff f$ is bijective and continuous and $f^{-1}$ is continuous.
+	Two metric spaces are \textbf{homeomorphic} $\iff$ there is a homeomorphism between them.
+\end{defn}
+
+\begin{defn}
+	$f$ is \textbf{Lipschitz} iff
+	$$\exists M > 0 : \forall x_1, x_2 \in X,\ \d_Y(f(x_1), f(x_2)) \leq M\d_X(x_1, x_2)$$
+	$f$ is \textbf{bi-Lipschitz} iff
+	$$\exists M_1, M_2 > 0 : \forall x_1, x_2 \in X,\ M_2\d_X(x_1, x_2) \leq \d_Y(f(x_1), f(x_2)) \leq M_1\d_X(x_1, x_2)$$
+	$f$ is an \textbf{isometry} or \textbf{distance preserving} iff
+	$$\forall x_1, x_2 \in X,\ \d_Y(f(x_1), f(x_2)) = \d_X(x_1, x_2)$$
+\end{defn}
+
+\begin{prop*}
+	$f$ is surjective and bi-Lipschitz $\implies f$ is a homeomorphism.
+\end{prop*}
+
+\subsection{Topological spaces}
+
+\subsubsection{Motivation}
+
+Nothing important in this section.
+
+\subsubsection{Topology on a set}
+
+\begin{defn}
+	A \textbf{topology} on a set $A$ is $\tau$, a collection of subsets of $A$ where
+	\begin{itemize}
+		\item $\emptyset \in \tau$
+		\item $A \in \tau$
+		\item Any union of elements of $\tau$ is in $\tau$
+		\item Any intersection of finitely many elements of $\tau$ is in $\tau$
+	\end{itemize}
+	A \textbf{topological space} is a pair $(A, \tau)$ where $\tau$ is a topology on $A$.
+	The elements of $A$ are \textbf{points}.
+	The elements of $\tau$ are \textbf{open sets}.
+	An open set containing $a \in A$ is a \textbf{neighbourhood} of $a$.
+\end{defn}
+
+\begin{defn*}
+	The \textbf{coarse topology} on any $A$ is $\{\emptyset, A\}$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{discrete topology} on any $A$ is the set of all its subsets.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{Sierpinski topological space} is $(\{a, b\}, \{\emptyset, \{a, b\}, \{b\}\})$
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{order topology} on $\mathbb{R}$ is the collection of all sets of the form $(a, +\infty)$ with $a \in \mathbb{R} \cup \{-\infty, +\infty\}$, where $(+\infty, +\infty) = \emptyset$.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{co-finite topology} on any $A$ is the collection of subsets whose complements are finite, and also the empty set.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{induced topology} on any $X$ from a metric d on $X$ is the collection of open sets under d.
+	Two topologically equivalent metrics induce the same topology.
+\end{defn*}
+
+\begin{defn*}
+	The \textbf{Euclidean topology} is the topology induced from the Euclidean metric.
+\end{defn*}
+
+\begin{defn*}
+	$(A, \tau)$ is \textbf{metrisable} if there is a metric on $A$ which induces $\tau$.
+\end{defn*}
+
+\begin{defn*}
+	For $(A, \tau)$ and $Y \subset A$, the \textbf{induced} or \textbf{subspace topology} on $Y$ is $\tau_Y = \{U \cap Y \mid U \in \tau\}$
+\end{defn*}
+
+\begin{defn*}
+	For $(A, \tau_A)$ and $(B, \tau_B)$, the \textbf{product topology} on $A \times B$ is
+	$$\tau \star \mu = \{\Omega \subseteq A \times B \mid \forall (a, b) \in \Omega,\ \exists U \in \tau, V \in \mu : a \in U \land b \in V \land U \times V \in \Omega\}$$
+\end{defn*}
+
+\begin{defn}
+	A topology $\tau$ is \textbf{stronger} or \textbf{finer} than another topology $\mu$ on the same set $\iff \mu \subset \tau$.
+\end{defn}
+
+\begin{prop*}
+	The coarse topology is weaker than all others.
+	The discrete topology is stronger than all others.
+\end{prop*}
+
+\begin{lem}
+	$G \in \tau \iff \forall x \in G,\ \exists U \in \tau : x \in U \land U \subseteq G$.
+\end{lem}
+
+\begin{defn}
+	For $\Omega \subseteq A$, $x \in \Omega$ is an \textbf{interior point} of $\Omega \iff \exists U \in \tau : z \in U \land U \subseteq \Omega$.
+	The \textbf{interior} of $\Omega$ is $\Omega^{\circ}$, the set of all interior points.
+\end{defn}
+
+\subsubsection{Convergence, and the Hausdorff property}
+
+\begin{defn}
+	A sequence $(x_n)$ of elements of $A$ \textbf{converges} $\iff$ there is a \textbf{limit} $x$ such that
+	$$\forall G \in \tau \text{ where } x \in \tau,\ \exists N \in \mathbb{N} : \forall n \geq N,\ x_n \in G$$.
+	Limits are not necessarily unique.
+\end{defn}
+
+\begin{prop*}
+	Under the coarse topology, all sequences are convergent.
+	Under the discrete topology, $(x_n)$ converges $\iff (x_n)$ is eventually constant.
+\end{prop*}
+
+\begin{defn*}
+	$U$ and $V$ \textbf{separate} $x$ and $y \iff x \in U \land y \in V \land U \cap V = \emptyset$.
+\end{defn*}
+
+\begin{defn}
+	A topological space is \textbf{Hausdorff} $\iff$ any pair of distinct elements can be separated.
+\end{defn}
+
+\begin{thm}
+	In Hausdorff topological spaces, limits are unique.
+\end{thm}
+
+\subsubsection{Closed sets in topological spaces}
+
+\begin{defn}
+	$V \subseteq A$ is \textbf{closed} in $(A, \tau) \iff A \setminus V$ is open in $(A, \tau)$.
+\end{defn}
+
+\begin{thm}
+	The lecturer messed up the numbering.
+\end{thm}
+
+\begin{lem}
+	$\emptyset$ and $A$ are closed.
+	An intersection of closed sets is closed.
+	A union of finitely many closed sets is closed.
+\end{lem}
+
+\begin{lem}
+	For $(A, \tau)$ Hausdorff and $a \in A$, $\{a\}$ is closed.
+\end{lem}
+
+\begin{defn}
+	For $\Omega \subseteq A$, $x \in \Omega$ is a \textbf{limit} or \textbf{accumulation point} of $\Omega$ iff 
+	$$\forall U \in \tau,\ x \in U \implies (X \cup U) \setminus \{x\} \neq \emptyset$$
+	The \textbf{closure} of $\Omega$ is $\overline{\Omega}$, the union of $\Omega$ and the set of its limit points.
+\end{defn}
+
+\begin{lem}
+	$S \subset T \implies \overline{S} \subset \overline{T}$. $S$ is closed $\iff S = \overline{S}$.
+\end{lem}
+
+\subsubsection{Continuous maps on topological spaces}
+
+\begin{not*}
+	In this section, let $(A, \tau_A)$ and $(B, \tau_B)$ be topological spaces and let $f : A \to B$ be a map.
+\end{not*}
+
+\begin{defn}
+	$f$ is \textbf{continuous} $\iff \forall U \in \tau_B,\ f^{-1}(U) \in \tau_A$.
+\end{defn}
+
+\begin{prop*}
+	$\tau_A$ is the discrete topology $\implies f$ is continuous.
+	$\tau_B$ is the coarse topology $\implies f$ is continuous.
+\end{prop*}
+
+\begin{thm}
+	$f$ is continuous $\iff \forall U \in \tau_B,\ U$ is closed $\implies f^{-1}(U)$ is closed. 
+\end{thm}
+
+\begin{thm}
+	A composition of continuous maps is continuous.
+\end{thm}
+
+\begin{lem}
+	The constant map is continuous.
+\end{lem}
+
+\begin{defn}
+	$f$ is a \textbf{homeomorphism} $\iff f$ is bijective and continuous and $f^{-1}$ is continuous.
+	Two topological spaces are \textbf{topologically equivalent} or \textbf{homeomorphic} $\iff$ there is a homeomorphism between them.
+\end{defn}
+
+\begin{prop*}
+	If $(A, \tau_A)$ and $(B, \tau_B)$ are homeomorphic, $(A, \tau_A)$ is Hausdorff $\iff (B, \tau_B)$ is Hausdorff.
+\end{prop*}
+
+\subsection{Connectedness}
+
+\subsubsection{Connected sets}
+
+\begin{not*}
+	From now on $(X, \d)$, $(X, \d_X)$ and $(Y, \d_Y)$.
+\end{not*}
+
+\begin{defn}
+	$T \subseteq X$ is \textbf{disconnected} if there are open sets $U, V \subseteq X$ such that
+	\begin{itemize}
+		\item $U \cap V = \emptyset$
+		\item $T \subseteq U \cup V$
+		\item $T \cap U \neq \emptyset$ and $T \cap V \neq \emptyset$
+	\end{itemize}
+\end{defn}
+
+\begin{defn}
+	$T$ is \textbf{connected} $\iff T$ is not disconnected.
+\end{defn}
+
+\begin{prop*}
+	$X$ is connected $\iff$ the only subsets which are both open and closed are $X$ and $\emptyset$.
+\end{prop*}
+
+\begin{lem}
+	$T$ is disconnected $\iff$ there is a continuous map $f : T \to \mathbb{R}$ with $f(T) = \{0, 1\}$.
+\end{lem}
+
+\begin{lem}
+	$S \subseteq \mathbb{R}$ is an interval $\iff \forall x, y \in S, z \in \mathbb{R},\ x < z < y \implies z \in S$.
+\end{lem}
+
+\begin{thm}
+	In $(\mathbb{R}, \d_1)$, all connected sets are intervals.
+\end{thm}
+
+\begin{thm}
+	In $(\mathbb{R}, \d_1)$, all closed intervals (of the form $[a, b]$) are connected.
+\end{thm}
+
+\begin{prop*}
+	In fact, all intervals in $(\mathbb{R}, \d_1)$ are connected.
+\end{prop*}
+
+\subsubsection{Continuous maps and connected sets}
+
+\begin{thm}
+	If $f : X \to Y$ is continuous and $S \subseteq X$ is connected, $f(S)$ is connected.
+\end{thm}
+
+\begin{cor}
+	If $(X, \d_X)$ and $(Y, \d_Y)$ are homeomorphic, $X$ is connected $\iff Y$ is connected.
+\end{cor}
+
+\begin{thm}
+	If $X$ is connected, $f : X \to \mathbb{R}$ is continuous, and $a, b \in X$
+	$$f(a) < 0 \land f(b) > 0 \implies \exists c \in X : f(c) = 0$$
+\end{thm}
+
+\begin{cor}
+	If $f : [a, b] \to \mathbb{R}$ is continuous and $x, y \in [a, b]$
+	$$f(x) < 0 \land f(y) > 0 \implies \exists z \in [a, b] : f(z) = 0$$
+\end{cor}
+
+\subsubsection{Path connected sets}
+
+\begin{defn}
+	A \textbf{path} from $a$ to $b$ is a continuous map $f : [0, 1] \to X$ where $f(0) = a$ and $f(1) = b$.
+\end{defn}
+
+\begin{defn}
+	$(X, \d)$ is \textbf{path-connected} if every pair of points is joined by a path.
+\end{defn}
+
+\begin{thm}
+	$(X, \d)$ is path connected $\implies (X, \d)$ is connected.
+\end{thm}
+
+\subsection{Compactness}
+
+\subsubsection{Compactness by covers}
+
+\begin{defn}
+	An \textbf{open cover} for $Y \subseteq X$ is a collection $\mathcal{R}$ of open subsets of $X$ where $Y \subseteq \bigcup_{U \in \mathcal{R}}U$.
+	A \textbf{sub-cover} of $\mathcal{R}$ for $Y$ is $\mathcal{C} \subseteq \mathcal{R}$ such that $\mathcal{C}$ is also an open cover for $Y$.
+	A \textbf{finite cover} is an open cover with finitely many elements.
+\end{defn}
+
+\begin{defn}
+	$Y$ is \textbf{compact} $\iff$ every open cover for $Y$ has a finite sub-cover.
+\end{defn}
+
+\begin{prop}
+	In $(\mathbb{R}, \d_1)$, closed intervals are compact.
+\end{prop}
+
+\begin{prop}
+	$X$ is compact and $Y \subseteq X$ is closed $\implies Y$ is compact.
+\end{prop}
+
+\begin{thm}
+	$Y$ is compact $\implies Y$ is closed.
+\end{thm}
+
+\begin{thm}
+	For both of the examples of product metric spaces in Definition 2.4, $X$ and $Y$ are compact $\implies X \times Y$ is compact.
+\end{thm}
+
+\begin{cor}
+	A Cartesian product of closed intervals is compact in $\mathbb{R}^n$.
+\end{cor}
+
+\begin{defn}
+	$Z \subseteq X$ is \textbf{bounded} iff
+	$$\exists M \in \mathbb{R} : \forall x, y \in Z,\ \d(x, y) \leq M$$
+	For an arbitrary set $S$, $f : S \to X$ is \textbf{bounded} $\iff f(S)$ is bounded.
+\end{defn}
+
+\begin{prop*}
+	A union of finitely many bounded sets is bounded.
+\end{prop*}
+
+\begin{lem}
+	$(X, \d)$ is compact $\implies X$ is bounded.
+\end{lem}
+
+\begin{thm}
+	(Heine Borel Theorem)
+	In $(\mathbb{R}^n, \d_2)$, a subset is compact $\iff$ it is closed and bounded.
+\end{thm}
+
+\subsubsection{Sequential compactness}
+
+\begin{defn}
+	$(X, \d)$ is \textbf{sequentially compact} $\iff$ every sequence has a convergent subsequence.
+\end{defn}
+
+\begin{lem}
+	$(x_n)$ has a convergent subsequence $\iff \exists x \in X : \forall \epsilon > 0$, there are infinitely many $i$ where $x_i \in B_{\epsilon}(x)$.
+\end{lem}
+
+\begin{prop*}
+	$(X, \d)$ is sequentially compact $\implies X$ is bounded.
+\end{prop*}
+
+\begin{thm}
+	$(X, \d)$ is compact $\implies (X, \d)$ is sequentially compact.
+\end{thm}
+
+\begin{thm}
+	(Bolzano-Weierstrass Theorem)
+	In $\mathbb{R}^n$, every bounded sequence has a convergent subsequence.
+\end{thm}
+
+\begin{thm}
+	$(X, \d)$ is sequentially compact $\implies (X, \d)$ is compact.
+\end{thm}
+
+\subsubsection{Continuous maps and compact sets}
+
+\begin{thm}
+	$Z \subseteq X$ is compact and $f : X \to Y$ is continuous $\implies f(Z)$ is compact.
+\end{thm}
+
+\begin{cor}
+	If $(X, \d_X)$ and $(Y, \d_Y)$ are homeomorphic, $X$ is compact $\iff Y$ is compact.
+\end{cor}
+
+\begin{thm}
+	$X$ is compact and $f : X \to Y$ is continuous $\implies f$ is uniformly continuous.
+\end{thm}
+
+\begin{cor}
+	$f : [a, b] \to \mathbb{R}$ is continuous $\implies f$ is uniformly continuous.
+\end{cor}
+
+\begin{thm}
+	If $X$ is compact and $f : X \to \mathbb{R}$ is continuous, $f$ is bounded from above and below and attains its upper and lower bounds.
+\end{thm}
+
+\begin{thm}
+	For $f : \mathbb{R} \to \mathbb{R}$ continuous and $[a, b] \subseteq \mathbb{R}$, $f([a, b])$ is a closed interval.
+\end{thm}
+
+\subsection{Completeness}
+
+\subsubsection{Complete metric spaces and Banach space}
+
+\begin{defn}
+	$(x_n)$ is \textbf{Cauchy} iff
+	$$\forall \epsilon > 0,\ \exists N \in \mathbb{N} : \forall n, m > N,\ \d(x_n, x_m) < \epsilon$$
+\end{defn}
+
+\begin{prop*}
+	$(x_n)$ is convergent $\implies (x_n)$ is Cauchy.
+\end{prop*}
+
+\begin{prop*}
+	If a Cauchy sequence has a subsequence converging to some $x$, the whole sequence convergence to $x$.
+\end{prop*}
+
+\begin{defn}
+	$(X, \d)$ is \textbf{complete} $\iff$ all Cauchy sequences in $X$ converge.
+	$(V, \length{\cdot})$ is a \textbf{Banach space} $\iff (V, \d_{\length{\ }})$ is complete.
+\end{defn}
+
+\begin{lem}
+	For all $n$, $(\mathbb{R}^n, \d_2)$ is complete.
+\end{lem}
+
+\begin{prop}
+	The metric space $(C([a, b]), \d_2)$, where
+	$$\d_2(f, g) = \sqrt{\int_a^b\lvert f(t) - g(t) \rvert^2dt}$$
+	is not complete.
+\end{prop}
+
+\begin{thm}
+	If $(f_n)$ is a sequence of continuous functions which converges uniformly, its limit is also continuous.
+\end{thm}
+
+\begin{thm}
+	The metric space $(C([a, b]), \d_{\infty})$, where
+	$$\d_{\infty}(f, g) = \sup_{t \in [a, b]} \lvert f(t) - g(t) \rvert$$
+	is complete.
+\end{thm}
+
+\begin{thm}
+	$(X, \d)$ is compact $\implies (X, \d)$ is complete.
+\end{thm}
+
+\subsubsection{Arzel\`a-Ascoli}
+
+\begin{defn}
+	A collection $\mathcal{C}$ of functions $f : [a, b] \to \mathbb{R}$ is \textbf{uniformly bounded} iff
+	$$\exists M > 0 : \forall f \in \mathcal{C}, x \in [a, b],\ \lvert f(x)\rvert < M$$
+	$\mathcal{C}$ is \textbf{uniformly equi-continuous} iff
+	$$\forall \epsilon > 0,\ \exists \delta > 0 : \forall f \in \mathcal{C}, x, y \in [a, b],\ \lvert x - y \rvert < \delta \implies \lvert f(x) - f(y) \rvert < \epsilon$$
+\end{defn}
+
+\begin{thm}
+	(Arzel\`a-Ascoli Theorem)
+	If $\mathcal{C}$ is a uniformly bounded and equi-continuous collection of continuous functions, every sequence in $\mathcal{C}$ has a convergent subsequence in $(C([a, b]), \d_{\infty})$ with $\d_{\infty}$ defined as in Theorem 2.52.
+\end{thm}
+
+\subsubsection{Fixed point theorem}
+
+\begin{defn}
+	$f : X \to Y$ is \textbf{contracting} iff
+	$$\exists K \in (0, 1) : \forall a, b \in X,\ \d_Y(f(a), f(b)) \leq K\d_X(a, b)$$
+\end{defn}
+
+\begin{thm}
+	(Banach Fixed Point Theorem)
+	If $(X, \d)$ is non-empty and complete and $f : X \to X$ is contracting, $f$ has a unique fixed point.
+\end{thm}
+
+\end{document}

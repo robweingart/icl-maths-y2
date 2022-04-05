@@ -1,0 +1,840 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{prop*}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem*{defn*}{Definition}
+\newtheorem*{not*}{Notation}
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\D}{\mathbb{D}}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\Arg}{Arg}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\Log}{Log}
+\DeclareMathOperator{\length}{length}
+\DeclareMathOperator{\Res}{Res}
+
+\begin{document}
+
+%\maketitle
+
+\begin{titlepage}
+  \vspace*{\fill}
+  \begin{center}
+    {\Huge MATH50001 Analysis 2 Term 2}\\
+    \vspace{0.5cm}
+    {\Large also known as}\\
+    \vspace{0.5cm}
+    {\Huge MATH50018 Complex Analysis for JMC}\\
+    \vspace{1cm}
+    {\Large Notes by Robert Weingart}
+  \end{center}
+  \vspace*{\fill}
+\end{titlepage}
+
+\newpage
+
+\tableofcontents
+
+%\section{Complex numbers}
+
+\section{Holomorphic functions}
+
+%\subsection{Lesson 1}
+
+\subsection{Basic properties}
+
+A complex number has the form $z = x + iy$ with $x, y \in \R$ and $i^2 = -1$.
+\begin{align*}
+  \re{(x + iy)} &:= x\\
+  \im{(x + iy)} &:= y\\
+  \overline{x + iy} &:= x - iy\\
+\end{align*}
+They can also be written in polar form:
+\begin{align*}
+  z &= r(\cos{\theta} + i\sin{\theta}) =: r\cis{\theta}\\
+  \abs{z} &:= r = \sqrt{x^2 + y^2}\\
+  \arg{z} &:= \theta
+\end{align*}
+Note that the argument is not unique; it can be increased or decreased by any integer multiple of $2\pi$ with no effect.
+
+\begin{defn}
+  The \textbf{principal argument} of $z = r\cis{\theta}$ is $\Arg{z} := \theta, \theta \in (-\pi, \pi]$
+\end{defn}
+
+\begin{thm}
+  $r_1\cis{\theta_1}r_2\cis{\theta_2} = r_1r_2\cis{(\theta_1 + \theta_2)}$
+\end{thm}
+
+\begin{cor}
+  (De Moivre's formula)
+  $(r\cis{\theta})^n = r^n\cis{(n\theta)}$
+\end{cor}
+
+Note that $\arg{z_1} + \arg{z_2} = \arg{z_1z_2}$ but $\Arg{z_1} + \Arg{z_2} \neq \Arg{z_1z_2}$
+
+\subsection{Sets in the complex plane}
+
+\begin{defn}
+  For $z_0 \in \mathbb{C}, r > 0$, we have the \textbf{open disc} $D_r(z_0) := \{z \in \mathbb{C} : \abs{z - z_0} < r\}$ and the \textbf{circle} $C_r(z_0) := \{z \in \mathbb{C} : \abs{z - z_0} = r\}$.
+\end{defn}
+
+\begin{defn}
+  The \textbf{unit disc} is $\D := D_1(0)$.
+\end{defn}
+
+\begin{defn}
+  For $\Omega \subset \C$, $z \in \Omega$ is an \textbf{interior point} of $\Omega \iff \exists r > 0 : D_r(z) \subset \Omega$.
+  The \textbf{interior} of $\Omega$ is the set of its interior points.
+\end{defn}
+
+\begin{defn}
+  $\Omega$ is \textbf{open} $\iff$ all points in $\Omega$ are interior.
+\end{defn}
+
+\begin{defn}
+  $\Omega$ is \textbf{closed} $\iff \Omega^c = \C \setminus \Omega$ is open.
+\end{defn}
+
+\begin{defn}
+  The \textbf{closure} of $\Omega$ is $\overline{\Omega} = \Omega$ $\cup$ limit points of $\Omega$.
+\end{defn}
+
+\begin{defn}
+  The \textbf{boundary} of $\Omega$ is $\partial\Omega = \overline{\Omega}$ $\setminus$ interior of $\Omega$.
+\end{defn}
+
+\begin{defn}
+  $\Omega$ is \textbf{bounded} $\iff \exists M > 0 : \forall z \in \Omega,\ \abs{z} < M$.
+\end{defn}
+
+\begin{defn}
+  The \textbf{diameter} of $\Omega$ bounded is $\diam{\Omega} = \sup_{z, w \in \Omega}{\abs{z - w}}$.
+\end{defn}
+
+\begin{defn}
+  $\Omega$ is \textbf{compact} $\iff \Omega$ is closed and bounded.
+\end{defn}
+
+\begin{thm}
+  $\Omega$ is compact $\iff$ all sequences in $\Omega$ have a subsequence converging in $\Omega$.
+\end{thm}
+
+\begin{defn}
+  An \textbf{open covering} of $\Omega$ is a family of open sets whose union contains $\Omega$.
+\end{defn}
+
+\begin{thm}
+  $\Omega$ is compact $\iff$ every open covering of $\Omega$ has a finite subcovering.
+\end{thm}
+
+\begin{thm}
+  For $\Omega_1 \supset \Omega_2 \supset \ldots$ all non-empty with $\diam{\Omega_n} \to 0$, $\exists! w \in \C : \forall n,\ w \in \Omega_n$.
+\end{thm}
+
+\begin{defn}
+  $\Omega$ open is \textbf{connected} $\iff$ all pairs of points in $\Omega$ are joined by a curve contained in $\Omega$.
+\end{defn}
+
+%\subsection{Lesson 2}
+
+\subsection{Complex functions}
+
+A function $f : \Omega_1 \to \Omega_2$ can be written as $f(x + iy) = u(x, y) + iv(x, y)$ with $u, v : \R^2 \to \R$.
+
+\begin{defn}
+  $f : \Omega \to \C$ is \textbf{continuous at} $z_0 \in \Omega \iff \forall \epsilon > 0 \exists \delta > 0 : \forall z \in \Omega,\ \abs{z - z_0} < \delta \implies \abs{f(z) - f(z_0)} < \epsilon$.
+\end{defn}
+
+\begin{defn}
+  $f$ is \textbf{continuous} $\iff$ it is continuous at all points.
+\end{defn}
+
+%\section{Differentiation}
+
+\subsection{Complex derivative}
+
+\begin{defn}
+  $f$ is \textbf{differentiable} or \textbf{holomorphic at} $z \in \Omega \iff$ the derivative
+  $$f'(z) := \lim_{h \to 0}\frac{f(z + h) - f(z)}{h}$$
+  exists.
+  Note that $h \in \C$ so it can approach 0 from any direction.
+\end{defn}
+
+\begin{defn}
+  $f$ is \textbf{holomorphic on} $\Omega$ open $\iff f$ is holomorphic at all $z \in \Omega$.
+\end{defn}
+
+\begin{defn}
+  $f$ is \textbf{holomorphic on} $C$ closed $\iff f$ is holomorphic on an open superset of $C$.
+\end{defn}
+
+\begin{defn}
+  $f$ is \textbf{entire} $\iff f$ is holomorphic on $\C$.
+\end{defn}
+
+\begin{prop}
+  $f$ is holomorphic at $z \iff \exists \alpha \in \C : f(z + h) - f(z) - ah = h\psi(h)$ with $\lim_{h \to 0}\psi(h) = 0$.
+  In this case $\alpha = f'(z)$.
+\end{prop}
+
+\begin{cor}
+  $f$ holomorphic $\implies f$ continuous.
+\end{cor}
+
+\begin{prop}
+  The sum, product, quotient and chain rules for differentiation of real functions hold for complex derivatives as well.
+\end{prop}
+
+\subsection{Cauchy-Riemann equations}
+
+\begin{defn}
+  For $f(x, y) = u(x, y) + iv(x, y)$, the \textbf{Cauchy-Riemann Equations} are $\frac{\partial u}{\partial x} = \frac{\partial v}{\partial y}$ and $\frac{\partial u}{\partial y} = -\frac{\partial v}{\partial x}$
+\end{defn}
+
+\begin{prop}
+  $f$ is holomorphic $\implies$ the CREs hold.
+\end{prop}
+
+\begin{defn}
+  The \textbf{partial derivative with respect to a complex number} $z = x + iy$ is $\frac{\partial}{\partial z} := \frac{1}{2}\left(\frac{\partial}{\partial x} + \frac{1}{i}\frac{\partial}{\partial y}\right)$.
+\end{defn}
+
+\begin{thm}
+  If $f$ is holomorphic at $z_0$ then $\frac{\partial f}{\partial \overline{z}}(z_0) = 0$ and $f'(z_0) = \frac{\partial f}{\partial z}(z_0) = 2\frac{\partial u}{\partial z}(z_0)$
+\end{thm}
+
+\begin{thm}
+  If $u$ and $v$ are continuously differentiable and the CREs hold on $\Omega$ then $f$ is holomorphic on $\Omega$ with $f'(z) = \frac{\partial f(z)}{\partial z}$
+\end{thm}
+
+%\subsection{Lesson 3}
+
+\subsection{Cauchy-Riemann equations in polar coordinates}
+
+\begin{prop}
+  In polar coordinates, the CREs become $\frac{\partial u}{\partial r} = \frac{1}{r}\frac{\partial v}{\partial \theta}$ and $\frac{\partial v}{\partial r} = -\frac{1}{r}\frac{\partial u}{\partial \theta}$
+\end{prop}
+
+%\section{Examples of complex functions}
+
+\subsection{Power series}
+
+\begin{defn}
+  A \textbf{power series} has the form $S(z) := \sum_{n = 0}^{\infty}a_nz^n$ with $a_n \in \C$.
+  It exists at some $z$ iff the sum converges there.
+  It is \textbf{absolutely convergent} at $z$ iff $\sum_{n = 0}^{\infty}\abs{a_n}\abs{z^n}$ converges.
+\end{defn}
+
+
+\begin{defn}
+  The \textbf{radius of convergence} of a series is $R \in [0, \infty]$ defined by
+  $$\frac{1}{R} = \limsup_{n \to \infty}\abs{a_n}^{\frac{1}{n}}$$
+  The \textbf{disc of convergence} is $D_R(0)$.
+\end{defn}
+
+\begin{thm}
+  If the power series $S(z)$ has a radius of convergence $R$ then the series converges absolutely if $\abs{z} < R$ and diverges if $\abs{z} > R$.
+\end{thm}
+
+\begin{thm}
+  $f(z) = \sum_{n = 0}^{\infty}a_nz^n$ is holomorphic in its disc of convergence with $f'(z) = \sum_{n = 1}^{\infty}na_nz^{n - 1}$.
+  $f'$ has the same radius of convergence as $f$.
+\end{thm}
+
+\begin{cor}
+  Power series are infinitely differentiable.
+\end{cor}
+
+%\subsection{Lesson 4}
+
+\subsection{Elementary functions}
+
+\begin{defn}
+  The \textbf{exponential function} is $e^{x + iy} := e^x\cis{y}$.
+\end{defn}
+
+\begin{prop}
+  $e^z$ is entire.
+\end{prop}
+
+\begin{defn}
+  The \textbf{sine} and \textbf{cosine} of a complex number are
+  \begin{align*}
+    \sin{z} &:= \frac{1}{2i}\left(e^{iz} - e^{-iz}\right)\\
+    \cos{z} &:= \frac{1}{2}\left(e^{iz} + e^{-iz}\right)
+  \end{align*}
+\end{defn}
+
+\begin{prop}
+  $\sin{z}$ and $\cos{z}$ are entire and obey the usual identities for their real-valued counterparts.
+\end{prop}
+
+\begin{defn}
+  A \textbf{complex logarithm} of $z$ is $\log{z} := \ln{\abs{z}} + i\arg{z} = \log{r} + i(\theta + 2\pi k)$.
+  Note that $e^{\log{z}} = z$, and that $\log{z}$ is multi-valued.
+\end{defn}
+
+\begin{defn}
+  The \textbf{principal value} of the complex logarithm is $\Log{z} = \ln{\abs{z}} + i\Arg{z}$.
+\end{defn}
+
+\begin{prop}
+  $\log{z_1z_2} = \log{z_1}\log{z_2}$ but $\Log{z_1z_2} \neq \Log{z_1} + \Log{z_2}$.
+\end{prop}
+
+\begin{prop}
+  $\Log{z}$ is holomorphic on $\C \setminus (-\infty, 0]$
+\end{prop}
+
+\begin{defn}
+  For $\alpha \in \C$ we have the multi-valued function $z^{\alpha} = e^{\alpha\log{z}}$ and its principal value $e^{\alpha\Log{z}}$.
+\end{defn}
+
+\begin{prop}
+  $z^{\alpha}z^{\beta} = z^{\alpha + \beta}$
+\end{prop}
+
+%\section{Curves}
+\section{Cauchy's integral formulae}
+
+%\subsection{Lesson 4 continued}
+
+\subsection{Parametrised curves}
+
+\begin{defn}
+  A \textbf{parametrised curve} is a function $\gamma : [a, b] \to \C$.
+  We use the symbol $\gamma$ also to refer to the set of values of $\gamma$.
+\end{defn}
+
+\begin{defn}
+  $\gamma$ is \textbf{smooth} $\iff$ it is continuously differentiable with $\gamma' \neq 0$ anywhere, where $\gamma'(a)$ and $\gamma'(b)$ are defined using one-sided limits.
+\end{defn}
+
+\begin{defn}
+  $\gamma$ is \textbf{piecewise-smooth} $\iff$ it is continuous and there are finitely many points in $[a, b]$ such that $\gamma$ is smooth on the intervals between them.
+\end{defn}
+
+\begin{defn}
+  $\gamma : [a, b] \to \C$ and $\tilde{\gamma} : [c, d] \to \C$ are \textbf{equivalent} $\iff$ there exists $t : [c, d] \to [a, b]$ bijective and continuously differentiable such that $t'(s) > 0$ and $\tilde{\gamma} = \gamma \circ t$.
+  This is an equivalence relation.
+\end{defn}
+
+\noindent In all the definitions in this module, if two curves are equivalent then they are interchangeable.
+
+\begin{defn}
+  For $\gamma : [a, b] \to \C$ smooth and $f$ continuous on $\gamma$, the \textbf{integral of $f$ along $\gamma$} is $\int_{\gamma}f(z)dz := \int_a^bf(\gamma(t))\gamma'(t)dt$.
+\end{defn}
+
+\begin{defn}
+  The \textbf{integral along} a piecewise-smooth curve is the sum of the integrals along the smooth intervals.
+\end{defn}
+
+\begin{defn}
+  For any $\gamma : [a, b] \to \C$ we have $\gamma^-(t) := \gamma(b + a - t)$.
+\end{defn}
+
+\begin{defn}
+  $\gamma$ smooth or piecewise-smooth is \textbf{closed} $\iff \gamma(a) = \gamma(b)$.
+\end{defn}
+
+\begin{not*}
+  We write the integral along a closed curve using $\oint$ instead of $\int$.
+\end{not*}
+
+\begin{defn}
+  $\gamma$ smooth or piecewise-smooth is \textbf{simple} $\iff \forall s, t \in (a, b),\ s \neq t \implies \gamma(s) \neq \gamma(t)$.
+\end{defn}
+
+%\subsection{Lesson 5}
+
+\subsection{Integration along curves}
+
+\begin{defn}
+  The \textbf{length} of $\gamma$ smooth is $\length{\gamma} := \int_a^b\abs{\gamma'(t)}dt$.
+\end{defn}
+
+\begin{thm}
+  Integration along curves is linear.
+  $\int_{\gamma}f(z)dz = -\int_{\gamma^-}f(z)dz$.
+  ML-inequality: $\abs{\int_{\gamma}f(z)dz} \leq \sup_{z \in \gamma}\abs{f(z)}\length{\gamma}$.
+\end{thm}
+
+%\section{Holomorphic functions and integration}
+
+\subsection{Primitive functions}
+
+\begin{defn}
+  A \textbf{primitive} for $f$ on $\Omega$ is $F$ holomorphic on $\Omega$ with $F' = f$.
+\end{defn}
+
+\begin{thm}
+  If $f$ continuous has a primitive $F$ in an open set $\Omega$ containing $\gamma : [a, b] \to \C$ then $\int_{\gamma}f(z)dz = F(b) - F(a)$.
+\end{thm}
+
+\begin{cor}
+  If $\gamma$ is closed and $f$ has a primitive then $\oint_{\gamma}f(z)dz = 0$.
+\end{cor}
+
+\begin{cor}
+  If $f$ is holomorphic in an open connected set with $f' = 0$ then $f$ is constant.
+\end{cor}
+
+\subsection{Properties of holomorphic functions}
+
+\begin{thm}
+  For $\Omega$ open, $T$ a triangle contained (along with its interior) in $\Omega$, and $f$ holomorphic in $\Omega$, $\oint_Tf(z)dz = 0$.
+\end{thm}
+
+\begin{cor}
+  The above theorem also holds for rectangles.
+\end{cor}
+
+%\subsection{Lesson 6}
+
+\subsection{Local existence of primitives and Cauchy-Goursat theorem in a disc}
+
+\begin{thm}
+  A function which is holomorphic in an open disc has a primitive in that disc.
+\end{thm}
+
+\begin{cor}
+  (Cauchy-Goursat Theorem for a disc)
+  If $f$ is holomorphic in a disc and $\gamma$ is a closed curve in that disc then $\oint_{\gamma}f(z)dz = 0$
+\end{cor}
+
+\begin{cor}
+  For $\Omega$ open, $C$ a circle contained (along with its interior) in $\Omega$, and $f$ holomorphic in $\Omega$, $\oint_Cf(z)dz = 0$.
+\end{cor}
+
+\subsection{Homotopies and simply connected domains}
+
+\begin{defn}
+  $\gamma_0 : [a, b] \to \Omega$ and $\gamma_1 : [a, b] \to \Omega$ are \textbf{homotopic} in  $\Omega \iff \forall s \in (a, b),\ \exists \gamma_s : [a, b] \to \Omega$ such that all the $\gamma_s(t)$ are jointly continuous in $s \in [a, b]$ and $t \in [a, b]$ (including the two original curves!)
+\end{defn}
+
+\begin{thm}
+  If $\gamma_0$ and $\gamma_1$ are homotopic and $f$ is holomorphic in $\Omega$ then $\int_{\gamma_0}f(z)dz = \int_{\gamma_1}f(z)dz$.
+\end{thm}
+
+\begin{defn}
+  An open set $\Omega$ is \textbf{simply connected} if all pairs of curves in $\Omega$ with the same endpoints are homotopic.
+\end{defn}
+
+\begin{thm}
+  Any holomorphic function in a simply connected domain has a primitive.
+\end{thm}
+
+\begin{cor}
+  (Cauchy-Goursat Theorem)
+  For $\Omega$ simply connected, $\gamma \subset \Omega$ closed and piecewise-smooth, and $f$ holomorphic in $\Omega$, $\oint_{\gamma}f(z)dz = 0$.
+\end{cor}
+
+\begin{thm}
+  (Deformation Theorem)
+  For $\gamma_1$ and $\gamma_2$ simple, closed and piecewise-smooth with $\gamma_2$ wholly inside $\gamma_1$ and $f$ holomorphic in the region between $\gamma_1$ and $\gamma_2$, $\int_{\gamma_1}f(z)dz = \int_{\gamma_2}f(z)dz$
+\end{thm}
+
+\subsection{Cauchy's integral formulae}
+
+\begin{thm}
+  For $\gamma$ simple, closed and piecewise-smooth, $f$ holomorphic inside and on $\gamma$ and $z_0$ inside $\gamma$
+  $$f(z_0) = \frac{1}{2\pi i}\oint_{\gamma}\frac{f(z)}{z - z_0}dz$$
+\end{thm}
+
+\begin{thm}
+  (Generalised Cauchy's integral formula)
+  For $\Omega$ open and $f$ holomorphic in $\Omega$, $f$ has infinitely many complex derivatives in $\Omega$.
+  Furthermore, for $\gamma \subset \Omega$ simple, closed and piecewise-smooth, and $z$ inside $\gamma$
+  $$\frac{d^nf(z)}{dz^n} = \frac{n!}{2\pi i}\oint_{\gamma}\frac{f(\eta)}{(\eta - z)^{n + 1}}d\eta$$
+\end{thm}
+
+\begin{cor}
+  If $f$ is holomorphic then so are all its derivatives.
+\end{cor}
+
+\section{Applications of Cauchy's integral formulae}
+
+\subsection{Applications of Cauchy's integral formulae}
+
+\begin{cor}
+  (Liouville's Theorem)
+  A bounded entire function is constant.
+\end{cor}
+
+\begin{thm}
+  (Fundamental Theorem of Algebra)
+  Any polynomial of degree greater than 0 with complex coefficients has at least one zero.
+\end{thm}
+
+\begin{cor}
+  Every polynomial $P(z)$ of degree $n > 0$ with complex coefficients has precisely $n$ roots $w_1, w_2, \ldots, w_n \in \C$.
+  Furthermore, $P(z) = a_n\prod_{k = 1}^n(z - w_k)$ where $a_n$ is the leading coefficient of $P(z)$.
+\end{cor}
+
+\begin{thm}
+  (Morera's Theorem)
+  If $D$ is an open disc and $f$ is continuous in $D$ such that for any triangle $T \subset D$ we have $\oint_Tf(z)dz = 0$ then $f$ is holomorphic.
+\end{thm}
+\subsection{Taylor and Maclaurin series}
+
+\begin{thm}
+  (Taylor Expansion Theorem)
+  For $\Omega$ open, $f$ holomorphic in $\Omega$, $z_0 \in \Omega$, and $z \in D_r(z_0) \subset \Omega$ for some $r$
+  $$f(z) = \sum_{k = 0}^{\infty}\frac{f^{(k)}(z_0)}{k!}(z - z_0)^k$$
+\end{thm}
+
+\begin{defn}
+  The sum above is the \textbf{Taylor series} of $f$ about $z_0$.
+  If $z_0 = 0$ it is the \textbf{Maclaurin series} of $f$.
+\end{defn}
+
+\subsection{Sequences of holomorphic functions}
+
+\begin{thm}
+  If a sequence of holomorphic functions converges uniformly to $f$ in every compact subset of $\Omega$ then $f$ is holomorphic in $\Omega$.
+\end{thm}
+
+\begin{thm}
+  If a sequence of holomorphic functions converges uniformly to $f$ in every compact subset of $\Omega$ then the sequence of their derivatives converges uniformly to $f'$.
+\end{thm}
+
+\begin{cor}
+  If $f_n$ is a sequence of holomorphic functions and $F(z) := \sum_{n = 1}^{\infty}f_n(z)$ converges uniformly in all compact subsets of $\Omega$ then $f$ is holomorphic in $\Omega$.
+\end{cor}
+
+\subsection{Holomorphic functions defined in terms of integrals}
+
+\begin{thm}
+  Given $\Omega$ open and $F : \Omega \times [0, 1] \to \C$ where $F$ is continuous on $\Omega \times [0, 1]$ and $z \mapsto F(z, s)$ is holomorphic in $\Omega$ for any $s \in [0, 1]$, the function
+  $$f(z) = \int_0^1F(z, s)ds$$
+  is holomorphic in $\Omega$.
+\end{thm}
+
+\subsection{Schwarz reflection principle}
+
+\begin{not*}
+  In this section, let $\Omega$ be open with $z \in \Omega \iff \overline{z} \in \Omega$.
+  Then define:
+  \begin{align*}
+    \Omega^+ &:= \{z \in \Omega : \im{z} > 0 \}\\
+           I &:= \{z \in \Omega : \im{z} = 0 \}\\
+    \Omega^- &:= \{z \in \Omega : \im{z} < 0 \}
+  \end{align*}
+\end{not*}
+
+\begin{thm}
+  (Symmetry principle)
+  Suppose $f^+$ is holomorphic in $\Omega^+$, $f^-$ is holomorphic in $\Omega^-$, and they extend continuously to $I$ such that $\forall x \in I\, f^+(x) = f^-(x)$.
+  Then
+  $$f(z) := \begin{cases}
+    f^+(z) & z \in \Omega^+ \\
+    f^+(z) & z \in I \\
+    f^-(z) & z \in \Omega^- 
+  \end{cases}$$
+\end{thm}
+
+\begin{thm}
+  For $f$ holomorphic on $\Omega^+$ and extended continuously to $I$ such that $f(I) \subset \R$, there exists $F$ holomorphic on $\Omega$ such that $\forall z \in \Omega^+,\ F(z) = f(z)$.
+\end{thm}
+
+\subsection{The complex logarithm}
+
+\begin{thm}
+  For $\Omega$ simply connected with $1 \in \Omega$ and $0 \notin \Omega$, there exists a branch of the logarithm $F(z) = \log_{\Omega}(z)$ which is holomorphic in $\Omega$ with $e^{F(z)} = z\ \forall z \in \Omega$ and $F(x) = \log{x}$ for $x \in \R$ close to 1.
+\end{thm}
+
+\section{Meromorphic Functions}
+
+\subsection{Zeros of holomorphic functions}
+
+\begin{defn}
+  $f$ has a \textbf{zero of order $m$} at $z_0 \in \C \iff f(z_0) = f'(z_0) = f''(z_0) = \ldots = f^{(m - 1)}(z_0) = 0$ and $f^{(m)}(z_0) \neq 0$.
+\end{defn}
+
+\begin{thm}
+  $f$ holomorphic has a zero of order $m$ at $z_0 \iff f(z) = (z - z_0)^mg(z)$ for some $g$ holomorphic at $z_0$ with $g(z_0) \neq 0$.
+\end{thm}
+
+\begin{cor}
+  For every zero of a non-constant holomorphic function, there is a neighbourhood inside of which it is the only zero.
+\end{cor}
+
+\subsection{Laurent series}
+
+\begin{defn}
+  The \textbf{Laurent series} for $f$ at $z_0$ is
+  $$f(z) = \sum_{n = -\infty}^{\infty}a_n(z - z_0)^n$$
+  (if it converges)
+\end{defn}
+
+\begin{thm}
+  (Laurent Expansion Theorem)
+  If $f$ is holomorphic in $D = \{z : r < \abs{z - z_0} < R\}$ then
+  $$f(z) = \sum_{n = -\infty}^{\infty}a_n(z - z_0)^n$$
+  where
+  $$a_n = \frac{1}{2\pi i}\oint_{\gamma}\frac{f(\eta)}{(\eta - z_0)^{n + 1}}d\eta$$
+  For any simple, closed and piecewise $\gamma \subset D$ whose interior contains $z_0$.
+\end{thm}
+
+\subsection{Poles of holomorphic functions}
+
+\begin{defn}
+  A \textbf{singularity} of $f$ is $z_0$ such that $f$ is not holomorphic at $z_0$ but every neighbourhood of $z_0$ contains at least one point at which $f$ is holomorphic.
+\end{defn}
+
+\begin{defn}
+  A singularity is \textbf{isolated} if there is a neighbourhood in which it is the only singularity.
+\end{defn}
+
+\begin{defn}
+  For $f$ holomorphic with an isolated singularity at $z_0$ and
+  $$f(z) = \sum_{n = -\infty}^{\infty}a_n(z - z_0)^n$$
+  for $z \in \{z : 0 < \abs{z - z_0} < R\}$,
+  \begin{itemize}
+    \item $z_0$ is a \textbf{removable singularity} $\iff \forall n < 0,\ a_n = 0$
+    \item $z_0$ is a \textbf{pole of order $m$} $\iff \forall n < -m,\ a_n = 0$ and $a_{-m} \neq 0$
+    \item $z_0$ is an \textbf{essential singularity} $\iff a_n \neq 0$ for infinitely many $n < 0$.
+  \end{itemize}
+\end{defn}
+
+\begin{defn}
+  A \textbf{simple} pole is a pole of order 1.
+\end{defn}
+
+\begin{defn}
+  $f$ is \textbf{meromorphic} $\iff f$ is holomorphic except at a set of isolated poles.
+  This definition isn't in the lectures, but it's the section title according to Blackboard so I thought it should be included.
+\end{defn}
+
+\begin{thm}
+  $f$ has a pole of order $m$ at $z_0 \iff f(z) = \frac{g(z)}{(z - z_0)^m}$ with $g$ holomorphic at $z_0$ with $g(z_0) \neq 0$.
+\end{thm}
+
+\subsection{Residue theory}
+
+\begin{defn}
+  The \textbf{residue} of $f$ at $z_0$ is $\Res{[f, z_0]} = a_{-1}$ where
+  $$f(z) = \sum_{n = -\infty}^{\infty}a_n(z - z_0)^n$$
+  for $z \in \{z : 0 < \abs{z - z_0} < R\}$,
+\end{defn}
+
+\begin{thm}
+  Suppose
+  $$f(z) = \sum_{n = -\infty}^{\infty}a_n(z - z_0)^n$$
+  for $z \in \{z : 0 < \abs{z - z_0} < R\}$.
+  For $\gamma \subset \{z : 0 < \abs{z - z_0} < R\}$ simple, closed, piecewise-smooth and containing $z_0$ in its interior,
+  $$\Res{[f, z_0]} = \frac{1}{2\pi i}\oint_{\gamma}f(z)dz$$
+\end{thm}
+
+\begin{thm}
+  For $\gamma$ simple, closed and piecewise-smooth and $f$ holomorphic inside and on $\gamma$ except for singularities $z_1, \ldots z_n$ in the interior of $\gamma$,
+  $$\oint_{\gamma}f(z)dz = 2\pi i\sum_{j = 1}^n\Res{[f, z_j]}$$
+\end{thm}
+
+\subsection{The argument principle}
+
+\begin{thm}
+  (Principle of the Argument)
+  For 
+  \begin{itemize}
+    \item $\Omega$ open
+    \item $f$ holomorphic in $\Omega$ except for a finite number of poles
+    \item $\gamma \subset \Omega$ simple, closed, piecewise-smooth and not passing through any zeroes or poles of $f$
+    \item $N =$ the sum of the orders of the zeroes of $f$ inside $\gamma$
+    \item $P =$ the sum of the orders of the poles of $f$ inside $\gamma$
+  \end{itemize}
+  we have
+  $$\oint_{\gamma}\frac{f'(z)}{f(z)}dz = 2\pi i(N - P)$$
+\end{thm}
+
+\begin{not*}
+  Let $N_{\gamma}(f)$ be the sum of the orders of the zeroes of $f$ inside $\gamma$.
+\end{not*}
+
+\begin{thm}
+  (Rouche's Theorem)
+  For $\Omega$ open, $\gamma \subset \Omega$ simple, closed and piecewise-smooth with interior $\subset \Omega$ and $f$ and $g$ holomorphic in $\Omega$ with $\abs{f(z)} > \abs{g(z)}$ for $z \in \gamma$, we have $N_{\gamma}(f + g) = N_{\gamma}(f)$.
+\end{thm}
+
+\section{Harmonic Functions}
+
+\subsection{Open mapping theorem and maximum modulus principle}
+
+\begin{defn}
+  $f$ is \textbf{open} $\iff (\Omega$ open $\implies f(\Omega)$ open$)$.
+\end{defn}
+
+\begin{thm}
+  (Open Mapping Theorem)
+  If $\Omega$ is open and $f$ is holomorphic and non-constant in $\Omega$ then $f$ is open.
+\end{thm}
+
+\begin{thm}
+  (Maximum Modulus Principle)
+  If $\Omega$ is open and $f$ is holomorphic and non-constant in $\Omega$ then $\abs{f}$ does not attain a maximum in $\Omega$.
+\end{thm}
+
+\begin{cor}
+  For $\Omega$ open with $\overline{\Omega}$ compact and $f$ holomorphic on $\Omega$ and continuous on $\overline{\Omega}$,
+  $$\sup_{z \in \Omega}\abs{f(z)} \leq \sup_{z \in \overline{\Omega} \setminus \Omega}\abs{f(z)}$$
+\end{cor}
+
+\subsection{Evaluation of definite integrals}
+
+This section has no new content.
+
+\subsection{Harmonic functions}
+
+\begin{defn}
+  The \textbf{Laplace operator} $\Delta$ transforms a function $\varphi : \R^2 \to \R$ into
+  $$\Delta\varphi(x, y) := \frac{\partial^2\varphi}{\partial x^2}(x, y) + \frac{\partial^2\varphi}{\partial y^2}(x, y)$$
+\end{defn}
+
+\begin{defn}
+  For $\Omega \subset \R^2$ open, $\varphi : \R^2 \to \R$ is \textbf{harmonic} in $\Omega \iff \forall (x, y) \in \Omega,\ \Delta\phi(x, y) = 0$.
+\end{defn}
+
+\begin{thm}
+  If $u(x, y) + iv(x, y)$ is holomorphic then $u$ and $v$ are harmonic.
+\end{thm}
+
+\begin{thm}
+  (Harmonic Conjugate)
+  For an open disc $D \subset \C$, $u$ and harmonic in $D$, there exists $v$ harmonic such that $u + iv$ is holomorphic in $D$.
+\end{thm}
+
+\begin{defn}
+  In the situation above, $v$ is the \textbf{harmonic conjugate} of $u$.
+\end{defn}
+
+\begin{prop}
+  In a simply connected $\Omega$, the harmonic conjugate of any harmonic $u$ is
+  $$v(x, y) = \int_{\gamma}\left(-\frac{\partial u}{\partial y}dx + \frac{\partial u}{\partial x}dy\right)$$
+  where $\gamma$ is any curve starting at a fixed point $(x_0, y_0)$ and ending at $(x, y)$.
+  The proof of this statement, in particular the fact that $v(x, y)$ is independent of $\gamma$, is out of the scope of the course.
+\end{prop}
+
+\subsection{Properties of real and imaginary parts of holomorphic functions}
+
+\begin{thm}
+  For:
+  \begin{itemize}
+    \item $\Omega$ open and connected
+    \item $f = u + iv$ holomorphic in $\Omega$
+    \item $C, K \in \R$
+    \item $\gamma_1 := \{x + iy : u(x, y) = C\}$
+    \item $\gamma_2 := \{x + iy : v(x, y) = K\}$
+    \item $x_0 + iy_0 \in \Omega$ where $u(x_0, y_0) = C$ and $v(x_0, y_0) = K$ (i.e\@ $x_0 + iy_0 \in \gamma_1 \cap \gamma_2$) and $f'(x + iy_0) \neq 0$
+  \end{itemize}
+  $\gamma_1$ and $\gamma_2$ are orthogonal at $x_0 + iy_0$.
+\end{thm}
+
+\section{Conformal Mappings}
+
+\subsection{Preservation of angles}
+
+\begin{thm}
+  (Angle Preservation Theorem)
+  For $\Omega$ open, $f$ holomorphic in $\Omega$, $\gamma_1 : [0, 1] \to \Omega$, $\gamma_2 : [0, 1] \to \Omega$ and $z_0 \in \Omega$ with $z_0 = \gamma_1(0) = \gamma_2(0)$ where $\gamma_1'(0)$, $\gamma_2'(0)$ and $f'(z_0)$ are all non-zero,
+  $$\arg{\gamma_2'(0)} - \arg{\gamma_1'(0)} \equiv \arg{f(\gamma_2'(0))} - \arg{f(\gamma_1'(0))} \pmod {2\pi}$$
+\end{thm}
+
+\begin{defn}
+  $f$ is \textbf{conformal} in $\Omega$ open $\iff f$ is holomorphic in $\Omega$ and $\forall z \in \Omega,\ f'(z) \neq 0$
+\end{defn}
+
+\begin{defn}
+  $f$ is a \textbf{local injection} on $\Omega$ open $\iff \exists D_r(z_0) \in \Omega$ such that the restriction of $f$ to $D$ is injective.
+\end{defn}
+
+\begin{defn}
+  If $f$ is a holomorphic local injection on $\Omega$ then it is conformal on $\Omega$.
+  In particular, $f^{-1} : f(\Omega) \to \Omega$ is holomorphic, and in general the inverse of a conformal mapping is holomorphic.
+\end{defn}
+
+\begin{defn}
+  Two open sets are \textbf{conformally equivalent} $\iff$ there is a bijective conformal mapping between them.
+\end{defn}
+
+\subsection{M\"obius transformations}
+
+According to Blackboard this subsection and the next should be in section one, but in the lectures they're here.
+
+\begin{defn}
+  A \textbf{M\"obius} or \textbf{bilinear transformation} has the form
+  $$f(z) = \frac{az + b}{cz + d}$$
+  where $a, b, c, d \in \C$ and $ad - bc \neq 0$.
+\end{defn}
+
+\begin{prop}
+  A M\"obius transformation is holomorphic and conformal everywhere except at the simple pole $-\frac{d}{c}$
+\end{prop}
+
+\begin{thm}
+  If $f$ and $g$ are M\"obius transformations then so are $f^{-1}$ and $f \circ g$.
+\end{thm}
+
+\begin{prop}
+  $f(z) = \frac{az + b}{cz + d}$ has a simple geometric interpretation in the following cases:
+  \begin{enumerate}
+    \item If $a = re^{i\theta}$, $b = 0$, $c = 0$ and $d = 1$ then $f(z) = az$ is expansion by $r$ followed by anticlockwise rotation by $\theta$
+    \item If $a = 1$, $c = 0$ and $d = 1$ then $f(z) = z + b$ is translation by $b$.
+    \item If $a = 0$, $b = 1$, $c = 1$ and $d = 0$ then $f(z) = \frac{1}{z}$ is inversion
+  \end{enumerate}
+\end{prop}
+
+\begin{thm}
+  Every M\"obius transformation is a composition of the transformations of the three forms above.
+\end{thm}
+
+\begin{cor}
+  A M\"obius transformation transforms a circle into a circle and an interior point into an interior point (a line is a circle with infinite radius).
+\end{cor}
+
+\subsection{Cross-ratios M\"obius transformation}
+
+\begin{thm}
+  For a M\"obius transformation $f$ and $z_1, z_2, z_3 \in \C$ all distinct and $z \in \C$,
+  $$\left(\frac{z - z_1}{z - z_3}\right)\left(\frac{z_2 - z_3}{z_2 - z_1}\right) = \left(\frac{f(z) - f(z_1)}{f(z) - f(z_3)}\right)\left(\frac{f(z_2) - f(z_3)}{f(z_2) - f(z_1)}\right)$$
+\end{thm}
+
+\subsection{Conformal mapping of a half-plane to the unit disc}
+
+\begin{thm}
+  Let $\mathbb{H} = \{z \in \C : \im{z} > 0\}$ and recall $\D = D_1(0)$.
+  Then $\mathbb{H}$ is conformally equivalent to $\D$.
+  In particular, $f : \mathbb{H} \to \D$ defined by
+  $$f(z) = \frac{i - z}{i + z}$$
+  is a conformal mapping with inverse $g : \D \to \mathbb{H}$ defined by
+  $$g(z) = i\frac{1 - z}{1 + z}$$
+\end{thm}
+
+\subsection{Riemann mapping theorem}
+
+\begin{defn}
+  $\Omega \subset \C$ is \textbf{proper} $\iff \Omega \neq \emptyset$ and $\Omega \neq \C$.
+\end{defn}
+
+\begin{thm}
+  For $\Omega$ proper and simply connected and $z_0 \in \Omega$, there is a unique conformal map $f : \Omega \to \D$ where $f(z_0) = 0$ and $f'(z_0) > 0$.
+  The proof of this statement is out of the scope of the course.
+\end{thm}
+
+\begin{cor}
+  Any two proper simply connected open sets are conformally equivalent.
+\end{cor}
+
+\end{document}
