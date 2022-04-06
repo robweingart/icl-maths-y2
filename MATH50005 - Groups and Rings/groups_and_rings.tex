@@ -1,0 +1,427 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{prop*}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem*{defn*}{Definition}
+\newtheorem*{not*}{Notation}
+\newtheorem{exr}[thm]{Exercise}
+\newtheorem{exm}[thm]{Example}
+\newtheorem{rmk}[thm]{Remark}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\length{\lVert}{\rVert}
+
+\renewcommand{\d}{{\textnormal{d}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\isoto}{\xrightarrow{\sim}}
+\newcommand{\normsg}{\trianglelefteq}
+
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Inn}{Inn}
+\DeclareMathOperator{\Img}{Im}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\St}{St}
+\DeclareMathOperator{\Fix}{Fix}
+
+\title{MATH50005 Groups and Rings}
+\author{Notes by Robert Weingart}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Homomorphisms and normal subgroups}
+
+\subsection{Homomorphisms, isomorphisms and automorphisms}
+
+\begin{defn}
+  $f : G \to H$ is a \textbf{homomorphism} iff $\forall a, b \in G,\ f(ab) = f(a)f(b)$.
+\end{defn}
+
+\begin{prop}
+  For a homomorphism $f : G \to H$, $f(e_G) = e_H$ and for any $g \in G$, $f(g^{-1}) = (f(g))^{-1}$
+\end{prop}
+
+\begin{exm}
+\end{exm}
+
+\begin{defn}
+  $f : G \to H$ is an \textbf{isomorphism} iff it is a homomorphism and a bijection.
+  We then write $f : G \isoto H$.
+  $G$ and $H$ are \textbf{isomorphic} (written $G \cong H$) iff there is an isomorphism between them.
+\end{defn}
+
+\begin{exr}
+  $\cong$ is an equivalence relation.
+\end{exr}
+
+\begin{defn}
+  $f : G \isoto G$ is an \textbf{automorphism}.
+\end{defn}
+
+\begin{exr}
+  $\Aut(G)$ is the group of all automorphisms of $G$ under composition.
+\end{exr}
+
+\begin{exr}
+\end{exr}
+
+\begin{exm}
+  For $g \in G$, \textbf{conjugation by $g$} is the automorphism $x \mapsto gxg^{-1}$.
+\end{exm}
+
+\begin{defn*}
+  The \textbf{image} of a homomorphism is $\Img(f) := \{f(x) \mid x \in G\} \subset H$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{kernel} of a homomorphism is $\Ker(f) := \{ x \in G \mid f(x) = e_H\} \subset G$.
+\end{defn*}
+
+\begin{prop}
+  $\Img(f) \leq H$ and $\Ker(f) \normsg G$ (see next definition).
+\end{prop}
+
+\subsection{Normal subgroups, quotient groups and the isomorphism theorem}
+
+\begin{defn}
+  $S \leq G$ is \textbf{normal} iff $\forall x \in S, g \in G,\ gxg^{-1} \in S$.
+  I will then write $S \normsg G$ (this is standard notation, but the official notes do not use it).
+\end{defn}
+
+\begin{defn}
+  $G$ is \textbf{simple} iff it has no normal subgroups except $\{e_G\}$ and $G$.
+\end{defn}
+
+\begin{exr}
+  For $H \leq G$, $(\forall g \in G,\ gH = Hg) \implies H \normsg G$.
+\end{exr}
+
+\begin{lem}
+  For $N \normsg G, g_1, g_2 \in G$, we have $(g_1N)(g_2N) = g_1g_2N$.
+\end{lem}
+
+\begin{lem}
+  $G / N$ is a group under $(g_1N, g_2N) \mapsto g_1g_2N$.
+\end{lem}
+
+\begin{prop}
+  $f : g \mapsto gN$ is a surjective homomorphism $f : G \to G / N$ with $\Ker(f) = N$.
+\end{prop}
+
+\begin{defn}
+  The \textbf{quotient group} of $G$ modulo $N$ is $G / N$ under coset multiplication, as defined in Lemma 1.14.
+\end{defn}
+
+\begin{exr}
+\end{exr}
+
+\begin{thm}
+  (Isomorphism Theorem)
+  For any $f : G \to H$, $g\Ker(f) \mapsto f(g)$ is an isomorphism $G / \Ker(f) \isoto f(G)$.
+\end{thm}
+
+\begin{prop}
+  For $N \normsg G$, $S \leq G$ where $N \subset S$, and $f : G \to G / N$ given by $f(g) = gN$:
+  \begin{itemize}
+    \item $N \normsg S$
+    \item $f(S) = S / N \leq G / N$
+    \item $S \mapsto f(S)$ gives a bijection between the subgroups of $G$ containing $N$ and the subgroups of $G / N$ (TODO: what does that mean?)
+    \item $S \normsg G \iff S / N \normsg G / N$
+  \end{itemize}
+\end{prop}
+
+\subsection{Some group-theoretic constructions}
+
+\subsubsection{The centre of a group}
+
+\begin{defn*}
+  The \textbf{inner automorphism group} $\Inn(G)$ is the group of conjugations by elements of $G$.
+  Note that $\Inn(G) \leq \Aut(G)$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{centre} of $G$ is
+  $$Z(G) := \{ g \in G \mid \forall x \in G,\ gxg^{-1} = x \}$$.
+  Note that $Z(G) \normsg G$, with $Z(G) = G \iff G$ is abelian.
+\end{defn*}
+
+\subsubsection{The commutator of a group}
+
+\begin{defn*}
+  The \textbf{commutator} of $a$ and $b$ is $[a, b] := aba^{-1}b^{-1}$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{commutator} or \textbf{derived subgroup} of $G$, written $[G, G]$, is the smallest subgroup of $G$ containing all commutators of elements in $G$.
+  Note $[G, G] = \{e_G\} \iff G$ is abelian.
+\end{defn*}
+
+\begin{lem}
+  $[G, G] \normsg G$.
+  $G / [G, G]$ is abelian.
+\end{lem}
+
+\begin{prop}
+  $G / N$ is abelian $\iff [G, G] \subset N$.
+\end{prop}
+
+\begin{exr}
+  $[G, G] \subset S \leq G \implies S \normsg G$.
+\end{exr}
+
+\subsubsection{The product of groups}
+
+\begin{defn*}
+  The \textbf{product} of groups $A$ and $B$ is the cartesian product $A \times B$ under $((a, b), (a', b')) \mapsto (aa', bb')$.
+\end{defn*}
+
+\begin{prop*}
+  If we consider $a = (a, e_B)$ and $b = (e_A, b)$ then $A \normsg A \times B$ and $B \normsg A \times B$.
+  The elements of $A$ commute with all elements of $B$ and vice versa.
+\end{prop*}
+
+\begin{prop}
+  For $A \normsg G$, $B \normsg G$ where $A \cap B = \{e_G\}$ and every element of $G$ can be written as $ab$ with $a \in A$ and $b \in B$, we have $A \times B \cong G$ with the isomorphism $(a, b) \mapsto ab$.
+\end{prop}
+
+\subsubsection{Abelian groups and $p$-primary subgroups}
+
+\begin{lem}
+  For $G$ abelian, $a, b \in G$ with finite orders, $ab$ also has finite order and $\ord{ab} \mid \lcm(\ord{a}, \ord{b})$.
+\end{lem}
+
+\begin{defn}
+  For $G$ abelian, the \textbf{torsion subgroup of $G$} is $G_{tors}$, the set of elements of finite order
+  Note that $G_{tors} \leq G$.
+  $G$ is a \textbf{torsion abelian group} iff $G_{tors} = G$
+\end{defn}
+
+\begin{defn}
+  For $G$ abelian and $p$ prime, the \textbf{$p$-primary subgroup} of $G$ is $G\{p\}$, the set of elements with order $p$.
+  Note that $G\{p\} \leq G$.
+  $G$ is a \textbf{$p$-primary torsion abelian group} iff $G\{p\} = G$.
+\end{defn}
+
+\begin{cor}
+  For $p_1, \ldots, p_m$ prime and $a_1, \ldots a_m$ all $\geq 1$, and $n = \prod_{i = 1}^mp_i^{a_i}$,
+  $$C_n \cong \prod_{i = 1}^mC_{p_i^{a_i}}$$
+\end{cor}
+
+\subsubsection{Generators}
+
+\begin{lem}
+  An intersection of subgroups is also a subgroup.
+\end{lem}
+
+\begin{defn}
+  For $S \subset G$ (not necessarily a subgroup), the \textbf{subgroup generated by $S$} is the intersection of all subgroups containing $S$.
+  If $G$ is the only such subgroup then the elements of $S$ \textbf{generate} $G$.
+\end{defn}
+
+\begin{exm}
+  If $A$ is generated by $n$ elements and $B$ is generated by $m$ elements then $A \times B$ is generated by $n + m$ elements.
+\end{exm}
+
+\begin{defn}
+  $G$ is \textbf{finitely generated} if it is generated by a positive finite number of elements.
+\end{defn}
+
+\section{Groups acting on sets}
+
+\subsection{Actions, orbits and stabilisers}
+
+\begin{defn*}
+  For a set $X$, $S(X)$ is the group of bijections $X \to X$ under composition.
+\end{defn*}
+
+\begin{defn}
+  An \textbf{action} of $G$ on $X$ is a homomorphism $G \to S(X)$.
+  The bijection associated with $g$ by an action is written simply as $g : X \to X$.
+  Equivalently, an action is a function $G \times X \to X$ where $g_1(g_2(x)) = (g_1g_2)(x)$ for any $g_1, g_2 \in G$ and $x \in X$.
+\end{defn}
+
+\begin{exm}
+\end{exm}
+
+\begin{defn}
+  An action is \textbf{faithful} iff it is injective.
+\end{defn}
+
+\begin{not*}
+  The following definitions assume the existence of a particular action of $G$ on $X$.
+\end{not*}
+
+\begin{defn}
+  The \textbf{$G$-orbit of $x$} is $G(x) := \{ g(x) \mid g \in G \} \subset X$.
+  The \textbf{stabiliser} of $x$ is $\St_G(x) := \{ g \in G \mid g(x) = x \} \leq G$.
+  We write $\St$ instead if $G$ is clear from context.
+\end{defn}
+
+\begin{lem}
+  $\St(g(x)) = g\St(x)g^{-1}$.
+\end{lem}
+
+\begin{thm}
+  (Orbit-stabiliser)
+  For $x \in X$, $g \mapsto g(x)$ gives a bijection from $G / \St(x)$ (the set of left cosets, not necessarily a quotient group since $\St(x)$ may not be normal) to $G(x)$.
+  If $G$ is finite we thus have $\abs{G(x)} = \abs{G} / \abs{\St(x)}$.
+  If $X$ is finite and $X = \bigcup_{i = 1}^nG(x_i)$ where the $G$-orbits are disjoint then
+  $$\abs{X} = \sum_{i = 1}^n\abs{G(x_i)} = \sum_{i = 1}^n(G : \St(x)i)$$
+  where $:$ denotes the index (number of cosets).
+\end{thm}
+
+\subsection{Applications of the orbit-stabiliser theorem}
+
+\begin{thm}
+  (Cayley)
+  If $G$ has finite order $n$ then $S_n$ has a subgroup isomorphic to $G$.
+\end{thm}
+
+\begin{thm}
+  (Cauchy)
+  If $G$ has finite order $n$ and $p$ is prime and divides $n$ then $G$ has an element of order $p$.
+\end{thm}
+
+\begin{defn}
+  For $p$ prime and $G$ finite, $G$ is a \textbf{$p$-group} iff its order is a power of $p$.
+\end{defn}
+
+\begin{cor}
+  A finite group is a $p$-group iff the orders of all its elements are powers of $p$.
+\end{cor}
+
+\begin{thm}
+  $G$ is a $p$-group $\implies Z(G) \neq \{e_G\}$.
+\end{thm}
+
+\begin{exm}
+\end{exm}
+
+\begin{defn}
+  For an action $G \times X \to X$, \textbf{$G$ acts transitively on $X$} iff $X = G(x)$ for some $x \in X$.
+\end{defn}
+
+\begin{defn}
+  $x$ is a \textbf{fixed point} of $g$ iff $g(x) = x$.
+  The set of fixed points of $g$ is $\Fix(g)$.
+\end{defn}
+
+\begin{thm}
+  (Jordan)
+  If $G$ and $X$ are finite and $G$ acts transitively on $X$ then
+  $$\sum_{g \in G}\abs{\Fix(g)} = \abs{G}$$
+  In particular, $\Fix(g) = \emptyset$ for some $g \in G$.
+\end{thm}
+
+\begin{cor}
+  If $G$ and $X$ are finite then the number of $G$-orbits in $X$ is
+  $$\abs{G}^{-1}\sum_{g \in G}\abs{\Fix(g)}$$
+\end{cor}
+
+\begin{exm}
+\end{exm}
+
+\section{Finitely generated abelian groups}
+
+\subsection{Smith normal form}
+
+\begin{defn}
+  The $m \times n$ matrix with entries $a_{ij} \in \Z$ is in \textbf{Smith normal form} iff
+  \begin{itemize}
+    \item $i \neq j \implies a_{ij} = 0$
+    \item There exists $k \geq 0$ where $i \leq k \implies a_{ii} > 0$ and $i > k \implies a_{ii} = 0$
+    \item $a_{11} \mid a_{22}$, $a_{22} \mid a_{33}$ and so on
+  \end{itemize}
+\end{defn}
+
+\begin{thm}
+  A matrix with integer entries can be brought into Smith normal form using row and column operations.
+\end{thm}
+
+\begin{defn*}
+  $d(A)$ is the greatest common divisor of the entries of $A$.
+  Note this does not change under row and column operations.
+  $t(A)$ is the smallest non-zero absolute value of an entry of $A$.
+\end{defn*}
+
+\begin{lem}
+  A matrix $A$ with integer entries can be transformed by row and column operations into a matrix $B$ with $t(B) = d(B) = d(A)$.
+\end{lem}
+
+\subsection{Classification of finitely generated abelian groups}
+
+\begin{defn}
+  The \textbf{free abelian group of rank $n$} is $\Z^n = \Z \times \Z \times \ldots \times \Z$ ($n$ times).
+\end{defn}
+
+\begin{prop}
+  $\Z^m \cong \Z^n \implies m = n$.
+  Thus, the rank of a free abelian group is well-defined.
+\end{prop}
+
+\begin{prop}
+  Any subgroup of $\Z^n$ is isomorphic to $\Z^m$ for some $m \leq n$.
+\end{prop}
+
+\begin{cor}
+  For $G$ finitely generated and abelian, there is a surjective homomorphism $f : \Z^n \to G$ for some $n$, and $\Ker(f) \cong \Z^m$ for some $m$.
+\end{cor}
+
+\begin{thm}
+  A finitely generated abelian group is isomorphic to a product of finitely many cyclic groups.
+\end{thm}
+
+\begin{rmk}
+  The \textbf{rank} of a finitely generated abelian group $G$ is $m$ where $G \cong G_{tors} \times \Z^m$, which is well defined.
+\end{rmk}
+
+\begin{cor}
+  For a finite abelian group $G$, $G \cong \prod_{p \textnormal{ prime}}G\{p\}$.
+\end{cor}
+
+\begin{thm}
+  A finitely generated abelian group is isomorphic to the product of finitely many infinite cyclic groups and finitely many cyclic groups whose orders are powers of primes.
+  The number of factors of a given size is uniquely determined by the group.
+\end{thm}
+
+\section{Basic theory of rings}
+
+\subsection{Motivation, definitions, examples}
+
+\subsection{Homomorphisms, ideals, quotient rings}
+
+\subsection{Integral domains and fields}
+
+\subsection{More on ideals}
+
+\section{PID and UFD}
+
+\subsection{Polynomial rings}
+
+\subsection{Factorisation in integral domains}
+
+\section{Fields}
+
+\subsection{Field extensions}
+
+\subsection{Constructing fields from irreducible polynomials}
+
+\subsection{Existence of finite fields}
+
+\end{document}
