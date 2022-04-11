@@ -23,6 +23,7 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathbb{F}}
 \newcommand{\isoto}{\xrightarrow{\sim}}
 \newcommand{\normsg}{\trianglelefteq}
 
@@ -34,6 +35,8 @@
 \DeclareMathOperator{\lcm}{lcm}
 \DeclareMathOperator{\St}{St}
 \DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\chr}{char}
 
 \title{MATH50005 Groups and Rings}
 \author{Notes by Robert Weingart}
@@ -404,24 +407,344 @@
 
 \subsection{Motivation, definitions, examples}
 
+\begin{defn}
+  A \textbf{ring} is a set $R$ with two binary operations, $+ : R \to R$ and $\times : R \to R$ (as usual, written $ab$ rather than $a \times b$), where
+  \begin{itemize}
+    \item $(R, +)$ is an abelian group with identity element 0 and the inverse of $x$ being $-x$
+    \item $\times$ is associative
+    \item There is a unit element 1 which is the identity element for $\times$
+    \item Distributivity: for any $a, b, c \in R$, $a(b + c) = ab + ac$ and $(a + b)c = ac + bc$
+  \end{itemize}
+\end{defn}
+
+\begin{lem}
+  For any $x, y \in R$, $0x = x0 = 0$, $(-x)y = x(-y) = -xy$, and $R \neq \{0\} \implies 1 \neq 0$.
+\end{lem}
+
+\begin{defn}
+  A \textbf{subring} is a subset of a ring which is also a ring with the same $+$, $\times$ and 1.
+\end{defn}
+
+\begin{lem}
+  For $S \subseteq R$ non-empty, $S$ is a subring iff it contains 1 and is closed under $+$, $\times$ and taking inverses.
+\end{lem}
+
+\begin{defn}
+  $R$ is \textbf{commutative} iff $\forall x, y \in R,\ xy = yx$.
+\end{defn}
+
+\begin{defn}
+  $x \in R$ is \textbf{invertible} iff $\exists y, z \in R : xy = zx = 1$.
+\end{defn}
+
+\begin{rmk}
+  In the definition above, we necessarily have $y = z =: x^{-1}$.
+  The \textbf{multiplicative group} of $R$ is $R^{\times}$, the set of invertible elements.
+  This is a group.
+\end{rmk}
+
+\begin{defn}
+  A \textbf{division ring} is a ring where all elements except 0 are invertible.
+  A \textbf{field} is a commutative division ring.
+\end{defn}
+
+\begin{exm}
+  For any set $X$, the set of functions $X \to R$ under $(f + g)(x) := f(x) + g(x)$ and $(fg)(x) := f(x)g(x)$ is a ring.
+\end{exm}
+
+\begin{exm}
+  The set of $n \times n$ matrices with entries in $R$ under matrix addition and multiplication is a ring.
+\end{exm}
+
+\begin{exm}
+  For an abelian group $A$, the set of endomorphisms $A \to A$ (written as $\End(A)$) under addition and function composition is a ring.
+\end{exm}
+
 \subsection{Homomorphisms, ideals, quotient rings}
+
+\begin{defn}
+  For rings $R$ and $S$, $f : R \to S$ is a \textbf{homomorphism of rings} iff it is a homomorphism of the additive groups, $f(xy) = f(x)f(y)$ for any $x, y \in R$, and $f(1_R) = 1_S$.
+\end{defn}
+
+\begin{lem}
+  For a homomorphism $f : R \to S$, $\Ker(f) \leq (R, +)$ and $\Ker(f)$ is an ideal of $R$ (see definition below).
+\end{lem}
+
+\begin{exm}
+\end{exm}
+
+\begin{exm}
+\end{exm}
+
+\begin{defn}
+  $I \subseteq R$ is an \textbf{ideal} iff $I \leq (R, +)$ (note that this also means $I \normsg (R, +)$ since the additive group is abelian) and $\forall r \in R, x \in I$ we have $rx, xr \in I$.
+  $I$ is a \textbf{proper ideal} iff additionally $R \neq I$.
+\end{defn}
+
+\begin{defn}
+  For a proper ideal $I \subsetneq R$, the \textbf{quotient ring} of $R$ by $I$ is $R / I$ with the usual coset addition from $(R, +)$ and $\times$ inherited from $R$.
+\end{defn}
+
+\begin{defn}
+  For a commutative ring $R$ and $a \in R$, the \textbf{principal ideal} with \textbf{generator} $a$ is $aR := \{ ax \mid x \in R\}$.
+  This is an ideal.
+\end{defn}
+
+\begin{defn}
+  $f : R \to S$ is an \textbf{isomorphism} iff it is a homomorphism and a bijection.
+  We then write $f : R \isoto S$.
+  An \textbf{endomorphism} is a homomorphism $R \to R$.
+  An \textbf{automorphism} is an isomorphism $R \isoto R$.
+\end{defn}
+
+\begin{thm}
+  (Isomorphism Theorem)
+  For a homomorphism $f : R \to S$, $f(R)$ is a subring with $f(R) \cong R / \Ker(f)$.
+\end{thm}
 
 \subsection{Integral domains and fields}
 
+\begin{defn}
+  $a, b \in R$ are \textbf{zero-divisors} iff $a \neq 0$, $b \neq 0$ and $ab = 0$.
+  An \textbf{integral domain} is a commutative ring with no zero-divisors.
+\end{defn}
+
+\begin{lem}
+  For an integral domain $R$ and $a \neq 0$, $ab = ac \iff b = c$.
+\end{lem}
+
+\begin{lem}
+  For an integral domain $R$ and $a, b \in R$, $aR = bR \iff \exists r \in R^{\times} : a = br$.
+\end{lem}
+
+\begin{prop}
+  $R$ is a field $\implies R$ is an integral domain.
+\end{prop}
+
+\begin{thm}
+  $R$ is a finite integral domain $\implies R$ is a field.
+\end{thm}
+
+\begin{cor}
+  For a positive integer $n$, $\Z / n\Z$ is an integral domain $\iff$ it is a field $\iff n$ is prime.
+\end{cor}
+
+\begin{defn}
+  For a field $F$, $K \subseteq F$ is a \textbf{subfield} of $F$ iff it is a field under the same $+$ and $\times$.
+  Then $F$ is a \textbf{field extension} of $K$.
+\end{defn}
+
+\begin{prop}
+  For any ring $R$ there is a unique homomorphism $\Z \to R$.
+\end{prop}
+
+\begin{lem}
+  For an integral domain $R$, the kernel of the unique homomorphism described above is either $\{0\}$ or $p\Z$ for some prime $p$.
+\end{lem}
+
+\begin{defn}
+  The \textbf{characteristic} of an integral domain $R$ is $\chr(R)$, the unique non-negative generator of the kernel described above (either 0 or prime).
+\end{defn}
+
+\begin{defn}
+  A \textbf{vector space} over a field $K$ is an abelian group $V$ together with an action of $K$ on $V$ written $(x, v) \mapsto xv$ where for any $x, y \in L$ and $v, w \in V$,
+  \begin{itemize}
+    \item $1v = v$
+    \item $x(yv) = (xy)v$
+    \item $(x + y)v = xv + yv$
+    \item $x(v + w) = xv + xw$
+  \end{itemize}
+\end{defn}
+
+\begin{lem}
+  A field extension $F$ of $K$ is a vector space over $K$.
+\end{lem}
+
+\begin{thm}
+  For a field $K$, if $\chr(K) = 0$ then $K$ contains a unique subfield isomorphic to $Q$ (and therefore $K$ is a vector space over $Q$).
+  If $\chr(K) = p$ prime then $K$ contains a unique subfield isomorphic to $\F_p$ (and therefore $K$ is a vector space over $\F_p$).
+\end{thm}
+
+\begin{cor}
+  The size of any finite field is a positive power of a prime.
+\end{cor}
+
 \subsection{More on ideals}
+
+\begin{prop}
+  A commutative rings is also a field iff its only proper ideal is $\{0\}$.
+\end{prop}
+
+\begin{prop}
+  For a homomorphism $f : R \to S$, if $J \subseteq S$ is an ideal then so is $f^{-1}(J) \subseteq R$.
+\end{prop}
+
+\begin{prop}
+  For a surjective homomorphism $f : R \to S$, if $I \subseteq R$ is and ideal then so is $f(I) \subseteq S$. 
+  $I \mapsto f(I)$ and $J \mapsto f^{-1}(J)$ are inverses, so they give a bijection between the ideals of $R$ which contain $\Ker(f)$ and the ideals of $S$.
+\end{prop}
+
+\begin{defn}
+  A proper ideal $I$ of a commutative ring $R$ is a \textbf{prime ideal} iff $R / I$ is an integral domain.
+\end{defn}
+
+\begin{prop}
+  A proper ideal $I$ of a commutative ring $R$ is prime $\iff \forall x, y \in R,\ xy \in I \implies x \in I \lor y \in I$.
+\end{prop}
+
+\begin{defn}
+  A proper ideal $I$ of a commutative ring $R$ is a \textbf{maximal ideal} iff $R / I$ is a field.
+  Note that maximal $\implies$ prime.
+\end{defn}
+
+\begin{prop}
+  A proper ideal $I$ of a commutative ring $R$ is a maximal ideal $\iff$ there is no proper ideal $J$ with $I \subsetneq J \subseteq R$.
+\end{prop}
 
 \section{PID and UFD}
 
 \subsection{Polynomial rings}
 
+\begin{defn*}
+  For an integral domain $R$, the \textbf{ring of polynomials} with coefficients in $R$ in one variable $t$ is written $R[t]$.
+  The \textbf{degree} of a polynomial is written $\deg(p)$.
+\end{defn*}
+
+\begin{prop}
+  For an integral domain $R$ we have $\forall p, q \in R[t],\ \deg(pq) = \deg(p) + \deg(q)$.
+  Futhermore, $R[t]$ is an integral domain, and $R[t]^{\times} = R^{\times}$.
+\end{prop}
+
+\begin{prop}
+  For a field $K$ and $a, b \in K[t]$ with $b \neq 0$, $\exists q, r \in K[t] : a = qb + r$ where $r = 0$ or $\deg(r) < \deg(b)$.
+\end{prop}
+
+\begin{defn}
+  A \textbf{Euclidean domain} is an integral domain $R$ with a function $\phi : R \setminus \{0\} \to \Z_{\geq 0}$ where $\forall x, y \in R \setminus \{0\},\ \phi(xy) \geq \phi(x)$ and $\forall a, b \in R,\ \exists q, r \in R : a = qb + r$ where $r = 0$ or $\phi(r) < \phi(b)$.
+\end{defn}
+
+\begin{defn}
+  A \textbf{principal ideal domain} is an integral domain where all ideals are principal.
+\end{defn}
+
+\begin{thm}
+  $R$ is a Euclidean domain $\implies$ $R$ is a PID.
+\end{thm}
+
 \subsection{Factorisation in integral domains}
+
+\begin{defn}
+  For an integral domain $R$, $x \in R \setminus R^{\times}$ is \textbf{irreducible} iff $x$ is not a product of two elements in $R \setminus R^{\times}$.
+\end{defn}
+
+\begin{lem}
+  $x$ is irreducible $\implies \forall a \in R^{\times}$, $ax$ is irreducible.
+\end{lem}
+
+\begin{defn}
+  A \textbf{unique factorisation domain} or \textbf{factorial ring} is an integral domain $R$ where every element of $R \setminus R^{\times}$ can be written as a product of finitely many irreducibles, and where this decomposition is unique up to reordering the factors and multiplying them by elements of $R^{\times}$.
+\end{defn}
+
+\begin{defn}
+  For an integral domain $R$ and $a, b \in R$, \textbf{$a$ divides $b$} (written $a \mid b$) iff $\exists r \in R : b = ra$.
+  If $r \notin R^{\times}$ then \textbf{$a$ properly divides $b$}.
+  Otherwise if $r \in R^{\times}$ then $a$ and $b$ are \textbf{associates}.
+\end{defn}
+
+\begin{not*}
+  The rest of this section will refer to the following properties which an integral domain $R$ may or may not have:
+  \begin{enumerate}
+    \item There is no infinite sequence of non-zero elements of $R$ such that each element properly divides the previous.
+    \item For any irreducible $p \in R$, $p \mid ab \implies p \mid a \lor p \mid b$.
+  \end{enumerate}
+\end{not*}
+
+\begin{prop}
+  $R$ is a UFD $\implies$ (1) holds.
+\end{prop}
+
+\begin{prop}
+  $R$ is a UFD $\implies$ (2) holds.
+\end{prop}
+
+\begin{thm}
+  An integral domain $R$ is a UFD iff (1) and (2) hold.
+\end{thm}
+
+\begin{exm}
+\end{exm}
+
+\begin{prop}
+  In a PID, any sequence of ideals $I_1, I_2, \ldots$ where $I_1 \subseteq I_2 \subseteq \ldots$ \textbf{stabilises} (is eventually constant).
+\end{prop}
+
+\begin{exm}
+\end{exm}
+
+\begin{prop}
+  $R$ is a PID $\implies$ (2) holds.
+\end{prop}
+
+\begin{thm}
+  $R$ is a PID $\implies R$ is a UFD.
+\end{thm}
 
 \section{Fields}
 
 \subsection{Field extensions}
 
+\begin{defn}
+  A field extension $K \supset k$ is \textbf{finite} iff $K$ is a finite-dimensional vector space over $k$.
+  Then the \textbf{degree} of the extension is $[K : k] := \dim_k(K)$.
+\end{defn}
+
+\begin{thm}
+  For field extensions $K \supset F \supset k$, $K$ is a finite extension of $k$ iff $K$ is a finite extension of $F$ and $F$ is a finite extension of $k$.
+  In that case, $[K : k] = [K : F][F : k]$.
+\end{thm}
+
 \subsection{Constructing fields from irreducible polynomials}
 
+\begin{prop}
+  For a PID $R$ and $a \in R \setminus \{0\}$, $aR$ is maximal $\iff a$ is irreducible.
+\end{prop}
+
+\begin{cor}
+  For a PID $R$ and $a \in R$, $a$ is irreducible $\implies R / aR$ is a field.
+\end{cor}
+
+\begin{rmk}
+  For any irreducible polynomial over $k$, there is a field extension $K \supset k$ in which it has a root.
+\end{rmk}
+
+\begin{prop}
+  For $f \in k[t]$ with $\deg(f) \in \{2, 3\}$, $f$ is irreducible $\iff f$ has no root in $k$.
+\end{prop}
+
+\begin{exm}
+\end{exm}
+
+\begin{prop}
+  For an odd prime $p$, the number of non-squares in $\F_p = \Z / p\Z$ is $\frac{p - 1}{2} \geq 1$.
+  For any non-square $a \in \F_p$, $t^2 - a$ is irreducible in $\F_p[t]$ and $\F_p[t] / (t^2 - a)\F_p[t]$ is a quadratic (degree 2) extension of $\F_p$.
+\end{prop}
+
+\begin{prop}
+  For $p(t) \in k[t]$, there exists a field extension $K \supset k$ such that $p(t) = c\prod_{i = 1}^n(t - \alpha_i)$ for some $c \in k^{\ast}$ and $\alpha_1, \ldots, \alpha_n \in K$.
+\end{prop}
+
 \subsection{Existence of finite fields}
+
+\begin{lem}
+  For a field $k$ with prime characteristic $p$, any $x, y \in k$ and a positive integer $m$, $(x + y)^{p^m} = x^{p^m} + y^{p^m}$.
+\end{lem}
+
+\begin{lem}
+  For a field $k$, $p(t) = \prod_{i = 1}^n(t - \alpha_i)$ with $\alpha_1, \ldots, \alpha_n \in k$ and $i \neq j$, $a_i \neq a_j \iff p(t)$ and $p'(t)$ have not roots in common.
+\end{lem}
+
+\begin{thm}
+  For a prime $p$ and positive integer $n$, there exists a field of size $p^n$.
+\end{thm}
 
 \end{document}
