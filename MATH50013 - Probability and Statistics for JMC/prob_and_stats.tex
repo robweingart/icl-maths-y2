@@ -1,0 +1,686 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,booktabs}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{prop*}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[subsection]
+\newtheorem*{defn*}{Definition}
+\newtheorem*{not*}{Notation}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\length{\lVert}{\rVert}
+
+\renewcommand{\d}{{\textnormal{d}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\X}{\mathbb{X}}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bernoulli}{Bernoulli}
+\DeclareMathOperator{\Binomial}{Binomial}
+\DeclareMathOperator{\Geometric}{Geometric}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\Uniform}{Uniform}
+\DeclareMathOperator{\Exp}{Exp}
+
+\title{MATH50013 - Probability and Statistics for JMC}
+\author{Notes by Robert Weingart}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+\subsection{Introduction to Uncertainty}
+
+\subsection{Introduction to Statistics}
+
+\subsubsection{Population vs. Sample}
+
+\subsection{Probability AND Statistics}
+
+\subsection{Statistical Modelling}
+
+\section{Set Theory Review}
+
+\subsection{Sets, subsets and complements}
+
+\subsubsection{Sets}
+
+\subsubsection{Membership, subsets, equality, complements, and singletons}
+
+\subsection{Set operations}
+
+\subsubsection{Venn diagrams, Unions and Intersections}
+
+\subsubsection{Cartesian Products}
+
+\subsection{Cardinality}
+
+\section{Visual and Numerical Summaries}
+
+\subsection{Visualization}
+
+\subsubsection{The histogram}
+
+\begin{defn*}
+  A \textbf{histogram} partitions the range of a sample into \textbf{bins} and shows what number of data points in each bin.
+  Rather than frequency, the amount shown can also be relative frequency or density.
+\end{defn*}
+
+\subsubsection{Empirical CDF}
+
+\begin{defn*}
+  The \textbf{indicator function} is defined as $I(\text{false}) := 0$ and $I(\text{true}) = 1$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{empirical cumulative distribution function} of a sample is
+  $$F_n(x) := \frac{1}{n}\sum_{i = 1}^nI(x_i \leq x)$$
+\end{defn*}
+
+\subsection{Summary Statistics}
+
+\subsubsection{Measures of Location}
+
+\begin{defn*}
+  The \textbf{arithmetic mean} is $\bar{x} := \frac{1}{n}\sum_{i = 1}^nx_i$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{geometric mean} is $x_G := \left(\prod_{i = 1}^nx_i\right)^{\frac{1}{n}}$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{harmonic mean} is $x_H := n\left(\sum_{i = 1}^n\frac{1}{x_i}\right)^{-1}$
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{$i$th order statistic}, written $x_{(i)}$, is the $i$th smallest value of the sample.
+  For non-integer values of the form $i + \alpha$ with $\alpha \in (0, 1)$, we define
+  $$x_{(i + \alpha)} := (1 - \alpha)x_{(i)} + \alpha x_{(i + 1)}$$
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{median} is $x_{(\frac{n + 1}{2})}$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{mode} is the most frequently occurring value.
+  If there are multiple then the sample is \textbf{multimodal}.
+\end{defn*}
+
+\subsubsection{Measures of Dispersion}
+
+\begin{defn*}
+  The \textbf{mean square} or \textbf{sample variance} is
+  $$s_x^2 := \frac{1}{n}\sum_{i = 1}^n(x_i - \bar{x})^2$$
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{root mean square} or \textbf{sample standard deviation} is
+  $$s_x := \sqrt{\frac{1}{n}\sum_{i = 1}^n(x_i - \bar{x})^2}$$
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{range} is $x_{(n)} - x_{(1)}$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{first quartile} is $x_{\left(\frac{1}{4}(n + 1)\right)}$.
+  The \textbf{third quartile} is $x_{\left(\frac{3}{4}(n + 1)\right)}$.
+  The \textbf{interquartile range} is the difference between the third and first quartiles.
+\end{defn*}
+
+\subsubsection{Covariance and Correlation}
+
+\begin{defn*}
+  For a sample where each data point is an $(x_i, y_i)$ pair, the \textbf{covariance} is
+  $$s_{xy} := \frac{1}{n}\sum_{i = 1}^n(x_i - \bar{x})(y_i - \bar{y}) = \frac{\sum_{i = 1}^nx_iy_i}{n} - \bar{x}\bar{y}$$.
+\end{defn*}
+
+\begin{defn*}
+  For a sample as above, the \textbf{correlation} is
+  $$r_{xy} := \frac{s_{xy}}{s_xs_y}$$
+\end{defn*}
+
+\subsubsection{Skewness}
+
+\begin{defn*}
+  The \textbf{skewness} is $\frac{1}{n}\sum_{i = 1}^n\left(\frac{x_i - \bar{x}}{s}\right)^3$.
+\end{defn*}
+
+\subsection{One more visualization: the box-and-whisker plot}
+
+\begin{defn*}
+  A \textbf{box-and-whisker plot} shows the median, first and third quartiles, points within $\frac{3}{2} \times IQR$ of the quartiles, and any outliers.
+\end{defn*}
+
+\section{Probability}
+
+\subsection{The formal structure}
+
+\subsubsection{$\sigma$-algebras}
+
+\begin{defn}
+  A \textbf{$\sigma$-algebra associated with $S$} is a set $\F$ of subsets of $S$ where $S \in \F$, $\F$ is closed under complements with respect to $S$, and $\F$ is closed under countable unions.
+\end{defn}
+
+\begin{prop*}
+  $\emptyset \in \F$. $\F$ is also closed under countable intersections.
+\end{prop*}
+
+\subsubsection{Probability measure}
+
+\begin{defn}
+  A \textbf{probability measure} is a function $P : \F \to \R$ where $P(E) \geq 0$ for any $E$, $P(S) = 1$, and for countably many disjoint sets $E_i$,
+  $$P\left(\bigcup_{i = 1}^{\infty}E_i\right) = \sum_{i = 1}^{\infty}P(E_i)$$.
+  A triple $(S, \F, P)$ as previously defined is a \textbf{probability space}.
+\end{defn}
+
+\subsection{Interpretations of the probability space}
+
+\subsection{Interpretation of the $\sigma$-algebra}
+
+\subsubsection{The sample space ($S$)}
+
+\begin{defn*}
+  The \textbf{sample space} $S$ is the set of all possible outcomes of an experiment.
+\end{defn*}
+
+\subsubsection{The event space ($\F$)}
+
+\begin{defn*}
+  An \textbf{event} is a subset $E \subset S$.
+  $\F$ is the set of all possible events being considered (which may not include all possible combinations of outcomes).
+\end{defn*}
+
+\begin{defn*}
+  $E_1$ and $E_2$ are \textbf{mutually exclusive} iff $E_1 \cap E_2 = \emptyset$ i.e.\@ they cannot both happen at once.
+\end{defn*}
+
+\subsection{Interpretations of the probability measure ($P$)}
+
+\subsubsection{Classical interpretation}
+
+\begin{defn*}
+  In the \textbf{classical interpretiation}, $S$ consists of finitely many equally likely \textbf{elementary events} and $P(E) = \frac{\abs{E}}{\abs{S}}$.
+  For an infinite $S$, this can still be applied by replacing cardinality above with a different measure.
+\end{defn*}
+
+\subsubsection{Frequentist interpretation}
+
+\begin{defn*}
+  In the \textbf{frequentist interpretation}, when an experiment is repeated infinitely many times, the proportion of trials in which $E$ occurs approaches $P(E)$.
+\end{defn*}
+
+\subsubsection{Subjective interpretation}
+
+\begin{defn*}
+  In the \textbf{subjective interpretation}, $P(E)$ is the degree of belief a person has that $E$ occurs.
+\end{defn*}
+
+\subsection{A few derivations from the axioms}
+
+\begin{prop*}
+  For $E, F \in \F$,
+  \begin{itemize}
+    \item $P(\emptyset) = 0$
+    \item $P(E) \leq 1$
+    \item $P(\overline{E}) = 1 - P(E)$
+    \item $P(E \cup F) = P(E) + P(F) - P(E \cap F)$
+    \item $P(E \cap \overline{F}) = P(E) - P(E \cap F)$
+    \item $E \subseteq F \implies P(E) \leq P(F)$
+  \end{itemize}
+\end{prop*}
+
+\subsection{Conditional Probability}
+
+\begin{defn}
+  For $P(F) > 0$ the \textbf{conditional probability of $E$ given $F$} is
+  $$P(E \mid F) := \frac{P(E \cap F)}{P(F)}$$
+\end{defn}
+
+\begin{prop*}
+  For $P(F) > 0$,
+  \begin{itemize}
+    \item For any $E \in \F$, $P(E \mid F) \geq 0$
+    \item $P(F \mid F) = 1$
+    \item For $E_1, \ldots, E_n \in \F$ pairwise disjoint, $P\left(\bigcup_{i = 1}^nE_i \mid F\right) = \sum_{i = 1}^nP(E_i \mid F)$
+  \end{itemize}
+\end{prop*}
+
+\subsection{Independent Events}
+
+\begin{defn}
+  $E, F \in \F$ are \textbf{independent} iff $P(E \cap F) = P(E)P(F)$.
+  $E_1, \ldots E_n$ are \textbf{independent} iff for any subset $E_{i_1}, \ldots, E_{i_l}$ we have $P\left(\bigcap_{j = 1}^lE_{i_j}\right) = \prod_{j = 1}^lP(E_{i_j})$.
+\end{defn}
+
+\begin{prop*}
+  $E$ and $F$ are independent $\implies E$ and $\overline{F}$ are independent.
+\end{prop*}
+
+\begin{prop*}
+  $E$ and $F$ are independent $\iff P(E \mid F) = P(E)$.
+\end{prop*}
+
+\subsubsection{More Examples}
+
+\subsubsection{Conditional Independence}
+
+\begin{defn*}
+  For $E_1, E_2, F \in \F$, $E_1$ and $E_2$ are \textbf{conditionally independent given $F$} iff $P(E_1 \cap E_2 \cap F) = P(E_1 \mid F)P(E_2 \mid F)$.
+\end{defn*}
+
+\subsubsection{Joint Events}
+
+\begin{defn*}
+  When combining multiple independent experiments, a \textbf{probability table} can be used to show the probabilities of all elementary events (i.e.\@ combinations of an elementary event in each experiment).
+\end{defn*}
+
+\subsection{Bayes's Theorem}
+
+\setcounter{thm}{\arabic{subsection}} % why
+
+\begin{thm}
+  (Bayes's)
+  For $E, F \in \F$ with $P(E) > 0$ and $P(F) > 0$,
+  $$P(E \mid F) = \frac{P(F \mid E)P(E)}{P(F)}$$
+\end{thm}
+
+\begin{thm}
+  (The Law of Total Probability)
+  For a partition $E_1, \ldots$ of $S$, and any $F \in \F$, $P(F) = \sum_iP(F \mid E_i)P(E_i)$.
+\end{thm}
+
+\begin{thm}
+  (Bayes's applied to a partition)
+  For a partition $E_1, \ldots$ of $S$ with $P(E_i) > 0$ for all $i$ and $F \in \F$ with $P(F) > 0$,
+  $$P(E_i \mid F) = \frac{P(F \mid E_i)P(E_i)}{\sum_jP(F \mid E_j)P(E_j)}$$
+\end{thm}
+
+\setcounter{subsection}{\arabic{thm}}
+
+\subsection{More Examples}
+
+\section{Discrete Random Variables}
+
+\subsection{Random Variables}
+
+\begin{defn}
+  A \textbf{random variable} is a measurable mapping $X : S \to \R$ where $\forall x \in \R,\ \{s \in S : X(s) \leq x\} \in \F$.
+\end{defn}
+
+\begin{defn}
+  The \textbf{range} of $X$ is $\X$, the image of $S$ under $X$.
+\end{defn}
+
+\begin{defn*}
+  The \textbf{probability distribution} of $X$ is
+  $$P_X(X \in B) := P(\{s \in S : X(S) \in B\})$$
+  where $B \subseteq \R$.
+\end{defn*}
+
+\begin{not*}
+  For brevity we write $\{X \in B\} := \{s \in S : X(s) \in B\}$ (TODO: doesn't this make $P$ and $P_X$ interchangeable?) and $\{a < X \leq b\} := \{X \in (a, b]\}$ etc.
+\end{not*}
+
+\subsubsection{Cumulative Distribution Function}
+
+\begin{defn}
+  The \textbf{cumulative distribution function} of $X$ is $F_X : \R \to [0, 1]$ where $F_X(x) = P_X(X \leq x)$.
+\end{defn}
+
+\begin{defn*}
+  A function $f$ is \textbf{right-continuous} iff for any decreasing sequence $x_i \to x$ we have $f(x_i) \to f(x)$.
+\end{defn*}
+
+\begin{prop*}
+  A CDF is right-continuous.
+\end{prop*}
+
+\begin{prop*}
+  $F_X$ is a CDF iff all the following hold:
+  \begin{itemize}
+    \item $F_X$ is right-continuous
+    \item $F_X(\R) \subseteq [0, 1]$
+    \item $F_X$ is monotonically increasing
+    \item $\lim_{x \to -\infty}F_X(x) = 0$
+    \item $\lim_{x \to \infty}F_X(x) = 1$
+  \end{itemize}
+\end{prop*}
+
+\subsection{Discrete Random Variables}
+
+\begin{defn}
+  A random variable is \textbf{discrete} iff its range is finite or countably infinite.
+\end{defn}
+
+\begin{defn}
+  For a DRV $X$, the \textbf{probability mass function} $p_X : \R \to [0, 1]$ is $p_X(x) = P_X(X = x)$ for $x \in \X$ and $p_X(x) = 0$ for $x \notin \X$.
+\end{defn}
+
+\begin{defn*}
+  The \textbf{support} of $X$ is $\{x \in \R : p_X(x) > 0\}$.
+  Usually this is $\X$.
+\end{defn*}
+
+\subsubsection{Properties of Mass Function $p_X$}
+
+\begin{prop*}
+  An arbitrary function $p_X$ can be a PMF for $X$ iff $\forall x \in \X,\ p_X(x) \geq 0$ and $\sum_{x \in \X}p_X(x) = 1$.
+\end{prop*}
+
+\subsubsection{Discrete Cumulative Distribution Function}
+
+\begin{defn*}
+  The \textbf{cumulative distribution function} of a DRV $X$ is $F_X(x) = P(X \leq x)$ (TODO: is this not what it always is?).
+\end{defn*}
+
+\subsubsection{Connection between $F_X$ and $p_X$}
+
+\begin{prop*}
+  For $\X = \{x_1, \ldots\}$ with the $x_i \leq x_{i + 1}$ for all $i$,
+  $$F_X(x) = \sum_{x_i \leq x}p_X(x_i)$$
+  Equivalently,
+  $$\forall i \geq 1,\ p_X(x_i) = F_X(x_i) - F_X(x_{i - 1})$$
+\end{prop*}
+
+\subsubsection{Properties of Discrete CDF $F_X$}
+
+\begin{prop*}
+  We have
+  \begin{itemize}
+    \item $\lim_{x \to -\infty}F_X(x) = 0$
+    \item $\lim_{x \to \infty}F_X(x) = 1$
+    \item $\lim_{h \to 0^+}F_X(x + h) = F_X(x)$
+    \item $a < b \implies F_X(a) \leq F_X(b)$
+    \item For $a < b$, $P(a < X \leq b) = F_X(b) - F_X(a)$
+  \end{itemize}
+\end{prop*}
+
+\subsection{Functions of a discrete random variable}
+
+\begin{prop*}
+  For a DRV $X$ and $g : \X \to \R$, $Y = g(X)$ is also a DRV.
+  We have
+  $$p_Y(y) = \sum_{x \in \X : g(x) = y}p_X(x)$$
+\end{prop*}
+
+\subsection{Mean and Variance}
+
+\subsubsection{Expectation}
+
+\begin{defn}
+  The \textbf{expected value} or \textbf{mean} of a DRV $X$ is
+  $$E_X(X) := \sum_{x \in \X}xp_X(x)$$
+  It is often abbreviated to $E(X)$.
+\end{defn}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  For a \textbf{function of interest} $g : \R \to \R$, we have
+  $$E(g(X)) = \sum_{x \in \X}g(x)p_X(x)$$
+\end{thm}
+
+\begin{prop*}
+  $E$ is linear.
+\end{prop*}
+
+\stepcounter{subsection}
+
+\begin{defn}
+  For a DRV $X$, the \textbf{variance} of $X$ is
+  $$\Var_X(X) := E_X\left((X - E_X(X))^2\right) = E(X^2) - E(X)^2$$
+\end{defn}
+
+\begin{prop*}
+  For $a, b \in \R$, $\Var(aX + b) = a^2\Var(X)$
+\end{prop*}
+
+\begin{defn}
+  For a DRV $X$, the \textbf{standard deviation} of $X$ is
+  $$\sd(X) := \sqrt{\Var_X(X)}$$
+\end{defn}
+
+\begin{defn}
+  For a DRV $X$, the \textbf{skewness} of $X$ is
+  $$\gamma_1 := \frac{E_X((X - E_X(X))^3)}{\sd_X(X)^3}$$
+\end{defn}
+
+\subsubsection{Sums of Random Variables}
+
+\begin{prop*}
+  For $X_1, \ldots X_n$ (possibly with different distributions, not necessarily independent) with sum $S_n$, we have
+  $$E(S_n) = \sum_{i = 1}^nE(X_i)$$
+  and
+  $$E\left(\frac{S_n}{n}\right) = \frac{1}{n}\sum_{i = 1}^nE(X_i)$$
+\end{prop*}
+
+\begin{prop*}
+  For $X_1, \ldots X_n$ independent with sum $S_n$, we have
+  $$\Var(S_n) = \sum_{i = 1}^n\Var(X_i)$$
+  and
+  $$\Var\left(\frac{S_n}{n}\right) = \frac{1}{n^2}\sum_{i = 1}^n\Var(X_i)$$
+\end{prop*}
+
+\begin{prop*}
+  For $X_1, \ldots X_n$ independent and identically distributed with sum $S_n$,\\ $E(X_i) = \mu$ and $\Var(X_i) = \sigma^2$, we have
+  $$E\left(\frac{S_n}{n}\right) = \mu$$ and $\Var\left(\frac{S_n}{n}\right) = \frac{\sigma^2}{n}$
+\end{prop*}
+
+\subsection{Some Important Discrete Random Variables}
+
+\begin{tabular}{lccccc}
+  \toprule
+  $X$                           & $\X$               & $p_X(x)$                           & $E(X)$              & $\Var(X)$            & $\gamma_1$\\
+  \midrule
+  $X \sim \Bernoulli(p)$        & $\{0, 1\}$         & $p^x(1 - p)^{1 - x}$               & $p$                 & $p(1 - p)$           & $\frac{1 - 2p}{\sqrt{p(1 - p)}}\ast$ \\
+  $X \sim \Binomial(n, p)$      & $\{0, \ldots n\}$  & $\binom{n}{x}p^x(1 - p)^{n - x}$   & $np$                & $np(1 - p)$          & $\frac{1 - 2p}{\sqrt{np(1 - p)}}$ \\
+  $X \sim \Geometric(p)$        & $\{1, 2, \ldots\}$ & $p(1 - p)^{x - 1}$                 & $\frac{1}{p}$       & $\frac{1 - p}{p^2}$  & $\frac{2 - p}{\sqrt{1 - p}}$ \\
+  $X \sim \Poisson(\lambda)$    & $\{0, 1, \ldots\}$ & $\frac{e^{-\lambda}\lambda^x}{x!}$ & $\lambda$           & $\lambda$            & $\frac{1}{\sqrt{\lambda}}$\\
+  $X \sim \U(\{1, \ldots, n\})$ & $\{1, \ldots, n\}$ & $\frac{1}{n}$                      & $\frac{n + 1}{2}$   & $\frac{n^2 - 1}{12}$ & $0$ \\
+  \bottomrule
+\end{tabular}
+\bigskip
+
+$\ast$: The skewness of the Bernoulli distribution is not given in the official notes.
+
+\subsubsection{Bernoulli Distribution}
+
+$X \sim \Bernoulli(p)$ chooses between 1 and 0 where $P(X = 1) = p$.
+
+\subsubsection{Binomial Distribution}
+
+$X \sim \Binomial(n, p)$ is the total number of successes after $n$ Bernoulli trials with probability $p$.
+
+\subsubsection{Geometric Distribution}
+
+$X \sim \Geometric(p)$ is the number of Bernoulli trials with probability $p$ it will take to have the first success.
+
+\subsubsection{Poisson Distribution}
+
+$X \sim \Poisson(\lambda)$ is the number of occurrences of an event that occurs at a rate of $\lambda$.
+
+\subsubsection{Discrete Uniform Distribution}
+
+$X \sim \U(\{1, \ldots, n\})$ is a random value out of $\{1, \ldots n\}$.
+
+\section{Continuous Random Variables}
+
+\begin{defn}
+  A random variable $X$ is absolutely \textbf{continuous} iff there exists a measurable non-negative function $f_X : \R \to \R$ (the \textbf{probability density function}) where
+  $$\forall B \subseteq \R,\ P(X \in B) = \int_{x \in B}f_X(x)dx$$
+\end{defn}
+
+\subsubsection{Continuous Cumulative Distribution Function}
+
+\begin{defn}
+  The \textbf{cumulative distribution function} of a CRV $X$ is $F_X(x) = P(X \leq x)$ (as for any RV).
+\end{defn}
+
+\begin{prop*}
+  For a CRV $X$, $F_X(x) = \int_{-\infty}^xf_X(x')dx'$
+\end{prop*}
+
+\subsubsection{Properties of Continuous $F_X$ and $f_X$}
+
+\begin{prop*}
+  For a CRV $X$,
+  \begin{itemize}
+    \item $\lim_{x \to -\infty}F_X(x) = 0$
+    \item $\lim_{x \to \infty}F_X(x) = 1$
+    \item If $F_X$ is differentiable at $x$ then $f_X(x) = F'_X(x)$
+    \item $\forall a \in \R,\ P(X = a) = 0$
+    \item For $a < b$, $P(a < X \leq b) = F_X(b) - F_X(a)$
+    \item $f_X(X)$ is not a probability, so we do not require $f_X(x) \leq 1$
+    \item $X$ is uniquely defined by $f_X$
+  \end{itemize}
+\end{prop*}
+
+\begin{prop*}
+  An arbitrary function $f_X$ is a PDF for a CRV iff $\forall x \in \R,\ f_X(x) \geq 0$ and $\int_{-\infty}^{\infty}f_X(x)dx = 1$ ($f_X$ is \textbf{normalised}).
+\end{prop*}
+
+\subsubsection{Transformations}
+
+\begin{prop*}
+  For $Y = g(X)$ with $g$ strictly monotonically increasing, we have
+  $$F_Y(y) = F_X(g^{-1}(y))$$
+  and
+  $$f_Y(y) = f_X\left(g^{-1}(y)\right)g^{-1'}(y)$$
+\end{prop*}
+
+\begin{prop*}
+  For $Y = g(X)$ with $g$ strictly monotonically decreasing, we have
+  $$F_Y(y) = 1 - F_X(g^{-1}(y))$$
+  and
+  $$f_Y(y) = -f_X\left(g^{-1}(y)\right)g^{-1'}(y)$$
+\end{prop*}
+
+\subsection{Mean, Variance and Quantiles}
+
+\subsubsection{Expectation}
+
+\begin{defn}
+  The \textbf{mean} or \textbf{expectation} of a CRV $X$ is
+  $$E(X) := \int_{-\infty}^{\infty}xf_X(x)dx$$
+\end{defn}
+
+\begin{defn*}
+  For any measurable \textbf{function of interest} $g : \R \to \R$ we have
+  $$E(g(X)) := \int_{-\infty}^{\infty}g(x)f_X(x)dx$$
+\end{defn*}
+
+\begin{prop*}
+  $E$ is linear.
+\end{prop*}
+
+\subsubsection{Variance}
+
+\begin{defn}
+  The \textbf{variance} of a CRV $X$ is
+  $$\Var_X(X) = E((X - E(X))^2) = E(X^2) - E(X)^2$$
+\end{defn}
+
+\begin{prop*}
+  For $a, b \in \R$, $\Var(aX + b) = a^2\Var(X)$
+\end{prop*}
+
+\subsubsection{Quantiles}
+
+\begin{defn}
+  For $\alpha \in [0, 1]$, we \textbf{$\alpha$-quantile} of a CRV $X$ is
+  $$Q_X(\alpha) := F_X^{-1}(\alpha)$$
+  so that $P(X \leq Q_X(\alpha)) = \alpha$.
+\end{defn}
+
+\subsection{Some Important Continuous Random Variables}
+
+\begin{tabular}{lccccc}
+  \toprule
+  $X$                        & $\X$     & $f_X(x)$ & $F_X(x)$ & $E(X)$ & $\Var(X)$ \\
+  \midrule
+  $X \sim \U(a, b)$    & $(a, b)$ & $\begin{cases}\frac{1}{b - a} & a < x < b \\ 0 & \text{otherwise}\end{cases}$ & $\begin{cases}0 & x \leq a \\ \frac{x - a}{b - a} & a < x < b \\ 1 & x \geq b\end{cases}$ & $\frac{a + b}{2}$ & $\frac{(b - a)^2}{12}$\\
+  $X \sim \Exp(\lambda)$     & $[0, \infty)$ & $\lambda e^{-\lambda x}$ & $1 - e^{-\lambda x}$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$ \\
+  $X \sim \N(\mu, \sigma^2)$ & $\R$ & $\frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$ & $\frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^xe^{-\frac{(t - \mu)^2}{2\sigma^2}}dt$ & $\mu$ & $\sigma^2$ \\
+  \bottomrule
+\end{tabular}
+
+\subsubsection{Continuous Uniform Distribution}
+
+$X \sim \U(a, b)$ or $X \sim \Uniform(a, b)$ is uniformly distributed on the interval $(a, b)$ and 0 elsewhere.
+
+\begin{defn*}
+  Tht \textbf{standard uniform} is $\Uniform(0, 1)$.
+\end{defn*}
+
+\begin{prop*}
+  $X \sim \Uniform(0, 1) \implies (a + (b - a)X) \sim \Uniform(a, b)$.
+\end{prop*}
+
+\subsubsection{Exponential Distribution}
+
+$X \sim \Exp(\lambda)$ is the time until an event occurring at rate $\lambda$ occurs.
+
+\begin{prop*}
+  $X \sim \Exp(\lambda)$ exhibits the \textbf{Lack of Memory Property}:
+  $$\forall x, t > 0,\ P(X > t + x \mid X > t) = P(X > x)$$
+\end{prop*}
+
+\begin{prop*}
+  If the number of events occurring in an interval of size $x$ is\\ $N_x \sim \Poisson(\lambda x)$ then the separation between two events is $X \sim \Exp(\lambda)$.
+\end{prop*}
+
+\subsubsection{Normal (Gaussian) Distribution}
+
+$X \sim N(\mu, \sigma^2)$ has no obvious interpretation.
+
+\begin{defn*}
+  $X \sim N(0, 1)$ is the \textbf{standard normal distribution} or \textbf{unit normal distribution}.
+  It has the PDF
+  $$\phi(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}x^2\right)$$
+  and the CDF
+  $$\Phi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^x\exp\left(-\frac{t^2}{2}\right)dt$$
+\end{defn*}
+
+\begin{prop*}
+  $X \sim N(0, 1) \implies (\sigma X + \mu) \sim N(\mu, \sigma^2)$
+\end{prop*}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  (Central Limit Theorem)
+  For $X_1, \ldots, X_n$ independent and identically distributed with mean $\mu$ and variance $\sigma^2$,
+  $$\lim_{n \to \infty}\frac{\sum_{i = 1}^nX_i - n\mu}{\sqrt{n}\sigma} \sim N(0, 1)$$
+\end{thm}
+
+\stepcounter{subsection}
+
+\subsection{Further examples}
+
+\section{Joint Random Variables}
+
+\section{Estimation}
+
+\section{Hypothesis Testing}
+
+\section{Convergence Concepts}
+
+\end{document}
