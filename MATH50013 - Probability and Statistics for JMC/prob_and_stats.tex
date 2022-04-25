@@ -21,6 +21,7 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\F}{\mathcal{F}}
 \newcommand{\X}{\mathbb{X}}
+\newcommand{\Y}{\mathbb{Y}}
 
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\sd}{sd}
@@ -31,6 +32,8 @@
 \DeclareMathOperator{\U}{U}
 \DeclareMathOperator{\Uniform}{Uniform}
 \DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
 
 \title{MATH50013 - Probability and Statistics for JMC}
 \author{Notes by Robert Weingart}
@@ -676,6 +679,226 @@ $X \sim N(\mu, \sigma^2)$ has no obvious interpretation.
 \subsection{Further examples}
 
 \section{Joint Random Variables}
+
+\begin{defn}
+  For RVs $X$ and $Y$ with the same sample space, the \textbf{joint probability distribution} is $P_{XY}(B_X, B_Y) := P(X^{-1}(B_X) \cap Y^{-1}(B_Y))$ where $B_X, B_Y \subseteq \R$.
+\end{defn}
+
+\subsubsection{Joint Cumulative Distribution Function}
+
+\begin{defn}
+  The \textbf{joint cumulative distribution function} is $F_{xy}(x, y) := P_{XY}(X \leq x, Y \leq y)$.
+\end{defn}
+
+\begin{prop*}
+  $F_X(x) = F_{XY}(x, \infty)$ and $F_Y(y) = F_{XY}(\infty, y)$.
+\end{prop*}
+
+\subsubsection{Properties of Joint CDF $F_{XY}$}
+
+\begin{prop*}
+  And arbitrary function $F_{XY}$ is a valid joint CDF iff the following hold:
+  \begin{itemize}
+    \item $\forall x, y \in \R,\ F_{XY}(x, y) \in [0, 1]$
+    \item $\forall x_1, x_2, y \in \R,\ x_1 < x_2 \implies F_{XY}(x_1, y) \leq F_{XY}(x_2, y)$
+    \item $\forall x, y_1, y_2 \in \R,\ y_1 < y_2 \implies F_{XY}(x, y_1) \leq F_{XY}(x, y_2)$
+    \item $\forall x, y \in \R$, $F_{XY}(x, -\infty) = F_{XY}(-\infty, y) = 0$
+    \item $F_{XY}(\infty, \infty) = 1$
+  \end{itemize}
+\end{prop*}
+
+\subsubsection{Joint Probability Mass Functions}
+
+\begin{defn}
+  For DRVs $X, Y$, the \textbf{joint probability mass function} is\\ $p_{XY}(x, y) := P_{XY}(X = x, Y = y)$.
+\end{defn}
+
+\begin{prop*}
+  $p_X(x) = \sum_{y \in \Y}p_{XY}(x, y)$ and $p_Y(y) = \sum_{x \in \X}p_{XY}(x, y)$
+\end{prop*}
+
+\begin{prop*}
+  An arbitrary function $p_{XY}$ is a valid joint PMF iff $\forall x, y \in \R, p_{XY}(x, y) \in [0, 1]$ and $\sum_{y \in \Y}\sum_{x \in \X}p_{XY}(x, y) = 1$.
+\end{prop*}
+
+\subsubsection{Joint Probability Density Functions}
+
+\begin{defn*}
+  CRVs $X$ and $Y$ are \textbf{jointly continuous} iff $\exists f_{XY} : \R \times \R \to \R$ where
+  $$\forall B_{XY} \subseteq \R \times \R,\ P_{XY}(B_{XY}) = \int_{(x, y) \in B_{XY}}f_{XY}(x, y)dxdy$$
+  Then $f_{XY}$ is the \textbf{joint probability density function} of $X$ and $Y$.
+\end{defn*}
+
+\begin{prop*}
+  For jointly continuous CRVs, we have
+  $$F_{XY}(x, y) = \int_{t = -\infty}^y\int_{s = -\infty}^xf_{XY}(s, t)dsdt$$
+\end{prop*}
+
+\begin{defn}
+  (Not actually a definition)
+  The joint PDF is
+  $$f_{XY} = \frac{\partial^2}{\partial x\partial y}F_{XY}(x, y)$$
+\end{defn}
+
+\begin{prop*}
+  $f_X(x) = \int_{y = -\infty}^{\infty}f_{XY}(x, y)dy$ and $f_Y(y) = \int_{x = -\infty}^{\infty}f_{XY}(x, y)dx$
+\end{prop*}
+
+\begin{prop*}
+  An arbitrary function $f_{XY}$ is a valid joint PDF iff $\forall x, y \in \R,\ f_{XY}(x, y) \geq 0$ and $\int_{y = -\infty}^{\infty}\int_{x = -\infty}^{\infty}f_{XY}(x, y)dxdy = 1$.
+\end{prop*}
+
+\subsection{Independence, Conditional Probability, Expectation}
+
+\subsubsection{Independence and conditional probability}
+
+\begin{defn*}
+  RVs $X$ and $Y$ are \textbf{independent} iff $\forall B_X, B_Y \subseteq \R,\ P_{XY}(B_X, B_Y) = P_X(B_X)P_Y(B_Y)$.
+\end{defn*}
+
+\begin{defn}
+  CRVs $X$ and $Y$ are \textbf{independent} iff $\forall x, y \in \R,\ f_{XY}(x, y) = f_X(x)f_Y(y)$.
+\end{defn}
+
+\begin{defn}
+  For RVs $X$ and $Y$, the \textbf{conditional probability distribution} is
+  $$P_{Y \mid X}(B_Y \mid B_X) := \frac{P_{XY}(B_X, B_Y)}{P_X(B_X)}$$
+\end{defn}
+
+\begin{prop*}
+  $X$ and $Y$ are independent $\iff \forall B_X, B_Y \subseteq \R,\ P_{Y \mid X}(B_Y \mid B_X) = P_Y(B_Y)$.
+\end{prop*}
+
+\begin{defn}
+  For CRVs $X$ and $Y$, the \textbf{conditional probability density function} is
+  $$f_{Y \mid X}(y \mid x) := \frac{f_{XY}(x, y)}{f_X(x)}$$
+\end{defn}
+
+\begin{prop*}
+  $X$ and $Y$ are independent $\iff \forall x, y \in \R,\ f_{Y \mid X}(y \mid x) = f_Y(y)$.
+\end{prop*}
+
+\subsubsection{Expectation}
+
+\begin{defn}
+  For DRVs $X$ and $Y$:
+  $$E_{XY}(g(X, Y)) := \sum_{y \in \Y}\sum_{x \in \X}g(x, y)p_{XY}(x, y)$$
+\end{defn}
+
+\begin{defn}
+  For CRVs $X$ and $Y$:
+  $$E_{XY}(g(X, Y)) := \int_{y = -\infty}^{\infty}\int_{x = -\infty}^{\infty}g(x, y)f_{XY}(x, y)dxdy$$
+\end{defn}
+
+\begin{prop*}
+  Both versions of $E$ are linear.
+\end{prop*}
+
+\begin{prop*}
+  $E_{XY}(g_1(X) + g_2(Y)) = E_X(g_1(X)) + E_Y(g_2(y))$.
+  If $X$ and $Y$ are independent then $E_{XY}(g_1(x)g_2(y)) = E_X(g_1(x))E_Y(g_2(y))$.
+\end{prop*}
+
+\subsubsection{Conditional Expectiation}
+
+\begin{defn}
+  The \textbf{conditional expectation} of $Y$ given $X = x$ is
+  $$E_{Y \mid X}(Y \mid X = x) := \sum_{y \in \Y}yp(y \mid x)$$
+  or
+  $$E_{Y \mid X}(Y \mid X = x) := \int_{y = -\infty}^{\infty}yf(y \mid x)dy$$
+\end{defn}
+
+\begin{defn*}
+  The \textbf{covariance} of $X$ and $Y$ is
+  $$\sigma_{XY} = \Cov(X, Y) := E_{XY}((X - E_X(X))(Y - E_Y(Y)))$$
+\end{defn*}
+
+\begin{defn}
+  The \textbf{correlation} of $X$ and $Y$ is
+  $$\rho_{XY} = \Cor(X, Y) := \frac{\sigma_{XY}}{\sigma_X\sigma_Y}$$
+\end{defn}
+
+\begin{prop*}
+  $X$ and $Y$ are independent $\implies \sigma_{XY} = \rho_{XY} = 0$.
+\end{prop*}
+
+\subsection{Examples}
+
+\subsection{Multivariate Transformations}
+
+\subsubsection{Convolutions (sums of random variables)}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  (Convolution Theorem)
+  For independent RVs $X$ and $Y$ and $Z = X + Y$,
+  $$p_Z(z) = \sum_{x \in \X}p_X(x)p_Y(z - x)$$
+  or
+  $$p_Z(z) = \int_{\R}f_X(x)f_Y(z - x)dx$$
+\end{thm}
+
+\stepcounter{subsection}
+
+\begin{thm}
+  If $X \sim N(\mu_X, \sigma_X^2)$ and $Y \sim N(\mu_Y, \sigma_Y^2)$ are independent then $X + Y \sim N(\mu_X + \mu_Y, \sigma_X^2 + \sigma_Y^2)$.
+\end{thm}
+
+\stepcounter{subsection}
+
+\subsubsection{General Bivariate Transformations}
+
+\begin{prop*}
+  For DRVs $X$ and $Y$ with $U = g_1(X, Y)$ and $V = g_2(X, Y)$,
+  $$p_{UV}(u, v) = \sum_{(x, y) \in A}p_{XY}(x, y)$$
+  where
+  $$A := \{(x, y) : (g_1(x, y), g_2(x, y)) = (u, v)\}$$
+\end{prop*}
+
+\begin{prop*}
+  For CRVs $X$ and $Y$ with $U = g_1(X, Y)$ and $V = g_2(X, Y)$, and given $u := g_1(x, y)$ and $v := g_2(x, y)$,
+  $$f_{UV}(u, v) = f_{XY}(x, y)\left\lvert\frac{\partial x}{\partial u}\frac{\partial y}{\partial v} - \frac{\partial x}{\partial v}\frac{\partial y}{\partial u}\right\rvert$$
+  where
+  $$A := \{(x, y) : (g_1(x, y), g_2(x, y)) = (u, v)\}$$
+\end{prop*}
+
+\begin{defn*}
+  The \textbf{Gamma function} is $\Gamma(\alpha) = \int_0^{\infty}t^{\alpha - 1}e^{-t}dt$, defined for $\alpha \in (0, \infty)$.
+\end{defn*}
+
+\begin{prop*}
+  We have:
+  \begin{itemize}
+    \item $\forall \alpha > 1,\ \Gamma(\alpha) = (\alpha - 1)\Gamma(\alpha)$
+    \item $\Gamma(1) = 1$
+    \item $\forall n \in \N,\ \Gamma(n) = (n - 1)!$
+    \item $\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$
+  \end{itemize}
+\end{prop*}
+
+\begin{defn*}
+  The \textbf{Gamma distribution} $X \sim \textnormal{Gamma}(\alpha, \beta)$ with $\alpha, \beta > 0$ has the following properties:
+  \begin{itemize}
+    \item $f_X(x) := \frac{\beta^{\alpha}}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x}$
+    \item $\X = (0, \infty)$
+    \item $E(X) = \frac{\alpha}{\beta}$
+    \item $\Var(X) = \frac{\alpha}{\beta^2}$
+  \end{itemize}
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{Beta function} is $B(\alpha, \beta) := \int_0^1x^{\alpha - 1}(1 - x)^{\beta - 1}dx = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{Beta distribution} $X \sim \textnormal{Beta}(\alpha, \beta)$ has PDF $f_X(x) := \frac{1}{B(\alpha, \beta)}x^{\alpha - 1}(1 - x)^{\beta - 1}$ and $\X = (0, 1)$
+\end{defn*}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  If $X \sim \textnormal{Gamma}(\lambda, \beta)$ and $Y \sim \textnormal{Gamma}(\xi, \beta)$ are independent then $X + Y \sim \textnormal{Gamma}(\lambda + \xi, \beta)$
+\end{thm}
 
 \section{Estimation}
 
