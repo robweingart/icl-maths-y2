@@ -637,6 +637,11 @@ A function $f : \Omega_1 \to \Omega_2$ can be written as $f(x + iy) = u(x, y) + 
   for $z \in \{z : 0 < \abs{z - z_0} < R\}$.
   For $\gamma \subset \{z : 0 < \abs{z - z_0} < R\}$ simple, closed, piecewise-smooth and containing $z_0$ in its interior,
   $$\Res{[f, z_0]} = \frac{1}{2\pi i}\oint_{\gamma}f(z)dz$$
+  Furthermore, if $m$ is the largest integer such that $a_{-m} \neq 0$ then
+  $$\Res{[f, z_0]} = \lim_{z \to z_0}\frac{1}{(m - 1)!}\frac{d^{m - 1}}{dz^{m - 1}}((z - z_0)^mf(z))$$
+  Note that if $z_0$ is a pole of $f$ then $m$ is its order.
+  In particular if $z_0$ is a simple pole ($\iff m = 1$) then
+  $$\Res{[f, z_0]} = \lim_{z \to z_0}(z - z_0)f(z)$$
 \end{thm}
 
 \begin{thm}
