@@ -27,6 +27,8 @@
 \newcommand{\isoto}{\xrightarrow{\sim}}
 \newcommand{\normsg}{\trianglelefteq}
 
+\newcommand{\question}[1]{\noindent\textbf{Question #1} }
+
 \DeclareMathOperator{\Aut}{Aut}
 \DeclareMathOperator{\Inn}{Inn}
 \DeclareMathOperator{\Img}{Im}
@@ -746,5 +748,128 @@
 \begin{thm}
   For a prime $p$ and positive integer $n$, there exists a field of size $p^n$.
 \end{thm}
+
+\appendix
+
+\section{Problem Sheets}
+
+\subsection{Problem Sheet 1}
+
+\question{1} $\Aut(\Z) \cong \Z / 2\Z$ and $\Aut(\Z / n\Z) \cong \{[u]_n : (u, n) = 1\}$.
+
+\question{2.a} $\Inn(G) \normsg \Aut(G)$.
+
+\question{2.b} $\Inn(S_3) \cong S_3 / Z(S_3)$ and $\Inn(S_4) \cong S_4 / Z(S_4)$.
+
+\question{3.b} Index of $H \leq G$ is 2 $\implies H \normsg G$.
+
+\question{5} $G / Z(G)$ is cyclic $\implies G$ is abelian.
+
+\question{6.a} If $G = A \times B$ then $G / A \cong B$ and $G / B \cong A$.
+
+\question{6.b} If $G = A \times B$, $A_1 \normsg A$ and $B_1 \normsg B$ then $A_1 \times B_1 \normsg G$ and $G / (A_1 \times B_1) \cong (A / A_1) \times (B / B_1)$.
+
+\question{6.c} $Z(A \times B) = Z(A) \times Z(B)$.
+
+\question{8} $C_{mn} \cong C_m \times C_n \iff (m, n) = 1$.
+
+\subsection{Unseen Problem Sheet 1}
+
+\question{3} If $H \leq G$ and $\forall g \in G,\ g^2 \in H$ then $H \normsg G$.
+
+\question{4} An infinite group has infinitely many subgroups.
+
+\question{5} For $H \leq G$, $K \leq G$ and $L \normsg G$ with $HL = KL$ and $H \cap L = K \cap L$, we have $H \cong K$ but not necessarily $H = K$.
+
+\subsection{Problem Sheet 2}
+
+\question{6} If $\abs{G} = 4$ then $G$ is abelian and in fact $G \cong C_4$ or $G \cong C_2 \times C_2$.
+
+\question{7} If $\abs{G} = p^n$ for $p$ prime then $G$ has a subgroup of order $p^m$ for any $1 \leq m \leq n$.
+
+\subsection{Unseen Problem Sheet 2}
+
+\question{1} $\forall g \in G \setminus \{e\},\ \ord{g} = 2 \implies G$ is abelian.
+
+\subsection{Problem Sheet 3}
+
+\question{3} $G$ is abelian $\implies G / G_{tors} = \{e\}$.
+
+\question{4} $Z^m \cong Z^n \implies m = n$.
+
+\question{7} $G$ is not cyclic $\iff$ there is a subgroup $H \leq G$ with $H \cong C_p \times C_p$ for some prime $p$.
+
+\question{8} If $S \subseteq G$ is finite and closed under the group operation then $S \leq G$.
+
+\subsection{Unseen Problem Sheet 3}
+
+\question{1} If $\abs{G} = p$ for some prime $p$ then either $G \cong C_{p^2}$ or $G \cong C_p \times C_p$. 
+
+\question{2} For a finite abelian group $G$ and a prime $p$ dividing $\abs{G}$, if there are $N_p$ elements of order $p$ then $N_p \equiv -1 \pmod p$.
+
+\question{3} If $G$ is finite and the index of $H \leq G$ is the smallest prime divisor of $\abs{G}$ then $H \normsg G$.
+
+\subsection{Problem Sheet 4}
+
+\question{6} If $F_1$ and $F_2$ are subfields of a field $K$ then $F_1 \cap F_2$ is a subfield of $K$. 
+
+\question{7} If $R$ is a commutative ring and $I$ and $J$ are ideals then $I + J := \{a + b : a \in I, b \in J\}$ is also an ideal of $R$.
+
+\question{8} If $F$ is a finite field with $\abs{F} = p^n$ then $\forall r \in F,\ r^{p^n} = r$.
+
+\question{9} If $R$ is a ring with $\forall x \in R,\ x^2 = x$ then $R$ is commutative.
+
+\subsection{Problem Sheet 5}
+
+Euler's function $\varphi(n)$ is the number of integers less than $n$ which are comprime to $n$.
+
+\question{1.a} $(\Z / n\Z, +)$ has $\varphi(n)$ elements of order $n$.
+
+\question{1.b} $\varphi(n) = \abs{(\Z / n\Z)^{\times}}$.
+
+\question{1.c} For a prime $p$ and a positive integer $m$, $\varphi(p^m) = p^m - p^{m - 1}$.
+
+\question{1.d} If $(m, n) = 1$ then $\varphi(mn) = \varphi(m)\varphi(n)$. Furthermore, $\varphi(n) = n\prod_{p \mid n}\left(1 - \frac{1}{p}\right)$
+
+\question{2} $\forall d \in \N,\ d = \sum_{\delta \mid d}\varphi(\delta)$.
+
+\question{4} In a field with $q$ elements, if $d \mid q - 1$ then $x^d - 1$ has $d$ distinct roots.
+
+\question{5} In a field $F$ with $q$ elements, if $d \mid q - 1$ then $F^{\times}$ has $\varphi(d)$ elements of order $d$.
+
+\question{6} The multiplicative group of a finite field is cyclic.
+
+\question{7} If $F$ is a field with $p^n$ elements for some prime $p$ then the additive group of $F$ is cyclic $\iff n = 1$.
+
+\subsection{Problem Sheet 6}
+
+\begin{defn}
+  For commutative rings $R_1$ and $R_2$, the \textbf{product ring} $R$ is $R_1 \times R_2$ under coordinate-wise addition and multiplication.
+\end{defn}
+
+\question{5.a} $R$ is always a ring but never an integral domain.
+\\
+
+\begin{not*}
+  Let $R$ be a commutative ring, $I$ and $J$ be ideals of $R$, and $IJ$ be the set of all finite sums $\sum_{i = 1}^nx_iy_i$ with $x_i \in I$ and $y_i \in J$.
+\end{not*}
+
+\question{6.a} $I \cap J$ is an ideal of $R$.
+
+\question{6.b} $IJ$ is an ideal in $R$.
+
+\question{6.c} $IJ \subseteq I \cap J$.
+
+\question{6.d} $x \mapsto (x + I, x + J)$ is a homomorphism $R \to (R / I) \times (R / J)$ with kernel $I \cap J$.
+
+\begin{defn}
+  Ideals $I$ and $J$ of $R$ are \textbf{coprime} $\iff I + J = R$ (see PS 4 Q 7).
+\end{defn}
+
+\question{7.a} If $I$ and $J$ are coprime then $IJ = I \cap J$.
+
+\question{7.b} If $I$ and $J$ are coprime then the homomorphism from PS 6 Q 6d gives an isomorphism $R / IJ \cong (R / I) \times (R / J)$.
+
+\question{7.c} $\Z / ab\Z \cong \Z / a\Z \times \Z / b\Z$.
 
 \end{document}
