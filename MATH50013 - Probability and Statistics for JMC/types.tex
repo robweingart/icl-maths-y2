@@ -1,0 +1,198 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,booktabs,cancel}
+
+\theoremstyle{definition}
+\newtheorem*{defn*}{Definition}
+
+\renewcommand{\d}{{\textnormal{d}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\X}{\mathbb{X}}
+\newcommand{\Y}{\mathbb{Y}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\RV}{\mathbf{RV}}
+\newcommand{\DRV}{\mathbf{DRV}}
+\newcommand{\CRV}{\mathbf{CRV}}
+\renewcommand{\P}{{\mathcal{P}}}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bernoulli}{Bernoulli}
+\DeclareMathOperator{\Binomial}{Binomial}
+\DeclareMathOperator{\Geometric}{Geometric}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\Uniform}{Uniform}
+\DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\bias}{bias}
+\DeclareMathOperator{\rvto}{\xrightarrow{RV}}
+\DeclareMathOperator{\drvto}{\xrightarrow{DRV}}
+\DeclareMathOperator{\crvto}{\xrightarrow{CRV}}
+
+\begin{document}
+
+\noindent This document describes the domains and ranges of functions by using $\to$ as a right-associative binary operator on sets, like in Haskell.
+Additionally, $?$s are used to indicate how the arguments are written.
+For instance, if a function is applied as $g_x(y)$ then we write $g_{?}(?) : \R \to \R \to \R$.
+The function declarations are always written fully curried even if the applications are uncurried.
+The order of the $?$s corresponds to the order of the sets in the declaration.
+
+\setcounter{section}{2}
+
+\section{Probability}
+
+\noindent Let $\F \subseteq \P(S)$ be a $\sigma$-algebra
+
+\noindent Let $P : \F \to \R$ be a probability measure.
+
+\begin{align*}
+  P(? \mid ?) &: \F \to \F \to \R\\
+  P(E \mid F) &:= \frac{P(E \cap F)}{P(F)}\\
+\end{align*}
+
+\section{Discrete Random Variables}
+
+\noindent Let $S \rvto \X$ be the set of all random variables with sample space $S$ and range $\X$.
+
+\begin{align*}
+  P_{?}(?) &: (S \rvto \X) \to \P(\R) \to \R\\
+  P_X(X \in B) &\equiv P_X(B)\\
+  P_X(X \in B) &:= P(\{s \in S : X(S) \in B\})\\
+  \\
+  \sim &\subseteq (\RV_\X)^2\\
+  X \sim Y &\iff P_X = P_Y\\
+\end{align*}
+
+\noindent Most of the functions in this course are written as if they depend on $X$, but actually depend only on $P_X$.
+To make this clear, I will write $g : \RV_\X \to B$ instead of $g : (S \rvto \X) \to B$ whenever $X \sim Y \implies g(X) = g(Y)$.
+The symbols $\drvto, \DRV, \crvto, \CRV$ are defined similarly but with the added constraint of discreteness/continuity. 
+
+\begin{align*}
+  F_{?}(?) &: \RV_\X \to \R \to [0, 1]\\
+  F_X(x) &:= P_X(X \leq x)\\
+\end{align*}
+
+\section{Discrete Random Variables}
+
+\begin{align*}
+  p_{?}(x) &: \DRV_\X \to \R \to [0, 1]\\
+  p_X(x) &:= \begin{cases}P_X(X = x) & x \in \X \\ 0 & x \notin \X\end{cases}\\
+  \\
+  E(?, ?) &: (\R \to \R) \to \DRV_\X \to \R\\
+  E(g, X) &:= \sum_{x \in \X}g(x)p_X(x)\\
+  E(g(X)) &\equiv E_X(g(X)) \equiv E(g, X)\\
+  E(X) &\equiv E_X(X) \equiv E(\text{id}, X)\\
+  \\
+  \Bernoulli(?) &: [0, 1] \to \DRV_{\{0, 1\}}\\
+  \Binomial(?, ?) &: \N \to [0, 1] \to \DRV_{\{0, \ldots, n\}}\\
+  \Geometric(?) &: [0, 1] \to \DRV_{\Z^+}\\
+  \Poisson(?) &: \R^+ \to \DRV_{\N}\\
+  \U(?) &: A \to \DRV_A\\
+     &\text{where $A$ is any finite set}\\
+\end{align*}
+
+\section{Continuous Random Variables}
+
+\begin{align*}
+  f_{?}(?) &: \CRV_\X : \X \to \R\\
+  \forall B \subseteq \R,\ P_X(X \in B) &:= \int_{x \in B}f_X(x)dx\\
+  \\
+  E(?, ?) &: (\R \to \R) \to \CRV_\X \to \R\\
+  E(g, X) &:= \int_{-\infty}^{\infty}g(x)f_X(x)dx\\
+  E(g(X)) &\equiv E_X(f(X)) \equiv E(g, X)\\
+  E(X) &\equiv E_X(X) \equiv E(\text{id}, X)\\
+\end{align*}
+\begin{align*}
+  (\Uniform(?, ?) &: \R \to \R \to \CRV_\R)\\
+  \Uniform(a, b) &\in \CRV_{(a, b)}\\
+  \Exp(?) &: \R^+ \to \CRV_{\{0\} \cup \R^+}\\
+  \text{N}(?, ?) &: \R \to \R \to \CRV_\R
+\end{align*}
+
+\section{Joint Random Variables}
+
+\begin{align*}
+  P_{??}(?, ?) &: (S \rvto \X) \to (S \rvto \Y) \to \P(\R) \to \P(\R) \to [0, 1]\\
+  P_{XY}(B_X, B_Y) &:= P(X^{-1}(B_X) \cap Y^{-1}(B_Y))\\
+  \\
+  F_{??}(?, ?) &: (S \rvto \X) \to (S \rvto \Y) \to \R \to \R \to [0, 1]\\
+  F_{XY}(x, y) &:= P_{XY}(X \leq x, Y \leq y)\\
+  \\
+  p_{??}(?, ?) &: (S \drvto \X) \to (S \drvto \Y) \to \R \to \R \to [0, 1]\\
+  p_{XY}(x, y) &:= P_{XY}(X = x, Y = y)\\
+  \\
+  f_{??}(?, ?) &: (S \crvto \X) \to (S \crvto \Y) \to \R \to R \to \R\\
+  \forall B_XY \subseteq \R \times \R,\ P_{XY}(B_XY) &:= \int_{(x, y) \in B_{XY}}f_{XY}(x, y)dxdy\\
+                                                     &\text{(exists iff $X$ and $Y$ are jointly continuous)}\\
+  \\
+  P_{? \mid ?}(? \mid ?) &: (S \rvto \Y) \to (S \rvto \X) \to \P(\R) \to \P(\R) \to \R\\
+  P_{Y \mid X}(B_Y \mid B_X) &:= \frac{P_{XY}(B_X, B_Y)}{P_X(B_X)}\\
+  \\
+  f_{? \mid ?}(? \mid ?) &: (S \rvto \Y) \to (S \rvto \X) \to \R \to \R \to \R\\
+  f_{Y \mid X}(y \mid x) &:= \frac{f_{XY}(x, y)}{f_X(x)}\\
+  \\
+  E(?, ?, ?) &: (\R \to \R \to \R) \to (S \drvto \X) \to (S \drvto \Y) \to \R\\
+  E(g, X, Y) &:= \sum_{y \in \Y}\sum_{x \in \X}g(x, y)p_{XY}(x, y)\\
+  \\
+  E(?, ?, ?) &: (\R \to \R \to \R) \to (S \crvto \X) \to (S \crvto \Y) \to \R\\
+  E(g, X, Y) &:= \int_{y = -\infty}^{\infty}\int_{-\infty}^{\infty}g(x, y)f_{XY}(x, y)dxdy\\
+  \\
+  E_{XY}(g(X, Y)) &\equiv E(g, X, Y)\\
+\end{align*}
+
+\begin{align*}
+  E(? \mid ? = ?) &: (S \drvto \Y) \to (S \drvto \X) \to \R \to \R\\
+  E(Y \mid X = x) &:= \sum_{y \in \Y}yp_{Y \mid X}(y \mid x)\\
+  \\
+  E(? \mid ? = ?) &: (S \crvto \Y) \to (S \crvto \X) \to \R \to \R\\
+  E(Y \mid X = x) &:= \int_{y = -\infty}^{\infty}yf_{Y \mid X}(y \mid x)dy\\
+  \\
+  \Cov(?, ?) &: (S \rvto \X) \to (S \rvto \Y) \to \R\\
+  \Cov(X, Y) &:= E_{XY}((X - E_X(X))(Y - E_Y(Y)))\\
+  \sigma_{XY} &\equiv \Cov(X, Y)\\
+  \\
+  \Cor(?, ?) &: (S \rvto \X) \to (S \rvto \Y) \to \R\\
+  \Cor(X, Y) &:= \frac{\sigma_{XY}}{\sigma_X\sigma_Y}\\
+  \rho_{XY} &\equiv \Cor(X, Y)
+  \\
+  \Gamma &: \R^+ \to \R\\
+  \Gamma(\alpha) &:= \int_0^{\infty}t^{\alpha - 1}e^{-t}dt\\
+  \\
+  \text{Gamma}(?, ?) &: \R^+ \to \R^+ \to \CRV_{\R^+}\\
+  B(?, ?) : \R^+ \to \R^+ \to \R\\
+  B(\alpha, \beta) &:= \int_0^1x^{\alpha - 1}(1 - x)^{\beta - 1}dx = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}\\
+  \\
+  \text{Beta}(?, ?) &: \R^+ \to \R^+ \to \CRV_{(0, 1)}
+\end{align*}
+
+\section{Estimation}
+
+\begin{align*}
+  \underline{X} &\in (\Theta \to \RV_\X)^n\text{ i.i.d}\\
+  t &: \R^n \to \R\\
+  T &: \Theta \to \RV_\R\\
+  T &:= t \circ \underline{X}\\
+  \\
+  T \mid \theta &\equiv T(\theta)\\
+  \\
+  &\text{for some definitions $T$ is a ``rule'' that works for any $n$, so}\\
+  t &: \P(\R) \to \R\text{ (finite subsets only)}\\
+  \\
+  \bias(?, ?) &: (\Theta \to \RV_\R) \to \Theta \to \R\\
+  \bias(T, \theta) &:= E(T - \theta \mid \theta) = E(T \mid \theta) - \theta
+  \\
+  L_{?}(? \mid ?) &: \DRV_\X \to \Theta \to \R^n \to \R\\
+  L_X(\theta \mid \underline{x}) &:= \prod_{i = 1}^np_{X \mid \theta}(x_i)\\
+  \\
+  L_{?}(? \mid ?) &: \CRV_\X \to \Theta \to \R^n \to \R\\
+  L_X(\theta \mid \underline{x}) &:= \prod_{i = 1}^nf_{X \mid \theta}(x_i)\\
+  \\
+  \ell &= \log \circ L
+\end{align*}
+
+
+\end{document}

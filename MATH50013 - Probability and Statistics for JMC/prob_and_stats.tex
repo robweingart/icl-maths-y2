@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage[a4paper, margin=1in]{geometry}
-\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,booktabs}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,booktabs,cancel}
 
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}[thm]{Lemma}
@@ -22,6 +22,7 @@
 \newcommand{\F}{\mathcal{F}}
 \newcommand{\X}{\mathbb{X}}
 \newcommand{\Y}{\mathbb{Y}}
+\newcommand{\RV}{\mathbf{RV}}
 
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\sd}{sd}
@@ -34,6 +35,9 @@
 \DeclareMathOperator{\Exp}{Exp}
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\Cor}{Cor}
+\DeclareMathOperator{\bias}{bias}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator{\Student}{Student}
 
 \title{MATH50013 - Probability and Statistics for JMC}
 \author{Notes by Robert Weingart}
@@ -426,19 +430,25 @@
 
 \subsection{Mean and Variance}
 
+\begin{not*}
+  All the functions defined in this section are of type $\RV \to \R$.
+\end{not*}
+
 \subsubsection{Expectation}
 
 \begin{defn}
   The \textbf{expected value} or \textbf{mean} of a DRV $X$ is
   $$E_X(X) := \sum_{x \in \X}xp_X(x)$$
   It is often abbreviated to $E(X)$.
+  For the case $E_Y(X)$ with $Y \neq X$, see below.
 \end{defn}
 
 \setcounter{thm}{\arabic{subsection}}
 
 \begin{thm}
   For a \textbf{function of interest} $g : \R \to \R$, we have
-  $$E(g(X)) = \sum_{x \in \X}g(x)p_X(x)$$
+  $$E_X(g(X)) = \sum_{x \in \X}g(x)p_X(x)$$
+  This is the only situation where we can have $E_X(Y)$ with $X \neq Y$.
 \end{thm}
 
 \begin{prop*}
@@ -687,7 +697,7 @@ $X \sim N(\mu, \sigma^2)$ has no obvious interpretation.
 \subsubsection{Joint Cumulative Distribution Function}
 
 \begin{defn}
-  The \textbf{joint cumulative distribution function} is $F_{xy}(x, y) := P_{XY}(X \leq x, Y \leq y)$.
+  The \textbf{joint cumulative distribution function} is\\ $F_{xy}(x, y) := P_{XY}(X \leq x, Y \leq y)$.
 \end{defn}
 
 \begin{prop*}
@@ -901,6 +911,129 @@ $X \sim N(\mu, \sigma^2)$ has no obvious interpretation.
 \end{thm}
 
 \section{Estimation}
+
+\begin{not*}
+  In this section we consider random variables which are known to have a distribution depending on an unknown parameter (so that $X \sim DIST(\theta)$ where $DIST$ is some distribution).
+  $\Theta$ is the set of all possible values of $\theta$.
+  For properties of $X$ which depend only on the distribution (essentially all of them), we use the notation $\mid \theta$ to indicate this dependence.
+  For instance, we write $P_{X \mid \theta}(x \mid \theta)$ to mean whatever $P(X)$ would be if the missing parameter of the distribution were $\theta$.
+  Note that this is entirely unrelated to all previous uses of the symbol $\mid$ in this document.
+\end{not*}
+
+\subsection{Estimators}
+
+\begin{not*}
+  Throughout this section, we consider a set of $n$ independent and identically distributed random variables $\underline{X} = (X_1, \ldots, X_n)$.
+\end{not*}
+
+\begin{defn}
+  A \textbf{statistic} is a random variable $T$ which depends on $\underline{X}$.
+  The corresponding lowercase letter $t : \R^n \to \R$ is used to represent a realised value of $T$.
+\end{defn}
+
+\begin{defn*}
+  An \textbf{estimator} is a statistic used to compute unknown parameters $\theta$ of the distribution of $\underline{X}$.
+  Its realised values are called \textbf{estimates}.
+\end{defn*}
+
+\subsubsection{Point estimates}
+
+\begin{defn*}
+  A \textbf{point estimate} is an estimator which estimates a single unknown parameter $\theta$.
+  The official notes call this an estimate even though, according to the previous definition, it is an estimator rather than an estimate.
+  The distribution of the point estimate, $P_{T \mid \theta}$, will depend on the same unknown parameter $\theta$.
+\end{defn*}
+
+\subsubsection{Bias, Efficiency, Consistency}
+
+\begin{defn*}
+  The \textbf{bias} of an estimator $T$ for a parameter $\theta$ is
+  $$\bias(T, \theta) := E(T - \theta \mid \theta) = E(T \mid \theta) - \theta$$
+\end{defn*}
+
+\begin{defn*}
+  $T$ is \textbf{unbiased} $\iff \forall \theta \in \Theta,\ \bias(T, \theta) = 0$.
+\end{defn*}
+
+\begin{prop*}
+  For any distribution, the mean of a sample is an unbiased estimator for the mean of the distribution.
+\end{prop*}
+
+\begin{defn*}
+  The \textbf{bias-corrected sample variance} of $\underline{X}$ is
+  $$S_{n - 1}^2 := \frac{1}{n - 1}\sum_{i = 1}^n(X_i - \overline{X})^2$$
+  This is an unbiased estimator for the variance of any distribution.
+\end{defn*}
+
+\begin{defn*}
+  Given two unbiased estimators for the same parameter, $\widehat{\Theta}$ and $\widehat{\Psi}$, $\widehat{\Theta}$ is \textbf{more efficient} than $\widehat{\Psi}$ iff
+  $$\left(\forall \theta \in \Theta,\ \Var\left(\widehat{\Theta} \mid \theta\right) \leq \Var\left(\widehat{\Psi} \mid \theta\right)\right) \land \left(\exists \theta \in \Theta : \Var\left(\widehat{\Theta} \mid \theta\right) < \Var\left(\widehat{\Psi} \mid \theta\right)\right)$$
+  $\widehat{\Theta}$ is \textbf{efficient} iff it is more efficient than all other estimators.
+\end{defn*}
+
+\begin{defn*}
+  $\widehat{\Theta}$ is \textbf{consistent} iff it converges in probability to $\theta$, that is to say
+  $$\forall \theta \in \Theta,\ \forall \varepsilon > 0,\ \lim_{n \to \infty}P_{\widehat{\Theta} \mid \theta}\left(\left\lvert\left(\widehat{\Theta} \mid \theta\right) - \theta\right\rvert > \varepsilon\right) = 0$$
+\end{defn*}
+
+\begin{prop*}
+  $\widehat{\Theta}$ is unbiased $\implies \widehat{\Theta}$ is consistent.
+\end{prop*}
+
+\subsubsection{Maximum Likelihood Estimation}
+
+\begin{defn*}
+  The \textbf{likelihood function} is
+  $$L(\theta \mid \underline{x}) := \prod_{i = 1}^np_{X \mid \theta}(x_i)$$
+  or
+  $$L(\theta \mid \underline{x}) := \prod_{i = 1}^nf_{X \mid \theta}(x_i)$$
+  where $\underline{x} = (x_1, \ldots, x_n)$ is a sample of $\underline{X}$.
+  Note that this is yet another different usage of $\mid$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{maximum likelihood estimate} is $\widehat{\theta}_{MLE} := \argmax_{\theta \in \Theta}L(\theta \mid \underline{x})$.
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{log-likelihood function} is $\ell(\theta \mid \underline{x}) := \log{L(\theta \mid \underline{x})}$
+\end{defn*}
+
+\begin{defn*}
+  The \textbf{maximum likelihood estimator} is defined like the maximum likelihood estimate and uses the same notation, but uses the RVs $\underline{X}$ instead of a specific sample $\underline{x}$.
+\end{defn*}
+
+\subsection{Confidence Intervals}
+
+\subsubsection{Normal Distribution with Known Variance}
+
+\begin{defn*}
+  The \textbf{$(1 - \alpha)$ confidence interval} for the mean $\mu$ given a known variance $\sigma^2$ is
+  $$\left[\overline{x} - z_{1 - \frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}, \overline{x} + z_{1 - \frac{\alpha}{2}}\frac{\sigma}{\sqrt{n}}\right]$$
+  where $z_\alpha$ is the $\alpha$-quantile of $N(0, 1)$.
+  Then a sample of size $n$ with this distribution should have $\overline{x}$ within this range $1 - \alpha$ of the time.
+\end{defn*}
+
+\subsubsection{Normal Distribution with Unknown Variance}
+
+\begin{prop*}
+  If $\mu$ and $\sigma^2$ are both unknown then 
+  $$\frac{\overline{X} - \mu}{S_{n - 1} / \mu} \sim \Student(n - 1)$$
+  where
+  $$S_{n - 1} = \sqrt{\frac{\sum_{i = 1}^n(X_i - \overline{X})^2}{n - 1}}$$
+  Then the $(1 - \alpha)$ confidence level for $\mu$ is
+  $$\left[\overline{x} - t_{n - 1, 1 - \frac{\alpha}{2}}\frac{s_{n - 1}}{\sqrt{n}}, \overline{x} + t_{n - 1, 1 - \frac{\alpha}{2}}\frac{s_{n - 1}}{\sqrt{n}}\right]$$
+  where $t_{\nu, \alpha}$ is the $\alpha$-quantile of $\Student(\nu)$.
+\end{prop*}
+
+\subsubsection{Another way to view the confidence interval: Neyman construction}
+
+\begin{defn*}
+  The \textbf{Neyman construction} is a graph with values of the estimator along the horizontal axis and values of the parameter along the vertical axis.
+  For each value of the parameter, indicate a belt of values in which the estimator is expected to lie for that value.
+  Draw a vertical line at the observed estimate.
+  Then the range of parameter values whos belts intersect this lane is the confidence interval.
+\end{defn*}
 
 \section{Hypothesis Testing}
 
