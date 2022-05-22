@@ -41,7 +41,7 @@ For instance, if a function is applied as $g_x(y)$ then we write $g_{?}(?) : \R 
 The function declarations are always written fully curried even if the applications are uncurried.
 The order of the $?$s corresponds to the order of the sets in the declaration.
 
-\setcounter{section}{2}
+\setcounter{section}{3}
 
 \section{Probability}
 
@@ -76,8 +76,6 @@ The symbols $\drvto, \DRV, \crvto, \CRV$ are defined similarly but with the adde
   F_X(x) &:= P_X(X \leq x)\\
 \end{align*}
 
-\section{Discrete Random Variables}
-
 \begin{align*}
   p_{?}(x) &: \DRV_\X \to \R \to [0, 1]\\
   p_X(x) &:= \begin{cases}P_X(X = x) & x \in \X \\ 0 & x \notin \X\end{cases}\\
@@ -110,7 +108,8 @@ The symbols $\drvto, \DRV, \crvto, \CRV$ are defined similarly but with the adde
   (\Uniform(?, ?) &: \R \to \R \to \CRV_\R)\\
   \Uniform(a, b) &\in \CRV_{(a, b)}\\
   \Exp(?) &: \R^+ \to \CRV_{\{0\} \cup \R^+}\\
-  \text{N}(?, ?) &: \R \to \R \to \CRV_\R
+  \text{N}(?, ?) &: \R \to \R \to \CRV_\R\\
+  \Phi &\equiv \text{N}(0, 1) 
 \end{align*}
 
 \section{Joint Random Variables}

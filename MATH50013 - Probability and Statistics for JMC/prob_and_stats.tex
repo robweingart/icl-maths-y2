@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage[a4paper, margin=1in]{geometry}
-\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,booktabs,cancel}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools,booktabs,cancel,multirow}
 
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}[thm]{Lemma}
@@ -24,6 +24,8 @@
 \newcommand{\Y}{\mathbb{Y}}
 \newcommand{\RV}{\mathbf{RV}}
 
+\newcommand{\mr}[1]{\multirow{2}{*}{#1}}
+
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\sd}{sd}
 \DeclareMathOperator{\Bernoulli}{Bernoulli}
@@ -38,6 +40,7 @@
 \DeclareMathOperator{\bias}{bias}
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator{\Student}{Student}
+\DeclareMathOperator{\freq}{freq}
 
 \title{MATH50013 - Probability and Statistics for JMC}
 \author{Notes by Robert Weingart}
@@ -1036,6 +1039,169 @@ $X \sim N(\mu, \sigma^2)$ has no obvious interpretation.
 \end{defn*}
 
 \section{Hypothesis Testing}
+
+\begin{defn*}
+  To test an unknown parameter $\theta \in \Theta$, partition $\Theta$ into $\Theta_0$ and $\Theta_1$.
+  The \textbf{null hypothesis} is $H_0 : \theta \in \Theta_0$ (usually chosen to represent the absence of a finding - no correlation, the change has no effect on the data etc).
+  The \textbf{alternative hypothesis} is $H_1 : \theta \in \Theta_1$.
+  From now on, we use the $\mid$ notation from the last chapter with $H_0$ and $H_1$ instead of individual values of $\theta$.
+\end{defn*}
+
+\begin{defn*}
+  To perform a hypothesis test, choose a \textbf{rejection region} $R \subseteq \R$ such that $P(T \in R \mid H_0) = \alpha$ is low.
+  This $\alpha$ is the \textbf{significance level} of the test.
+  Given an observed value $t(\underline{x})$, reject the null hypothesis iff $t \in R$.
+  The \textbf{$p$-value} of a test is the significance level that lies on the boundary between rejecting and not rejecting the null hypothesis.
+\end{defn*}
+
+\subsubsection{Error Rates and Power of a Test}
+
+\begin{defn*}
+  \textbf{Type I error} occurs when $H_0$ is rejected, but is actually true.
+  The probability of this is $\alpha$ by definition.
+  \textbf{Type II error} occurs when $H_0$ is not rejected, but actually $H_1$ is true.
+  Its probability is $\beta := P(T \notin R \mid \theta \in \Theta_1)$.
+\end{defn*}
+
+\begin{defn}
+  The \textbf{power} of a hypothesis test is $1 - \beta = P(T \in R \mid \theta \in \Theta_1)$.
+\end{defn}
+
+\begin{defn*}
+  A \textbf{simple hypothesis} or \textbf{point hypothesis} has the form $\theta = \theta_0$.
+  A \textbf{composite hypothesis} has the form $\theta < \theta_0$ or $\theta > \theta_0$.
+  A \textbf{two-sided test} tests a simple hypothesis against its negation.
+  A \textbf{one-sided test} tests a composite hypothesis against its negation (usually the case $\theta = \theta_0$ is included in $H_0$).
+\end{defn*}
+
+\newpage
+\begin{tabular}{c c c c c c}
+  \toprule
+  Dist(s)                 & $H_0$                & Test Stat & $R$ \\
+  \midrule
+  $N(\mu, \sigma^2)$      & $\mu = \mu_0$        & $\frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}}$ & $\{z \mid \abs{z} > z_{1 - \frac{\alpha}{2}}\}$\\
+  \addlinespace
+  $N(\mu, \sigma^2)^\star$      & $\mu = \mu_0$        & $\frac{\overline{X} - \mu}{S_{n - 1} / \mu}$     & $\{t \mid \abs{t} > t_{n - 1, 1 - \frac{\alpha}{2}}\}$\\
+  \addlinespace
+  $N(\mu_X, \sigma^2_X),$ & \mr{$\mu_X = \mu_Y$} & \mr{$\frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma^2_X}{n_1} + \frac{\sigma^2_Y}{n_2}}}$} & \mr{$\{z \mid \abs{z} > z_{1 - \frac{\alpha}{2}}\}$} \\
+  $N(\mu_Y, \sigma^2_Y)$  & & & \\
+  \addlinespace
+  $N(\mu_X, \sigma^2),$   & \mr{$\mu_X = \mu_Y$} & \mr{$\frac{\overline{X} - \overline{Y}}{S_{n_1 + n_2 - 2}\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$} & \mr{$\{t \mid \abs{t} > t_{n_1 + n_2 - 2, 1 - \frac{\alpha}{2}}\}$} \\
+  $N(\mu_Y, \sigma^2)^\star$    & & & \\
+  \addlinespace
+  $\theta \in \R^m, \abs{\X} = k$ & $\theta = \theta_0$  & $\sum\limits_{i = 1}^k\frac{(O_i - E_i)^2}{E_i}^\dag$ & $\{x^2 \mid x^2 > \chi^2_{k - m - 1,1-\alpha}\}$ \\
+  \addlinespace
+  $\abs{\X} = k,$          & $X$ and $Y$          & \mr{$\sum\limits_{j = 1}^\ell\sum\limits_{i = 1}^k\frac{(O_{ij} - E_{ij})^2}{E_{ij}}^\ddag$} & \mr{$\{x^2 \mid x^2 > \chi^2_{(k - 1)(\ell - 1),1-\alpha}\}$} \\
+  $\abs{\Y} = \ell$        & independent      & & \\
+  \addlinespace
+  \bottomrule
+\end{tabular}
+\\
+
+$\star$: $\sigma^2$ is not known.
+
+$\dag$: $O_i = (\freq(\underline{X}, x_i), E_i = np_X(x_i)$
+
+$\ddag$: $O_{ij} = \freq\left(\underline{(X, Y)}, (x_i, y_j)\right), E_{ij} = \freq(\underline{X}, x_i)\freq(\underline{Y}, y_j)$
+
+\subsection{Testing for a population mean}
+
+\subsubsection{Normal Distribution with Known Variance}
+
+\begin{prop*}
+  For $n$ variables i.i.d with distribution $N(\mu, \sigma^2)$ with $\mu$ unknown and $\sigma^2$ known and a hypothesis $H_0 : \mu = \mu_0$, use the test statistic
+  $$Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \sim \Phi$$
+  and the rejection region $R = (-\infty, -z_{1 - \frac{\alpha}{2}}) \cup (z_{1 - \frac{\alpha}{2}}, \infty) = \{z \mid \abs{z} > z_{1 - \frac{\alpha}{2}}\}$ has significance level $\alpha$.
+  The $p$-value is $2(1 - \Phi(\abs{z}))$.
+\end{prop*}
+
+\subsubsection{Normal Distribution with Unknown Variance}
+
+\begin{prop*}
+  If $\sigma^2$ is also unknown then we use
+  $$T = \frac{\overline{X} - \mu}{S_{n - 1} / \mu} \sim \Student(n - 1)$$
+  and the rejection region $R = (-\infty, -t_{n - 1, 1 - \frac{\alpha}{2}}) \cup (t_{n - 1, 1 - \frac{\alpha}{2}}, \infty) = \{t \mid \abs{t} > t_{n - 1, 1 - \frac{\alpha}{2}}\}$.
+\end{prop*}
+
+\begin{prop*}
+  $\chi^2(k)$ has mean $k$ and variance $2k$.
+\end{prop*}
+
+\subsection{Testing for differences in population means}
+
+\subsubsection{Two Sample Problems}
+
+\begin{not*}
+  In this section we have a sample $\underline{X} = (X_1, \ldots, X_{n_1})$ i. i. d with distribution $P_X$ and another sample $\underline{Y} = (Y_1, \ldots, Y_{n_2})$ i. i. d with distribution $P_Y$ with $\mu_X$ and $\mu_Y$ unknown and the samples independent from each other.
+  In the special case where $\underline{X}$ and $\underline{Y}$ are \textbf{paired}, $n_1 = n_2$ and each pair $(X_i, Y_i)$ is possibly dependent.
+\end{not*}
+
+\subsubsection{Normal Distributions with Known Variances}
+
+\begin{prop*}
+  If $P_X = N(\mu_X, \sigma^2_X)$ with $\mu_X$ unknown and $P_Y = N(\mu_Y, \sigma^2_Y)$ with $\mu_Y$ unknown, we can test $H_0 : \mu_X = \mu_Y$ using the test statistic
+  $$Z = \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma^2_X}{n_1} + \frac{\sigma^2_Y}{n_2}}} \sim \Phi$$
+  and the rejection region $R = \{z \mid \abs{z} > z_{1 - \frac{\alpha}{2}}\}$.
+\end{prop*}
+
+\subsubsection{Normal Distributions with Unknown Variances}
+
+\begin{defn*}
+  If $\sigma^2_X = \sigma^2_Y = \sigma^2$ unknown, the \textbf{bias-corrected pooled sample variance} is
+  $$\frac{\sum_{i = 1}^{n_1}(X_i - \overline{X})^2 + \sum_{i = 1}^{n_2}(Y_i - \overline{Y})^2}{n_1 + n_2 - 2}$$
+  This is an unbiased estimator for $\sigma^2$.
+\end{defn*}
+
+\begin{prop*}
+  In the situation above, test $H_0 : \mu_X = \mu_Y$ using
+  $$T = \frac{\overline{X} - \overline{Y}}{S_{n_1 + n_2 - 2}\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} \sim \Student(n_1 + n_2 - 2)$$
+  and $R = \{t \mid \abs{t} > t_{n_1 + n_2 - 2, 1 - \frac{\alpha}{2}}\}$
+\end{prop*}
+
+\subsection{Goodness of Fit}
+
+\subsubsection{Count Data and Chi-Square Tests}
+
+\begin{not*}
+  In this section, we have $\underline{X}$ with range $\{x_1, \ldots x_k\}$ and pmf $p_X(j) = P(X = x_j \mid \theta)$ where $\theta \in \R^m$ (there are $m$ unknown parameters which we express as an $m$-vector).
+  We write $p_j \equiv p_X(j)$ for brevity.
+  Consider the observed frequencies $\underline{O} = (O_1, \ldots, O_k)$ with $O_j = \abs{\{i \in \{1, \ldots, n\} \mid X_i = x_j\}}$
+  We will not be referring to $\underline{X}$ directly after this, so just ignore the fact that $x_i$ can we can't express extracting values from a sample $\underline{x}$ right now because the notation is the same as the values in the range.
+  For a hypothesis $H_0 : \theta = \theta_0$, we can compute the expected probabilites $\{p_1, \ldots, p_k\}$ and thus the expected frequencies $\underline{E} = (E_1, \ldots E_k)$ with $E_j = np_j$.
+\end{not*}
+
+\begin{prop*}
+  In this situation, test $H_0 : \theta = \theta^n$ using the \textbf{chi-squared statistic}
+  $$\chi^2 = \sum_{i = 1}^k\frac{(O_i - E_i)^2}{E_i} \sim \chi^2_{k - m - 1}$$
+  and $R = \{x^2 \mid x^2 > \chi^2_{k - m - 1,1-\alpha}\}$
+\end{prop*}
+
+\subsubsection{Proportions}
+
+\subsubsection{Model Checking}
+
+\subsubsection{Independence}
+
+\begin{prop*}
+  For two DRVs $X$ and $Y$ with ranges $\{x_1, \ldots x_k\}$ and $\{y_1, \ldots, y_\ell\}$, test $H_0 : X$ and $Y$ are independent by creating a \textbf{contingency table}:\\
+  \begin{tabular}{cccccc}
+             & $y_1$           & $y_2$           & $\ldots$ & $y_\ell$          &\\
+    $x_1$    & $n_{11}$        & $n_{12}$        & $\ldots$ & $n_{1\ell}$       & $n_{1\bullet}$\\
+    $x_2$    & $n_{21}$        & $n_{22}$        & $\ldots$ & $n_{2\ell}$       & $n_{2\bullet}$\\
+    $\vdots$ & $\vdots$        & $\vdots$        & $\ddots$ & $\vdots$          & $\ldots$\\
+    $x_k$    & $n_{k1}$        & $n_{k2}$        & $\ldots$ & $n_{k\ell}$       & $n_{k\bullet}$\\
+             & $n_{\bullet 1}$ & $n_{\bullet 2}$ & $\ldots$ & $n_{\bullet\ell}$ & $n$
+  \end{tabular}\\
+  where the $n_{ij}$ are the observed frequencies and the numbers at the end of each row and column are the sums of those frequencies.
+  Let the expected frequency at each $i, j$ be $\frac{n_{i\bullet}n_{\bullet j}}{n}$ and perform a chi-squared test on these observations and expectations.
+  Use the rejection region $\{x^2 \mid x^2 > \chi^2_{(k - 1)(\ell - 1),1-\alpha}\}$.
+\end{prop*}
+
+\subsubsection{The $\chi^2$ distribution and degrees of freedom}
+
+\begin{prop*}
+  The parameter of the $\chi^2$ distribution represents the size of the sample minus the number of ways in which the expectations depend on the sample.
+\end{prop*}
 
 \section{Convergence Concepts}
 
