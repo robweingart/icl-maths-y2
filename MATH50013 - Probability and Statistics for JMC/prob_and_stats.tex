@@ -23,6 +23,7 @@
 \newcommand{\X}{\mathbb{X}}
 \newcommand{\Y}{\mathbb{Y}}
 \newcommand{\RV}{\mathbf{RV}}
+\newcommand{\stdnorm}{\mathbf{\Phi}}
 
 \newcommand{\mr}[1]{\multirow{2}{*}{#1}}
 
@@ -41,6 +42,8 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator{\Student}{Student}
 \DeclareMathOperator{\freq}{freq}
+\DeclareMathOperator{\distto}{\xrightarrow{\mathcal{D}}}
+\DeclareMathOperator{\probto}{\xrightarrow{\mathcal{P}}}
 
 \title{MATH50013 - Probability and Statistics for JMC}
 \author{Notes by Robert Weingart}
@@ -672,7 +675,7 @@ $X \sim N(\mu, \sigma^2)$ has no obvious interpretation.
   It has the PDF
   $$\phi(x) = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}x^2\right)$$
   and the CDF
-  $$\Phi(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^x\exp\left(-\frac{t^2}{2}\right)dt$$
+  $$\stdnorm(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^x\exp\left(-\frac{t^2}{2}\right)dt$$
 \end{defn*}
 
 \begin{prop*}
@@ -1110,9 +1113,9 @@ $\ddag$: $O_{ij} = \freq\left(\underline{(X, Y)}, (x_i, y_j)\right), E_{ij} = \f
 
 \begin{prop*}
   For $n$ variables i.i.d with distribution $N(\mu, \sigma^2)$ with $\mu$ unknown and $\sigma^2$ known and a hypothesis $H_0 : \mu = \mu_0$, use the test statistic
-  $$Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \sim \Phi$$
+  $$Z = \frac{\overline{X} - \mu_0}{\sigma / \sqrt{n}} \sim \stdnorm$$
   and the rejection region $R = (-\infty, -z_{1 - \frac{\alpha}{2}}) \cup (z_{1 - \frac{\alpha}{2}}, \infty) = \{z \mid \abs{z} > z_{1 - \frac{\alpha}{2}}\}$ has significance level $\alpha$.
-  The $p$-value is $2(1 - \Phi(\abs{z}))$.
+  The $p$-value is $2(1 - \stdnorm(\abs{z}))$.
 \end{prop*}
 
 \subsubsection{Normal Distribution with Unknown Variance}
@@ -1140,7 +1143,7 @@ $\ddag$: $O_{ij} = \freq\left(\underline{(X, Y)}, (x_i, y_j)\right), E_{ij} = \f
 
 \begin{prop*}
   If $P_X = N(\mu_X, \sigma^2_X)$ with $\mu_X$ unknown and $P_Y = N(\mu_Y, \sigma^2_Y)$ with $\mu_Y$ unknown, we can test $H_0 : \mu_X = \mu_Y$ using the test statistic
-  $$Z = \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma^2_X}{n_1} + \frac{\sigma^2_Y}{n_2}}} \sim \Phi$$
+  $$Z = \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma^2_X}{n_1} + \frac{\sigma^2_Y}{n_2}}} \sim \stdnorm$$
   and the rejection region $R = \{z \mid \abs{z} > z_{1 - \frac{\alpha}{2}}\}$.
 \end{prop*}
 
@@ -1204,5 +1207,126 @@ $\ddag$: $O_{ij} = \freq\left(\underline{(X, Y)}, (x_i, y_j)\right), E_{ij} = \f
 \end{prop*}
 
 \section{Convergence Concepts}
+
+\subsection{Convergence in Distribution and the Central Limit Theorem}
+
+\subsubsection{Statement of the Central Limit Theorem}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  (Central Limit Theorem)
+  Given a countable sequence of i.i.d. RVs $X_1, X_2, \ldots$ with expected value $\mu$ and variance $\sigma^2 < \infty$ (we assume an MGF exists - see definition 10.2.3), let $\overline{X}_n := \frac{1}{n}\sum_{i = 1}^nX_i$ and let $G_n(x)$ be the CDF of $\frac{\overline{X}_n - \mu}{\sigma / \sqrt{n}}$. 
+  Then
+  $$\lim_{n \to \infty}G_n(x) := \stdnorm(x)$$
+  Alternatively, in the notation defined below,
+  $$\frac{\overline{X}_n - \mu}{\sigma / \sqrt{n}} \distto \text{N}(0, 1)$$
+\end{thm}
+
+\stepcounter{subsection}
+
+\subsubsection{Convergence in Distribution}
+
+\begin{defn}
+  The sequence $X_1, X_2, \ldots$ \textbf{converges in distribution} to $X$ iff\\ $\lim_{n \to \infty}F_{X_n} = F_X(x)$ whenever $F_X$ is continuous.
+  We then write $X_n \distto X$.
+\end{defn}
+
+\begin{defn}
+  When $X_n \distto X$ and $P(X = c) = 1$ for some $c$, the limiting distribution of $X_n$ is \textbf{degenerate at $c$}.
+  We write $X_n \distto c$.
+\end{defn}
+
+\subsubsection{Moment Generating Functions}
+
+\begin{defn}
+  The \textbf{moment generating function} of $X$ is $M_X(t) := E(e^{tX})$ when it exists in some neighbourhood of zero.
+\end{defn}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  If $X$ has an MGF then $E(X^n) = M_X^{(n)}(0)$.
+\end{thm}
+
+\stepcounter{subsection}
+
+\begin{prop*}
+  Properties of the MGF:
+  \begin{enumerate}
+    \item $M_{aX + b}(t) = e^{bt}M_X(at)$
+    \item For $X_1, \ldots, X_n$ independent and $Z = \sum_{i = 1}^nX_i$, $M_Z(t) = \prod_{i = 1}^nM_{X_i}(t)$
+    \item For $X_1, \ldots, X_n$ i.i.d., $M_{\overline{X}}(t) = (M_X(t / n))^n$
+    \item $M_X(t)$ exists near zero $\implies \forall r \in \N,\ M_X^{(r)}(t)$ exists near zero and $E(\abs{X}^r) < \infty$.
+    \item (Characterisation) If $M_X(t)$ and $M_Y(t)$ exist near zero with $M_X(t) = M_Y(t)$ then $F_X = F_Y$
+    \item (Convergence of MGFs) For a countable sequence $X_1, X_2, \ldots$ with $\lim_{i \to \infty}M_{X_i}(t) = M_X(t)$ in a neighbourhood of zero for some MGF $M_X$, there is a unique CDF $F_X$ such that $X_n \distto X$. 
+  \end{enumerate}
+\end{prop*}
+
+\subsubsection{Proof of the Central Limit Theorem}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  The CLT holds when the variables in the sequence have an MGF.
+\end{thm}
+
+\stepcounter{subsection}
+
+\subsection{Convergence in Probability and Inequalities}
+
+\subsubsection{Convergence in Probability}
+
+\begin{defn}
+  A sequence $X_1, X_2, \ldots$ \textbf{converges in probability} to $X$ iff
+  $$\forall \epsilon > 0,\ \lim_{n \to \infty}P(\abs{X_n - X} < \epsilon) = 1$$
+  We then write $X_n \probto X$.
+\end{defn}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  $X_n \probto X \implies X_n \distto X$.
+\end{thm}
+
+\stepcounter{subsection}
+
+\subsubsection{The Law of Large Numbers and Chebyshev's Inequality}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  (Weak Law of Large Numbers)
+  For a sequence $X_1, X_2, \ldots$ i. i. d. with mean $\mu$ and variance $\sigma^2 < \infty$, $\overline{X}_n \probto \mu$ (where $\overline{X}_n := \frac{1}{n}\sum_{i = 1}^nX_i$).
+\end{thm}
+
+\stepcounter{subsection}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  (Chebyshev's Inequality)
+  Given an RV $X$ and $g : \R \to \R^+$,
+  $$\forall r > 0,\ P(g(X) \geq r) \leq \frac{E(g(X))}{r}$$
+\end{thm}
+
+\stepcounter{subsection}
+
+\subsubsection{Jensen's Inequality}
+
+\setcounter{thm}{\arabic{subsection}}
+
+\begin{thm}
+  (Jensen's Inequality)
+  \begin{itemize}
+    \item $g'' \geq 0$ everywhere ($g$ is convex) $\implies E(g(X)) \geq g(E(X))$. 
+    \item $g'' \leq 0$ everywhere ($g$ is concave) $\implies E(g(X)) \leq g(E(X))$. 
+    \item $g$ is linear $\implies E(g(X)) = g(E(X))$
+  \end{itemize}
+  (The properties need to hold only on the support of $X$)
+\end{thm}
+
+\stepcounter{subsection}
+
 
 \end{document}
